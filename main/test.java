@@ -1,5 +1,8 @@
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @auther Lucas
  * @date 2018/12/28 9:16
@@ -34,4 +37,5 @@ public class test {
         int y = 10;
         System.out.println(x+y+""+(x+y)+y);  //151510
     }
+
 }
