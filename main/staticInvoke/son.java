@@ -9,6 +9,10 @@ public class son extends father {
     int j = 20;
     int k = 30;
 
+    public son(){
+        System.out.println("son 构造方法");
+    }
+
     public void run(){
         System.out.println("son no static run");
     }

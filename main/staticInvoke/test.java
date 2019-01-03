@@ -6,16 +6,19 @@ package staticInvoke;
  */
 public class test {
     public static void main(String[] args) {
-        father s = new son();
+        // father s = new son();
         // 静态成员变量  看父类
-        System.out.println(s.i);
+        //System.out.println(s.i);
         // 非静态成员变量  看父类
-        System.out.println(s.j);
+        //System.out.println(s.j);
         // 父类中没有 报错
         // System.out.println(s.k);
         // 非静态方法 看子类
-        s.run();
+        //s.run();
         // 静态方法 看父类
-        s.eat();
+        //s.eat();
+        // 调用子类静态变量，父类是否会被初始化
+        System.out.println(son.i);
+
     }
 }

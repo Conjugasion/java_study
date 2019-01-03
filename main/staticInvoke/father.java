@@ -8,6 +8,10 @@ public class father {
     static int i = 1;
     int j = 10;
 
+    public father(){
+        System.out.println("father 构造方法");
+    }
+
     public void run(){
         System.out.println("father no static run");
     }
