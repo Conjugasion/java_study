@@ -5,7 +5,7 @@ import java.util.List;
  * @auther Lucas
  * @date 2018/12/29 18:37
  */
-public class listSplit {
+ class listSplit {
     private static List<List<String>> split(List<String> list){
         List<List<String>> result = new ArrayList<>();
         int interval = 3;

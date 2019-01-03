@@ -9,5 +9,6 @@ import permission1.father;
 public class test {
     public static void main(String[] args) {
         son s = new son();
+        System.out.println(s.a);
     }
 }

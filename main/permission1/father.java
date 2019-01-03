@@ -8,4 +8,8 @@ public class father {
     protected void fatherMethon(){
         System.out.println("father protected方法");
     }
+
+    protected father(){
+        System.out.println("protected father 构造器");
+    }
 }
