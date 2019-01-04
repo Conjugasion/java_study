@@ -5,6 +5,7 @@ package superDemo;
  * @date 2018/12/28 14:41
  */
 public class person {
+    int age;
     {
         System.out.println("person no static");
     }
@@ -16,6 +17,7 @@ public class person {
 }
 
     public person(int age){
+        this.age = age;
         System.out.println("person age");
     }
 

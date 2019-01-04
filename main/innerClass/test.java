@@ -6,13 +6,13 @@ package innerClass;
  */
 public class test {
     public static void main(String[] args) {
-//        Outer1.Inner inner1 = new Outer1().new Inner();
-//        inner1.show();
+        Outer1.Inner inner1 = new Outer1().new Inner();
+        inner1.show();
 
-//        Outer2.Inner inner2 = new Outer2().new Inner();
-//        inner2.show();
+        Outer2.Inner inner2 = new Outer2().new Inner();
+        inner2.show();
 
-//        new Outer3().out();
+        new Outer3().out();
 
         // 使用匿名内部类 接口
         new smoking(){

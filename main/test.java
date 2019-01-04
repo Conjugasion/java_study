@@ -82,7 +82,10 @@ public class test {
 
         String str2 = str.replaceAll("t{2}","T");
         System.out.println(str2);
+    }
 
+    @Test
+    public void test5(){
 
     }
 }
