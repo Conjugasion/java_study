@@ -20,12 +20,13 @@ public class BigIntegerDemo {
 
         double d = 756.2345566;
 
+        // 保留小数
         //方法一：最简便的方法，调用DecimalFormat类
         DecimalFormat df = new DecimalFormat(".000");
-        System.out.println(df.format(d));
+        System.out.println("d: " + df.format(d));
 
         // 四舍五入取整
-        System.out.println(Math.round(d));
+        System.out.println("d: " + Math.round(d));
 
 
     }
