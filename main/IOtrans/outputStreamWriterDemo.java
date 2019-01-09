@@ -1,4 +1,4 @@
-package transIO;
+package IOtrans;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
