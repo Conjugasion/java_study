@@ -84,5 +84,8 @@ public class test {
         System.out.println(str2);
     }
 
+    @Test
+    public void test6(){
 
+    }
 }
