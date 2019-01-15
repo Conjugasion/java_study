@@ -6,9 +6,8 @@ import java.util.List;
  * @date 2018/12/29 18:37
  */
  class listSplit {
-    private static List<List<String>> split(List<String> list){
+    private static List<List<String>> split(List<String> list, int interval){
         List<List<String>> result = new ArrayList<>();
-        int interval = 3;
         int size = list.size();
         int i = size/interval;
         for (int j = 0; j < i; j++) {
@@ -41,7 +40,7 @@ import java.util.List;
 //        list.add("g");
 //        list.add("h");
 
-        System.out.println(split(list));
+        System.out.println(split(list,3));
 
     }
 }
