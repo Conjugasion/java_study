@@ -8,7 +8,7 @@ package varArgumentDemo;
  */
 public class varArgumentDemo {
     public static void main(String[] args) {
-        System.out.println(getSum(1,2,3));
+        System.out.println(getSum(1,2,3, 4, 5));
     }
 
     public static int getSum(int a, int b,int...num){
