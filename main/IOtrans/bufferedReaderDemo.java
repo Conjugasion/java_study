@@ -23,7 +23,7 @@ public class bufferedReaderDemo {
 
         String s1 = null;
         String s2 = "null";
-        if("str" instanceof String){
+        if(s1 instanceof String){
             System.out.println("yes");
         }
     }

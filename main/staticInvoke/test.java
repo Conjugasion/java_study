@@ -35,10 +35,13 @@ public class test {
         // 子类调用父类中特有的静态方法，父类静态代码块会运行(加载)，子类不会被加载
         // son.tennis();
 
-        // 父类/子类的final变量直接放入自身常量池，父类调用或者子类调用均不会引起初始化
-        // System.out.println(father.n);
-        // System.out.println(son.n);
-        // System.out.println(son.o);
+         // 父类/子类的final变量直接放入自身常量池，父类调用或者子类调用均不会引起初始化
+         // System.out.println(father.n);
+         // System.out.println(son.n);
+         // System.out.println(son.o);
+
+         // final方法也会引起初始化
+         // son.kill();
 
         // 数组不会引起初始化
         // father[] farray = new father[10];

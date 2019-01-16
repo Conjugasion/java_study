@@ -6,4 +6,7 @@ package innerClass;
  */
 public abstract class swim {
     public abstract void frogSwim();
+    public void achieve(){
+        System.out.println("抽象类的实现方法");
+    }
 }

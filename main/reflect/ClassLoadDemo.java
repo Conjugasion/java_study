@@ -12,17 +12,17 @@ public class ClassLoadDemo {
         Class c = Class.forName("reflect.person");
 
         // 仅能获得公共权限public的构造器
-//        Constructor[] constructors = c.getConstructors();
-//        for (Constructor con : constructors) {
-//            System.out.println(con);
-//        }
+        Constructor[] constructors = c.getConstructors();
+        for (Constructor con : constructors) {
+            System.out.println(con);
+        }
 
         // 获取指定的构造方法
-        Constructor constructor1 = c.getConstructor(String.class, Integer.class);
-        System.out.println(constructor1);
-        Object obj = constructor1.newInstance("Lucas", 24);
-        System.out.println(obj.getClass());
-        ((reflect.person)obj).run();
+//        Constructor constructor1 = c.getConstructor(String.class, Integer.class);
+//        System.out.println(constructor1);
+//        Object obj = constructor1.newInstance("Lucas", 24);
+//        System.out.println(obj.getClass());
+//        ((reflect.person)obj).run();
 
     }
 }

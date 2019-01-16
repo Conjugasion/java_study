@@ -41,4 +41,8 @@ public class son extends father {
     public static void basket(){
         System.out.println("son static basket");
     }
+
+    public final static void kill(){
+        System.out.println("son final kill");
+    }
 }
