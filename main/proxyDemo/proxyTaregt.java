@@ -25,7 +25,5 @@ public class proxyTaregt {
         });
         String s = objProxy.method2();
         System.out.println(s);
-        System.out.println(s);
-        System.out.println(s);
     }
 }
