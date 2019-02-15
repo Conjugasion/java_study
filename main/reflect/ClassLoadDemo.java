@@ -10,6 +10,8 @@ import java.lang.reflect.Constructor;
 public class ClassLoadDemo {
     public static void main(String[] args) throws Exception {
         Class c = Class.forName("reflect.person");
+        Class c1 = person.class;
+        Class c2 = new person().getClass();
 
         // 仅能获得公共权限public的构造器
         Constructor[] constructors = c.getConstructors();
