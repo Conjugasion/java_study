@@ -7,7 +7,8 @@ package staticInvoke;
  */
 public class test {
     public static void main(String[] args) {
-        // father s = new son();
+        father s = new son();
+        // son s = new son();
         // 静态成员变量  看父类
         // System.out.println(s.i);
         // 非静态成员变量  看父类
@@ -19,7 +20,7 @@ public class test {
         // 非静态方法 看子类
         // s.run();
         // 静态方法 看父类
-        // s.eat();
+        s.eat();
 
 
         // 调用子类和父类公有的静态变量，父类静态代码块会运行(加载)
