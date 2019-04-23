@@ -1,7 +1,5 @@
-package ThreadPoolDemo;
+package concurrentDemo.ThreadPoolDemo;
 
-import java.io.Serializable;
-import java.util.Deque;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -17,14 +15,15 @@ import java.util.concurrent.atomic.AtomicInteger;
  * threadFactory 新建线程工厂----new CustomThreadFactory()====定制的线程工厂
  * rejectedExecutionHandler 当提交任务数超过maxmumPoolSize+workQueue之和时,
  * 							即当提交第41个任务时(前面线程都没有执行完,此测试方法中用sleep(100)),
- * 						          任务会交给RejectedExecutionHandler来处理
+ * 						          任务会交给RejectedExecutionHandler
+ * 	用于测试线程挂了咋办
  */
-public class CustomThreadPool {
+public class CustomThreadPoolTest {
     private ThreadPoolExecutor pool;
 
     public void init(){
-        pool = new ThreadPoolExecutor(5, 10, 30L,
-                TimeUnit.MINUTES, new ArrayBlockingQueue<Runnable>(10), new CustomThreadFactory(),
+        pool = new ThreadPoolExecutor(10, 10, 30L,
+                TimeUnit.MINUTES, new LinkedBlockingQueue<Runnable>(), new CustomThreadFactory(),
                 new CustomRejectedExecutionHandler());
     }
 
@@ -49,11 +48,7 @@ public class CustomThreadPool {
         private AtomicInteger count = new AtomicInteger();
         @Override
         public Thread newThread(Runnable r) {
-            Thread t = new Thread(r);
-            String name =CustomThreadPool.class.getSimpleName() + count.addAndGet(1);
-            System.out.println(name);
-            t.setName(name);
-            return t;
+            return new Thread(r);
         }
     }
     public void destory(){
@@ -63,7 +58,7 @@ public class CustomThreadPool {
     }
 
     public static void main(String[] args) {
-        CustomThreadPool exec = new CustomThreadPool();
+        CustomThreadPoolTest exec = new CustomThreadPoolTest();
         exec.init();
         ThreadPoolExecutor pool = exec.getCustomThreadPool();
         for (int i = 1; i <= 100; i++) {

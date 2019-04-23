@@ -10,5 +10,5 @@ public abstract interface test {
         System.out.println("interface run");
     }
 
-    void swim();
+    public void swim();
 }
