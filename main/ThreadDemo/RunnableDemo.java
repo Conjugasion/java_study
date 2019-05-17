@@ -21,6 +21,7 @@ public class RunnableDemo {
                 System.out.println(Thread.currentThread().getName());
             }
         }.start();
+        System.out.println("show diff");
     }
 
     public static class Runnable1 implements Runnable{

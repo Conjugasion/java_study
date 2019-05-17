@@ -18,6 +18,6 @@ public class ThreadPoolDemo {
                 System.out.println(Thread.currentThread().getName());
             }
         });
-
+        System.out.println("show diff");
     }
 }
