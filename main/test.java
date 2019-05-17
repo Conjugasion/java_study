@@ -282,7 +282,18 @@ public class test {
         link.add(1);
         link.set(0, 11);
         System.out.println(link);
+    }
 
-
+    /**
+     * 条件debug
+     */
+    @Test
+    public void test15(){
+        int j = 0;
+        for (int i = 0; i < 100; i++) {
+            if (i==51&& j==0){
+                System.out.println(51);
+            }
+        }
     }
 }

@@ -8,7 +8,7 @@ import java.util.Date;
  * @auther Lucas
  * @date 2019/1/3 16:46
  */
-public class dateFormat {
+public class SimpleDateFormatDemo {
     public static void main(String[] args) throws ParseException {
         SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy年MM月dd日HH点mm分ss秒");
         System.out.println(sdf1.format(new Date()));
