@@ -22,14 +22,7 @@ public class volatileTest {
             }
         }).start();
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (flag) {
-                }
-                System.out.println(Thread.currentThread().getName() + "线程停止，死循环被打开");
-            }
-        }).start();
+
 
     }
 }
