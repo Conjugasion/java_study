@@ -1,4 +1,4 @@
-package algorithm;
+package algorithm.problem;
 
 import java.util.ArrayList;
 import java.util.List;

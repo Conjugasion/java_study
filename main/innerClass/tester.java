@@ -1,4 +1,6 @@
-package algorithm.exercise;
+package innerClass;
+
+import innerClass.OuterClass;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;

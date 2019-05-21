@@ -1,4 +1,4 @@
-package algorithm.exercise;
+package innerClass;
 
 /**
  * @auther Lucas
