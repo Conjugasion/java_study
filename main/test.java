@@ -1,3 +1,5 @@
+import org.apache.log4j.Logger;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.swing.text.StyledEditorKit;
@@ -10,10 +12,12 @@ import java.util.concurrent.Future;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+
 /**
  * @auther Lucas
  * @date 2018/12/28 9:16
  */
+@Ignore("ignore this method")
 public class test {
 //    public static void main(String[] args) {
 //        Scanner sc = new Scanner(System.in);
@@ -41,6 +45,8 @@ public class test {
 //        String nextStr2 = scanner.next();
 //        System.out.println("scanner.next()得到：" + nextStr2);
 //    }
+
+    public static Logger logger = Logger.getLogger(test.class);
 
     public static void main(String[] args) throws IOException {
         InputStreamReader isr = new InputStreamReader(System.in);
@@ -285,7 +291,7 @@ public class test {
     }
 
     /**
-     * 条件debug
+     * 条件断点
      */
     @Test
     public void test15(){
@@ -296,4 +302,39 @@ public class test {
             }
         }
     }
+
+    @Test
+    public void test16(){
+        boolean[][] a = new boolean[10][10];
+        boolean b[][] = new boolean[20][20];
+        a[0][0] = false;
+        b[0][0] = true;
+        System.out.println(b[0][0]);
+        logger.debug("debug");
+
+        boolean c = false;
+        boolean d = true;
+        c |= d == true;
+        System.out.println(c);
+        int e = 1;
+        int f = 0;
+        f += e++;
+        int h = 1;
+        int g = 0;
+        g += ++h;
+        System.out.println("f= " + f);
+        System.out.println("g= " + g);
+    }
+
+    @Test
+    public void test17(){
+        double[] d = new double[3];  // 0.0
+        System.out.println(d[0]);
+
+        float[] f = new float[3];  // 0.0
+        System.out.println(f[0]);
+
+        System.out.println(d[0]==f[0]); // true
+    }
+
 }

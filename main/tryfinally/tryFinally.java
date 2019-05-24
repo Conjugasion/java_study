@@ -1,7 +1,4 @@
-package algorithm.exercise;
-
-import java.util.*;
-import java.util.concurrent.locks.ReentrantLock;
+package tryfinally;
 
 /**
  * @auther Lucas
