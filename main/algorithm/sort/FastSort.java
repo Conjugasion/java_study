@@ -24,7 +24,7 @@ public class FastSort {
 
 
     }
-    // 1⃣️最左边的元素为轴枢
+    // 以最左边的元素为轴枢
     static void location(int[] array, int left, int right){
         if (left >= right){
             return ;
