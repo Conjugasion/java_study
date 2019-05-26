@@ -36,7 +36,7 @@ public class HeapSort {
             boolean flag = true;
             for (int i = 0; i < array.length; i++) {
                 int min;
-                if (2*i+1 < array.length && 2*i+2 < array.length){
+                if (2*i+2 < array.length){
                     min = (array[2*i+1] < array[2*i+2]) ? 2*i+1:2*i+2;
                     int temp = array[i];
                     if (array[i] > array[min]){
