@@ -10,59 +10,131 @@ import java.util.List;
  * 二叉树
  */
 public class tree {
-    private tree left;
-    private tree right;
-    private int value;
 
-    public tree(tree left, tree right, int value) {
-        this.left = left;
-        this.right = right;
-        this.value = value;
+    class node{
+        node left;
+        node right;
+        int value;
+
+        public node(node left, node right, int value) {
+            this.left = left;
+            this.right = right;
+            this.value = value;
+        }
+
+        public node() {
+        }
+
+        public node getLeft() {
+            return left;
+        }
+
+        public void setLeft(node left) {
+            this.left = left;
+        }
+
+        public node getRight() {
+            return right;
+        }
+
+        public void setRight(node right) {
+            this.right = right;
+        }
+
+        public int getValue() {
+            return value;
+        }
+
+        public void setValue(int value) {
+            this.value = value;
+        }
     }
 
-    public tree(){
+    private node root;
+    private List<node> nodeList;
 
+    public tree(node root) {
+        this.root = root;
     }
 
-    
-    // 建树 [1, 3, 2, 5, 4, 6]
+
+    public tree() {}
+
+    public node getRoot() {
+        return root;
+    }
+
+    public void setRoot(node root) {
+        this.root = root;
+    }
+
+    // 数组 初始化二叉树
     public void init(int[] array){
+        nodeList = new ArrayList<>();
         if (array.length == 0){
-            System.out.println("can't null");
+            System.out.println("数组不能为空");
         }
-        tree t = this
-        tree leftTemp = t;
-        tree rightTemp = t;
-        for (int i = 0; i < array.length; i++) {
-
-            if (2*i+2 < array.length){
-                leftTemp.left = new tree(null, null, array[2*i+1]);
-                leftTemp = leftTemp.left;
-                rightTemp.right = new tree(null, null, array[2*i+2]);
-                rightTemp = rightTemp.right;
+        else {
+            for (int i : array) {
+                nodeList.add(new node(null, null, i));
             }
-            else if (2*i+1 < array.length){
-                leftTemp.left = new tree(null, null, array[2*i+1]);
-                leftTemp = leftTemp.left;
+
+            root = nodeList.get(0);
+
+            for (int i = 0; i < array.length/2; i++) {
+                nodeList.get(i).setLeft(nodeList.get(2*i+1));
+                if (2*i+2 < array.length){
+                    nodeList.get(i).setRight(nodeList.get(2*i+2));
+                }
             }
         }
     }
+
+    // 前序遍历二叉树
+    public static void preVisit(node root){
+        if (root != null){
+            System.out.print(root.value + " ");
+            preVisit(root.left);
+            preVisit(root.right);
+        }
+    }
+    // 中序遍历二叉树
+    public static void midVisit(node root){
+        if (root != null){
+            midVisit(root.left);
+            System.out.print(root.value + " ");
+            midVisit(root.right);
+        }
+    }
+    // 后序遍历二叉树
+    public static void postVisit(node root){
+        if (root != null){
+            postVisit(root.left);
+            postVisit(root.right);
+            System.out.print(root.value + " ");
+        }
+    }
+    // 深度遍历
+    public static void deepVisit(node root){
+        List<node> stack = new ArrayList<>();
+        if (root == null){
+            return;
+        }
+    }
+
 
     public static void main(String[] args) {
         tree t = new tree();
-        int[] array = new int[]{1, 2, 3, 4, 5, 6};
-        t.init(array);
-//        List<Integer> list = new ArrayList<>();
-//        list.add(1);
-//        list.add(0);
-//        list.add(4);
-//        Collections.sort(list);
-//        System.out.println(list);
-//        System.out.println(new Integer(1).compareTo(new Integer(2)));
-//        System.out.println(new Integer(1).compareTo(new Integer(1)));
-//        System.out.println(Integer.compare(1, 0));
-//        list.sort((Integer x,Integer y) -> x.compareTo(y));
-//        System.out.println(list);
+        t.init(new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
+        /*
+                      0
+                  1       2
+               3     4  5   6
+             7   8  9
+         */
+        //preVisit(t.root); // 0 1 3 7 8 4 9 2 5 6
+        //midVisit(t.root); // 7 3 8 1 9 4 0 5 2 6
+        //postVisit(t.root); // 7 8 3 9 4 1 5 6 2 0
 
     }
 }
