@@ -51,7 +51,6 @@ public class tree {
     }
 
     private node root;
-    private List<node> nodeList;
 
     public tree(node root) {
         this.root = root;
@@ -70,7 +69,7 @@ public class tree {
 
     // 数组 初始化二叉树
     public void init(int[] array){
-        nodeList = new ArrayList<>();
+        List<node> nodeList = new ArrayList<>();
         if (array.length == 0){
             System.out.println("数组不能为空");
         }
@@ -116,9 +115,36 @@ public class tree {
     }
     // 深度遍历
     public static void deepVisit(node root){
-        List<node> stack = new ArrayList<>();
-        if (root == null){
-            return;
+        if (root != null){
+            List<node> stack = new ArrayList<>();
+            stack.add(root);
+            while (!stack.isEmpty()){
+                node pop = stack.remove(stack.size()-1);
+                System.out.print(pop.value + " ");
+                if (pop.right != null){
+                    stack.add(pop.right);
+                }
+                if (pop.left != null){
+                    stack.add(pop.left);
+                }
+            }
+        }
+    }
+    // 广度遍历
+    public static void broadVisit(node root){
+        if (root != null){
+            List<node> queue = new ArrayList<>();
+            queue.add(root);
+            while (!queue.isEmpty()){
+                node pop = queue.remove(0);
+                System.out.print(pop.value + " ");
+                if (pop.left != null){
+                    queue.add(pop.left);
+                }
+                if (pop.right != null){
+                    queue.add(pop.right);
+                }
+            }
         }
     }
 
@@ -135,6 +161,7 @@ public class tree {
         //preVisit(t.root); // 0 1 3 7 8 4 9 2 5 6
         //midVisit(t.root); // 7 3 8 1 9 4 0 5 2 6
         //postVisit(t.root); // 7 8 3 9 4 1 5 6 2 0
-
+        //deepVisit(t.root);
+        broadVisit(t.root);
     }
 }
