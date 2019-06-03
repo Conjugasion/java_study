@@ -6,6 +6,7 @@ import javax.swing.text.StyledEditorKit;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
@@ -453,6 +454,7 @@ public class test {
 
         byte b = 10;
         /*char c = b;*/   // char没有负值，byte有负值，不能自动转换
+        short k = b;
         short d = b;
         short e = 10;
         /*char f = e;*/  // char没有负值，short有负值，不能自动转换
@@ -462,6 +464,84 @@ public class test {
 
         final byte h = 10;
         char j = h;
+    }
+
+    /*
+
+     */
+    @Test
+    public void test20(){
+        Map<String, String> map1 = new HashMap();
+        map1.put("six","6");
+        map1.put("one","1");
+        map1.put("four","4");
+        map1.put("two","2");
+        map1.put("five","5");
+        map1.put("three","3");
+
+        ArrayList<Map.Entry<String, String>> entryList = new ArrayList<>(map1.entrySet());
+
+        Collections.sort(entryList, (o1, o2) -> o1.getValue().compareTo(o2.getValue()));
+        System.out.println("ArrayList根据value从小到大排序");
+        for (Map.Entry<String, String> e : entryList) {
+            System.out.println(e.getKey() + ": " + e.getValue());
+        }
+
+        System.out.println("ArrayList根据value从大到小排序");
+        entryList.sort(new Comparator<Map.Entry<String, String>>() {
+            @Override
+            public int compare(Map.Entry<String, String> o1, Map.Entry<String, String> o2) {
+                return 0;
+            }
+        });
+        for (Map.Entry<String, String> e : entryList) {
+            System.out.println(e.getKey() + ": " + e.getValue());
+        }
+
+        System.out.println("string's compareTo");
+        String s1 = "string";
+        String s2 = "strinh";
+        System.out.println(s1.compareTo(s2));
+
+
+        Integer[] array = {5, 4, 12, 3, 1};
+        Arrays.sort(array, new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                if (o1 > o2){
+                    return -2;
+                }
+                else if (o1 < o2){
+                    return 2;
+                }
+                else
+                    return 0;
+            }
+        });
+        System.out.println("重写数组sort的Comparator方法，从大到小排序");
+        System.out.println(Arrays.toString(array));
+
+        LinkedList<Integer> link = new LinkedList<>(Arrays.asList(new Integer[]{2, 3, 4, 1, 4, 7}));
+        Collections.sort(link);
+        System.out.println("Collections.sort(link): " + link);
+        Collections.sort(link, Collections.reverseOrder());
+        System.out.println("Collections.sort(link, Collections.reverseOrder()): " + link);
+        link.sort(new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                if (o1 > o2){
+                    return -2;
+                }
+                else if (o1 < o2){
+                    return 2;
+                }
+                else
+                    return 0;
+            }
+        });
+        System.out.println("LinkedList.sort()自定义排序 从大到小排序: " + link);
+
+
     }
 
 }
