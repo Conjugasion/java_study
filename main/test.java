@@ -337,4 +337,131 @@ public class test {
         System.out.println(d[0]==f[0]); // true
     }
 
+    @Test
+    /*
+    基本数据类型转型
+     */
+    public void test18(){
+        byte a1 = 0;
+        byte a2 = 1;
+        byte a3, a4;
+
+        char c1 = 2;
+        char c2 = 3;
+        char c3;
+
+        short d1 = 4;
+        short d2 = 5;
+        short d3;
+
+        float e1 = 6;
+        float e2 = 7;
+        float e3;
+
+        double f1 = 8;
+        double f2 = 9;
+        double f3;
+
+        long g1 = 10;
+        long g2 = 11;
+        long g3;
+
+        int h1 = 12;
+        int h2 = 13;
+        int h3;
+
+
+        /*a3 = a1 + a2;
+        c3 = c1 + c2;
+        d3 = d1 + d2;*/
+
+        int i = a1 + a2;    // byte char short 之间相加减， 都转型成int. int可以向上转
+        int i1 = c1 + c2;
+        int i2 = d1 + d2;
+        int i3 = a1 + c1;
+        long i4 = a1 + d1;
+        float i5 = c1 + d1;
+
+
+        e3 = e1 + e2;       // float double long 自己相加减，所得结果是自己类型
+        f3 = f1 + f2;
+        g3 = g1 + g2;
+
+        float v = a1 + e1;    // 以精度高的数据为准
+        double v1 = e1 + f1;
+        long l = g1 + a1;
+        float v2 = h1 + e1;   // 以浮点数为准
+        double v3 = g1 + f1;
+        float v4 = g1 + e1;
+
+        final byte a5 = 120;
+        final byte a6 = 7;
+        byte a7 = a5 + a6;
+
+        final char c4 = 58;
+        final char c5 = 15;
+
+        final long l2 = 10;
+        final int i8 = 10;
+        final float f4 = 10;
+
+        byte a8 = a6 + c4;
+        char c6 = a6 + c4;
+        short i6 = a5 + c4;
+        float i7 = a5 + c4;
+        /*byte a9 = a6 + l2;*/
+        byte a10 = a6 + i8;
+        float a11 = a6 + f4;
+        byte i9 = c4 + i8;
+
+        System.out.println(c6);
+        System.out.println(i6);
+
+        final float e4 = 16;
+
+        float v5 = a6 + e4;
+
+    }
+
+    /*
+    类的向上 向下转型
+     */
+    @Test
+    public void test19(){
+        abstract class father{
+            public father(){}
+        }
+        class mather{
+            public mather() {}
+        }
+         final class son extends mather{
+            public son(){}
+        }
+
+        mather m1 = new mather();
+        son s1 = new son();
+
+        /*son s2 = m1;*/   // 从大变小，要强转
+        mather m2 = s1;    // 从小变大，不需要强转
+
+        mather s3 = new son();
+        mather m3 = s3;
+        son s4 = (son)s3;
+
+        short s = 10;
+        int i = s;
+
+        byte b = 10;
+        /*char c = b;*/   // char没有负值，byte有负值，不能自动转换
+        short d = b;
+        short e = 10;
+        /*char f = e;*/  // char没有负值，short有负值，不能自动转换
+        char f = 10;
+        /*byte b1 = f;*/
+       /* short g = f;*/
+
+        final byte h = 10;
+        char j = h;
+    }
+
 }
