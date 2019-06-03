@@ -540,8 +540,25 @@ public class test {
             }
         });
         System.out.println("LinkedList.sort()自定义排序 从大到小排序: " + link);
-
-
+    }
+    /*
+    TreeMap
+     */
+    @Test
+    public void test21(){
+        TreeMap<String, String> treeMap = new TreeMap<>(new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return 0;
+            }
+        });
+        treeMap.put("six","6");
+        treeMap.put("one","1");
+        treeMap.put("four","4");
+        treeMap.put("two","2");
+        treeMap.put("five","5");
+        treeMap.put("three","3");
+        System.out.println(treeMap);
     }
 
 }
