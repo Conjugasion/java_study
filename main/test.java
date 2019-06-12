@@ -101,6 +101,7 @@ public class test {
     @Test
     public void test4(){
         String str = "ttest.java";
+        String strTest = "test.java";
 
         // 匹配后缀
         Boolean b1 = str.endsWith(".java");
@@ -119,19 +120,36 @@ public class test {
         System.out.println("b4 =" + b4);
 
         // 查找一个字符，在字符串中第一次出现的索引
-        System.out.println(str.indexOf("a"));
+        System.out.println("indexOf: " + str.indexOf("a"));
+        System.out.println("indexOf: " + str.indexOf("test"));
 
         // String字符串转成字节数组
         byte[] bytes = str.getBytes();
+        System.out.println("bytes = " + Arrays.toString(bytes));
 
         // String字符串转成字符数组
         char[] chars = str.toCharArray();
+        System.out.println("chars = " + Arrays.toString(chars));
 
         String str1 = str.replace("t","T");
-        System.out.println(str1);
+        System.out.println("replace: " + str1);
 
         String str2 = str.replaceAll("t{2}","T");
-        System.out.println(str2);
+        System.out.println("replaceAll: " + str2);
+
+        // compareTo
+        System.out.println("compareTo: " + "bbc".compareTo("bac"));     // ascii差
+        System.out.println("compareTo: " + "abcde".compareTo("abc"));   // 返回长度差
+
+        //concat
+        System.out.println("concat: " + "abc".concat("def"));
+
+        //copyValueOf
+        System.out.println("copyValueOf: " + String.copyValueOf(new char[]{'a','b','c'}, 1, 1));
+
+        //join
+        System.out.println("join: " + String.join("&", "a", "s", "d"));
+        System.out.println("join: " + String.join("$", new ArrayList<String>(){{add("a");add("s");add("d");}}));
     }
 
     @Test
