@@ -19,7 +19,8 @@ public class problem6 {
                     return array[0];
                 }
                 else if (array[i]>array[i+1] && array[0] >= array[i+1]){
-                    return array[i+1];}
+                    return array[i+1];
+                }
             }
         }
         return 0;

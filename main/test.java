@@ -561,4 +561,22 @@ public class test {
         System.out.println(treeMap);
     }
 
+    /*
+    string 格式化
+     */
+    @Test
+    public void test22(){
+        Date date = new Date();
+        String s = String.format("%tc", date);
+        System.out.println(s);
+
+        double f = 1.2d;
+        System.out.println(String.format("%.3f", f));
+
+        int i = 16;
+        System.out.println(String.format("%x", i));    // 转16进制
+        System.out.println(String.format("%o", i));    // 转8进制
+        System.out.println(String.format("%h", 20));   // 散列码
+    }
+
 }
