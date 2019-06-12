@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.regex.Pattern;
 
 
 /**
@@ -103,19 +104,19 @@ public class test {
 
         // 匹配后缀
         Boolean b1 = str.endsWith(".java");
-        System.out.println(b1);
+        System.out.println("b1 =" + b1);
 
         //匹配开头
         Boolean b2 = str.startsWith("test");
-        System.out.println(b2);
+        System.out.println("b2 =" + b2);
 
-        // 从指定位置匹配
-        Boolean b3 = str.startsWith("est",1);
-        System.out.println(b3);
+        // 从指定位置匹配  false
+        Boolean b3 = str.startsWith("est",2);
+        System.out.println("b3 =" + b3);
 
         // 是否包含指定字符串
         Boolean b4 = str.contains("t.");
-        System.out.println(b4);
+        System.out.println("b4 =" + b4);
 
         // 查找一个字符，在字符串中第一次出现的索引
         System.out.println(str.indexOf("a"));
@@ -560,5 +561,38 @@ public class test {
         treeMap.put("three","3");
         System.out.println(treeMap);
     }
+    /*
+    compile、pattern
+     */
+    @Test
+    public void test22(){
+        String pid = "mallocw: initialized with features=0 2945";
+        String[] pidStr = Pattern.compile(" ").split(pid);
+        System.out.println(pidStr[pidStr.length-1]);
 
+        char[] chars = pid.toCharArray();
+        StringBuffer result = new StringBuffer();
+        for (int i = chars.length-1; i >= 0; i--) {
+            if (chars[i] != ' '){
+                result.append(chars[i]);
+            }
+            else break;
+        }
+        System.out.println(result.reverse());
+
+        if (false && true || true && true){
+            System.out.println("-------------");
+        }
+        System.out.println(~2);  // 2在计算机中存储是0 010（补码） 取反得到1 101也是补码，输出需要源码，1 101->1 100->1 011
+
+        Integer a = -128;   // -128 ~ 127 均相等
+        Integer b = -128;
+        System.out.println(a==b);
+
+        int i = 1;
+        int j = 2;
+        System.out.println(i++*5 + ++j*5); // i++ 先用后加，++j 先加后用   5 + 15
+        System.out.println(i);  // 2
+        System.out.println(j);  // 2
+    }
 }
