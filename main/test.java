@@ -598,7 +598,7 @@ public class test {
         }
         System.out.println(result.reverse());
 
-        if (false && true || true && true){
+        if (false && true || true && false){
             System.out.println("-------------");
         }
         System.out.println(~2);  // 2在计算机中存储是0 010（补码） 取反得到1 101也是补码，输出需要源码，1 101->1 100->1 011
