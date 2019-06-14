@@ -612,5 +612,11 @@ public class test {
         System.out.println(i++*5 + ++j*5); // i++ 先用后加，++j 先加后用   5 + 15
         System.out.println(i);  // 2
         System.out.println(j);  // 2
+
+        // ++x*++y
+        int x = 3;
+        int y = 5;
+        int z = ++x*++y;  // 4*6
+        System.out.println("z= " + z);
     }
 }
