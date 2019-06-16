@@ -598,7 +598,7 @@ public class test {
         }
         System.out.println(result.reverse());
 
-        if (false && true || true && true){
+        if (false && true || true && false){
             System.out.println("-------------");
         }
         System.out.println(~2);  // 2在计算机中存储是0 010（补码） 取反得到1 101也是补码，输出需要源码，1 101->1 100->1 011
@@ -612,5 +612,11 @@ public class test {
         System.out.println(i++*5 + ++j*5); // i++ 先用后加，++j 先加后用   5 + 15
         System.out.println(i);  // 2
         System.out.println(j);  // 2
+
+        // ++x*++y
+        int x = 3;
+        int y = 5;
+        int z = ++x*++y;  // 4*6
+        System.out.println("z= " + z);
     }
 }
