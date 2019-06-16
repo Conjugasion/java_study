@@ -1,6 +1,7 @@
 package algorithm;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -11,19 +12,23 @@ import java.util.List;
  */
 public class dynamic5 {
     public static void main(String[] args) {
-        int[] money = {5,10,25,1};
-        int aim = 15;
-        System.out.println(find(money, aim));
+        int[] money = {1, 3, 4};
+        int aim = 40;
+        System.out.println("find all = " + find(money, aim));
+        System.out.println("stupidFind1 = " + stupidFind1());
+        int[] result = new int[3];
+        System.out.println("find min = " + findMin(money, aim));
     }
 
     /*
-    n种硬币组合成aim,有几种组合方式
+    n种硬币组合成aim,有几种组合方式，动态规划
      */
     static int find(int[] money, int aim){
         int[][] f = new int[money.length+1][aim+1];
         for (int i = 0; i <= aim; i++) {
             f[0][i] = 0;
         }
+        //  aim容量为0，一种放法
         for (int i = 0; i <= money.length; i++) {
             f[i][0] = 1;
         }
@@ -42,11 +47,30 @@ public class dynamic5 {
     }
 
     /*
+    暴力枚举 aim = a*n1 + b*n2 + c*n3 ...
+     */
+    static int stupidFind1(){
+        int result = 0;
+        for (int i = 0; i <= 40; i++) {
+            for (int j = 0; j <= 14; j++) {
+                for (int k = 0; k <= 10; k++) {
+                    if (i+3*j+4*k == 40){
+                        result++;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    
+    /*
     凑成aim的最少零钱数目
     f[i][j] = min{f[i][j], f[i][j-money[i]]+1}
+    贪心算法
      */
-    static int find(int[] money, int aim, int[][] f){
-      return 1;
+    static int findMin(int[] money, int aim){
+        return 1;
     }
 }
 
