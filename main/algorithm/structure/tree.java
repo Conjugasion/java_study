@@ -147,6 +147,7 @@ public class tree {
             }
         }
     }
+
     // 节点左旋
     public void leftRotate(){
 
@@ -166,7 +167,7 @@ public class tree {
         //preVisit(t.root); // 0 1 3 7 8 4 9 2 5 6
         //midVisit(t.root); // 7 3 8 1 9 4 0 5 2 6
         //postVisit(t.root); // 7 8 3 9 4 1 5 6 2 0
-        //deepVisit(t.root);
-        broadVisit(t.root);
+        deepVisit(t.root);   // 0 1 3 7 8 4 9 2 5 6
+        //broadVisit(t.root);
     }
 }
