@@ -1,4 +1,4 @@
-package algorithm;
+package algorithm.dynamic;
 
 import com.sun.glass.ui.delegate.MenuItemDelegate;
 import com.sun.org.apache.regexp.internal.RE;
