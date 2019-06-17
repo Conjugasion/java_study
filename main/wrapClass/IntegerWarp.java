@@ -21,5 +21,8 @@ public class IntegerWarp {
 
         String d = String.valueOf(123);
 
+        System.out.println("getClass: " + new IntegerWarp().getClass());
+        System.out.println("getClass().getName: " + new IntegerWarp().getClass().getName());
+        System.out.println("getClass().getSimpleName(): " + new IntegerWarp().getClass().getSimpleName());
     }
 }
