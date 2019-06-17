@@ -9,6 +9,7 @@ public class maxStr {
         int[] array = {1, -2, 3, 10, -4, 7, 2, -5};
         int i = find(array, 0, array.length - 1);
         System.out.println(i);
+        System.out.println(find(array));
     }
     /*
     分治
@@ -38,5 +39,22 @@ public class maxStr {
         }
         int m3 = sumleft + sumright;
         return Math.max(m1,m2) > m3 ? Math.max(m1,m2) : m3;
+    }
+
+    /*
+    暴力搜索
+     */
+    static int find(int[] array){
+        int max = array[0];
+        for (int i = 0; i < array.length; i++) {
+            for (int j = i; j < array.length; j++) {
+                int current = 0;
+                for (int k = i; k <= j; k++) {
+                    current += array[k];
+                }
+                max = current >= max ? current : max;
+            }
+        }
+        return max;
     }
 }
