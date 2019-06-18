@@ -1,8 +1,5 @@
 package algorithm.dynamic;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author Lucas
@@ -16,7 +13,6 @@ public class dynamic5 {
         int aim = 40;
         System.out.println("find all = " + find(money, aim));
         System.out.println("stupidFind1 = " + stupidFind1());
-        int[] result = new int[3];
         System.out.println("find min = " + findMin(money, aim));
     }
 
@@ -63,14 +59,30 @@ public class dynamic5 {
         return result;
     }
 
-    
     /*
     凑成aim的最少零钱数目
     f[i][j] = min{f[i][j], f[i][j-money[i]]+1}
     贪心算法
      */
     static int findMin(int[] money, int aim){
-        return 1;
+        int[][] f = new int[money.length+1][aim+1];
+        for (int i = 0; i <= money.length; i++) {
+            for (int j = 0; j <= aim; j++) {
+                if (i==0&&j%money[0]==0){
+                    f[i][j] = j/money[0];
+                }
+                else if (j==0){
+                    f[i][j] = 0;
+                }
+                else if (money[i-1] <= j){
+                    f[i][j] = f[i][j] <= f[i][j-money[i-1]]+1 ? f[i][j] : f[i][j-money[i-1]]+1;
+                }
+                else {
+                    f[i][j] = f[i-1][j];
+                }
+            }
+        }
+        return f[money.length][aim];
     }
 }
 
