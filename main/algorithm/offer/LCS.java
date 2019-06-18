@@ -1,5 +1,8 @@
 package algorithm.offer;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * @author Lucas
  * @date 2019-06-17 22:05
@@ -9,31 +12,70 @@ package algorithm.offer;
  */
 public class LCS {
     public static void main(String[] args) {
-
+        int[] source = {2, 3, 5, 4, 8, 10, 6, 7};
+        int[] target = {2, 3, 7, 5, 9, 1, 10, 4, 8, 6};
+        System.out.println(Arrays.toString(find(source, target)));
+        String str1 = "belong";
+        String str2 = "cnblogs";
+        System.out.println(find(str1,str2));
     }
 
-    static void find(int[] source, int[] target){
+    //最长公共子序列
+    static int[] find(int[] source, int[] target){
         int[][] dp = new int[source.length+1][target.length+1];
-        for (int i = 0; i < source.length; i++) {
-            dp[i][0] = 0;
-        }
-        for (int i = 0; i < target.length; i++) {
-            dp[0][i] = 0;
-        }
         /*
         if s[i]==t[i], dp[i][j] = dp[i-1][j-1]+1
         if s[i]!=t[i], dp[i][j] = max(dp[i-1][j], dp[i][j-1])
          */
-        for (int i = 0; i < target.length; i++) {
-            for (int j = 0; j < source.length; j++) {
-                if (target[i] == source[j]) {
-                    dp[i+1][j+1] = dp[i][j]+1;
+        for (int i = 0; i <= source.length; i++) {
+            for (int j = 0; j <= target.length; j++) {
+                if (i==0||j==0){
+                    dp[i][j] = 0;
+                }
+                else if (source[i-1] == target[j-1]) {
+                    dp[i][j] = dp[i-1][j-1]+1;
+
                 }
                 else {
-                    dp[i+1][j+1] = dp[i][j+1] >= dp[i+1][j] ? dp[i][j+1] : dp[i+1][j];
+                    dp[i][j] = dp[i][j-1] >= dp[i-1][j] ? dp[i][j-1] : dp[i-1][j];
                 }
             }
         }
+        int num = dp[source.length][target.length];
+        int i = source.length;
+        int j = target.length;
+        int[] result = new int[num];
+        while (i!=0&&j!=0){
+            if (source[i-1]==target[j-1]){
+                result[num-1] = source[i-1];
+                num--;
+            }
+            if (dp[i-1][j] > dp[i][j-1]){
+                i--;
+            }
+            else {
+                j--;
+            }
+        }
+        return result;
+    }
 
+    //最长公共字串
+    static int find(String source, String target){
+        int result = 0;
+        int[][] dp = new int[source.length()+1][target.length()+1];
+        for (int i = 0; i <= source.length(); i++) {
+            for (int j = 0; j <= target.length(); j++) {
+                if (i==0|j==0){
+                    dp[i][j]=0;
+                }
+                else if (source.toCharArray()[i-1]==target.toCharArray()[j-1]){
+                    dp[i][j] = dp[i-1][j-1]+1;
+                    result = result >= dp[i][j] ? result : dp[i][j];
+                }
+                else dp[i][j]=0;
+            }
+        }
+        return result;
     }
 }
