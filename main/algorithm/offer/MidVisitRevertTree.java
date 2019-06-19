@@ -5,7 +5,7 @@ package algorithm.offer;
  * @date 2019/5/28 21:53
  * 根据中序和后序恢复二叉树
  */
-public class problem4_1 {
+public class MidVisitRevertTree {
     class treeNode{
         int val;
         treeNode left;
@@ -48,8 +48,8 @@ public class problem4_1 {
     public static void main(String[] args) {
         int[] in = {4,7,2,1,5,3,8,6};
         int[] post = {7,4,2,5,8,6,3,1};
-        problem4_1 problem4_1 = new problem4_1();
-        treeNode root = problem4_1.reConstructBinaryTree(in, post);
-        problem4_1.preVisit(root);  // 1 2 4 7 3 5 6 8
+        MidVisitRevertTree MidVisitRevertTree = new MidVisitRevertTree();
+        treeNode root = MidVisitRevertTree.reConstructBinaryTree(in, post);
+        MidVisitRevertTree.preVisit(root);  // 1 2 4 7 3 5 6 8
     }
 }

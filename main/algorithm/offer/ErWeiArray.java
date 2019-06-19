@@ -13,7 +13,7 @@ import java.util.List;
  * 6 8 11 15
  * 左下角
  */
-public class problem1 {
+public class ErWeiArray {
     public static void main(String[] args) {
         int[][] array = new int[][]{{1,2,8,9},{2,4,9,12},{4,7,10,13},{6,8,11,15}};
 //        System.out.println(array.length);

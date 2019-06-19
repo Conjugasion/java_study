@@ -5,7 +5,7 @@ package algorithm.offer;
  * @date 2019-05-29 21:22
  * 旋转数组
  */
-public class problem6 {
+public class XuanZhuanArray {
     public int minNumberInRotateArray(int[] array) {
         if (array.length == 0){
             return 0;

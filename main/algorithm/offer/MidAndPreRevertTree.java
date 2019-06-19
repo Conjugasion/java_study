@@ -11,7 +11,7 @@ import java.util.List;
  * 前序遍历第一个一定是root，找到root在中序遍历中所在的位置
  * 其左边就是它的左子树，其右边就是它的右子树
  */
-public class problem4 {
+public class MidAndPreRevertTree {
     class treeNode{
         int val;
         treeNode left;
@@ -60,7 +60,7 @@ public class problem4 {
             4        5   6
               7         8
          */
-        problem4 problem4 = new problem4();
+        MidAndPreRevertTree problem4 = new MidAndPreRevertTree();
         treeNode root = problem4.reConstructBinaryTree(pre, in);
         problem4.postVisit(root);
     }

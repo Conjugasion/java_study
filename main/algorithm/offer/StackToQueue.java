@@ -8,7 +8,7 @@ import java.util.Stack;
  * 用两个栈实现队列
  * 两只水杯倒来倒去
  */
-public class problem5 {
+public class StackToQueue {
     Stack<Integer> stack1 = new Stack<Integer>();
     Stack<Integer> stack2 = new Stack<Integer>();
 
@@ -29,7 +29,7 @@ public class problem5 {
     }
 
     public static void main(String[] args) {
-        problem5 p5 = new problem5();
+        StackToQueue p5 = new StackToQueue();
         p5.push(1);
         p5.push(2);
         System.out.println(p5.pop());

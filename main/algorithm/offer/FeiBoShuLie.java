@@ -8,7 +8,7 @@ import java.util.Arrays;
  * 斐波那契数列
  * 调用次数 是 f(n-1)次+f(n-2)次+1
  */
-public class problem7 {
+public class FeiBoShuLie {
     /*
     递归版
      */

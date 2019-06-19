@@ -61,7 +61,7 @@ public class dynamic5 {
 
     /*
     凑成aim的最少零钱数目
-    f[i][j] = min{f[i][j], f[i][j-money[i]]+1}
+    f[i][j] = min{f[i-1][j], f[i][j-money[i]]+1}
      */
     static int findMin(int[] money, int aim){
         int[][] f = new int[money.length+1][aim+1];
