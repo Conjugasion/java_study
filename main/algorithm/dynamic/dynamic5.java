@@ -9,7 +9,7 @@ package algorithm.dynamic;
  */
 public class dynamic5 {
     public static void main(String[] args) {
-        int[] money = {1, 3, 4};
+        int[] money = {1, 3, 2};
         int aim = 40;
         System.out.println("find all = " + find(money, aim));
         System.out.println("stupidFind1 = " + stupidFind1());
@@ -62,27 +62,37 @@ public class dynamic5 {
     /*
     凑成aim的最少零钱数目
     f[i][j] = min{f[i][j], f[i][j-money[i]]+1}
-    贪心算法
      */
     static int findMin(int[] money, int aim){
         int[][] f = new int[money.length+1][aim+1];
         for (int i = 0; i <= money.length; i++) {
-            for (int j = 0; j <= aim; j++) {
-                if (i==0&&j%money[0]==0){
-                    f[i][j] = j/money[0];
-                }
-                else if (j==0){
-                    f[i][j] = 0;
-                }
-                else if (money[i-1] <= j){
-                    f[i][j] = f[i][j] <= f[i][j-money[i-1]]+1 ? f[i][j] : f[i][j-money[i-1]]+1;
+            f[i][0] = 0;
+        }
+        for (int i = 0; i <= aim; i++) {
+            f[0][i] = 0;
+        }
+        int min = 0;
+        for (int i = 1; i <= money.length; i++) {
+            for (int j = 1; j <= aim; j++) {
+                if (money[i-1] <= j){
+                    if (f[i][j] <= f[i][j-money[i-1]]+1 && f[i][j]!=0){
+                    } else {
+                        f[i][j] = f[i][j-money[i-1]]+1;
+                    }
                 }
                 else {
                     f[i][j] = f[i-1][j];
                 }
+                if (min == 0){
+                    min = f[i][j];
+                }
+                else {
+                    min = min <= f[i][j] ? min : f[i][j];
+                }
+
             }
         }
-        return f[money.length][aim];
+        return min;
     }
 }
 
