@@ -40,5 +40,7 @@ public class test {
             }
         };
         s.frogSwim();
+
+        BigEgg.Yolk yolk = new BigEgg().new Yolk();
     }
 }
