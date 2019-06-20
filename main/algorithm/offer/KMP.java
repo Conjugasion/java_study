@@ -6,7 +6,9 @@ package algorithm.offer;
  */
 public class KMP {
     public static void main(String[] args) {
-        System.out.println();
+        int[] source = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+        int[] target = {3, 4, 6};
+        System.out.println(find(source, target));
     }
 
     // 暴力搜索 查找source种target首次出现的位置
@@ -15,9 +17,8 @@ public class KMP {
         int t = target.length;
         int i = 0;
         int j = 0;
-        while (i < s && j < t){
-            if (source[i] == target[j]){
-                i++;
+        while (i+j < s && j < t){
+            if (source[i+j] == target[j]){
                 j++;
             }
             else {
@@ -32,4 +33,10 @@ public class KMP {
     }
 
     //
+
+
+
+
+
+
 }
