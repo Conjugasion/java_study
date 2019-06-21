@@ -1,5 +1,6 @@
 package algorithm.offer;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -15,7 +16,7 @@ public class LCS {
         int[] target = {2, 3, 7, 5, 9, 1, 10, 4, 8, 6};
         System.out.println(Arrays.toString(find(source, target)));
         String str1 = "belong";
-        String str2 = "cnblogs";
+        String str2 = "cnblongs";
         System.out.println(find(str1,str2));
     }
 
@@ -60,9 +61,10 @@ public class LCS {
     }
 
     //最长公共字串
-    static int find(String source, String target){
-        int result = 0;
+    static String find(String source, String target){
+        int num = 0;
         int[][] dp = new int[source.length()+1][target.length()+1];
+        ArrayList<int[]> possible = new ArrayList<>();
         for (int i = 0; i <= source.length(); i++) {
             for (int j = 0; j <= target.length(); j++) {
                 if (i==0|j==0){
@@ -70,9 +72,20 @@ public class LCS {
                 }
                 else if (source.toCharArray()[i-1]==target.toCharArray()[j-1]){
                     dp[i][j] = dp[i-1][j-1]+1;
-                    result = result >= dp[i][j] ? result : dp[i][j];
+                    if (num < dp[i][j]) {
+                        num = dp[i][j];
+                        possible.add(new int[]{i,j});
+                    }
                 }
                 else dp[i][j]=0;
+            }
+        }
+        String result = "";
+        for (int[] i : possible) {
+            if (dp[i[0]][i[1]]==num){
+                for (int j = num; j > 0; j--) {
+                    result += source.toCharArray()[i[0]-j];
+                }
             }
         }
         return result;
