@@ -148,12 +148,6 @@ public class tree {
         }
     }
 
-    // 节点左旋
-    public void leftRotate(){
-
-    }
-
-
 
     public static void main(String[] args) {
         tree t = new tree();

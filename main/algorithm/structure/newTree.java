@@ -168,19 +168,14 @@ public class newTree {
         ArrayList<Node> bList = new ArrayList<>();
 
         while (true){
+            aList.add(nodes.get(a));
             if (a == 0){
-                Node currentA = nodes.get(a);
-                aList.add(currentA);
                 break;
             }
             if (a%2==0){
-                Node currentA = nodes.get(a);
-                aList.add(currentA);
                 a = (a-2)/2;
             }
             else {
-                Node currentA = nodes.get(a);
-                aList.add(currentA);
                 a = (a-1)/2;
             }
         }
@@ -188,26 +183,21 @@ public class newTree {
             System.out.print(" "+i.value);
         }*/
         while (true){
+            bList.add(nodes.get(b));
             if (b == 0){
-                Node currentB = nodes.get(b);
-                bList.add(currentB);
                 break;
             }
             if (b%2==0){
-                Node currentB = nodes.get(b);
-                bList.add(currentB);
                 b = (b-2)/2;
             }
             else {
-                Node currentB = nodes.get(b);
-                bList.add(currentB);
-                b = (b-2)/2;
+                b = (b-1)/2;
             }
         }
-        /*for (Node i:bList) {
+        /*System.out.println(" ");
+        for (Node i:bList) {
             System.out.print(" "+i.value);
         }*/
-
         for (Node i : aList) {
             for (Node j : bList) {
                 if (i==j){
@@ -228,6 +218,6 @@ public class newTree {
         //t.rotate(t.root);
         t.broadVisit();
         System.out.println(" ");
-        System.out.println(t.common(9, 6).value);
+        System.out.println(t.common(7, 4).value);
     }
 }
