@@ -26,30 +26,29 @@ public class FastSort {
     }
     // 以最左边的元素为轴枢
     static void location(int[] array, int left, int right){
-        if (left >= right){
-            return ;
-        }
-        int i = right;
-        int j = left;
-        int pivot = array[left];
-        while (i != j){
-            while (array[i] >= pivot && i > j) {
-                i--;
+        if (left < right){
+            int i = right;
+            int j = left;
+            int pivot = array[left];
+            while (i != j){
+                while (array[i] >= pivot && i > j) {
+                    i--;
+                }
+                while (array[j] <= pivot && i > j){
+                    j++;
+                }
+                if (i > j){
+                    int temp = array[i];
+                    array[i] = array[j];
+                    array[j] = temp;
+                }
             }
-            while (array[j] <= pivot && i > j){
-                j++;
-            }
-            if (i > j){
-                int temp = array[i];
-                array[i] = array[j];
-                array[j] = temp;
-            }
-        }
-        array[left] = array[i];
-        array[i] = pivot;
+            array[left] = array[i];
+            array[i] = pivot;
 
-        location(array, left, i-1);
-        location(array, i+1, right);
+            location(array, left, i-1);
+            location(array, i+1, right);
+        }
     }
 }
 

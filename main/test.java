@@ -618,5 +618,47 @@ public class test {
         int y = 5;
         int z = ++x*++y;  // 4*6
         System.out.println("z= " + z);
+
+        Character c1 = 127;
+        Character c2 = 127;
+        System.out.println(c1==c2);
+    }
+
+    @Test
+    /*
+    十进制转二进制
+    不带加号的加法
+     */
+    public void test23(){
+        int a = 10;
+        int b = 0;
+        StringBuilder str = new StringBuilder();
+
+        while (true){
+            if (a == 0){
+                break;
+            }
+            b = a%2;
+            a = a/2;
+            str.append(b);
+        }
+        int num =  Integer.valueOf(str.reverse().toString());
+
+        int c = 5;
+        int d = 8;
+
+        while (true){
+            int num1 = (c^d);  // 不带进位的加法
+            int num2 = (c&d) << 1;   // 进位
+
+            if (num2 == 0){
+                System.out.println(num1);
+                break;
+            }
+            else {
+                c = num1;
+                d = num2;
+            }
+        }
     }
 }
