@@ -660,5 +660,23 @@ public class test {
                 d = num2;
             }
         }
+
+        ArrayList<String> list1 = new ArrayList<>();
+        list1.add("a");
+        list1.add("b");
+        list1.add("a");
+        System.out.println(list1);
+        list1.replaceAll(x -> x+1);
+        System.out.println(list1);
+
+        Collections.replaceAll(list1, "a1", "A1");
+        System.out.println(list1);
+
+        Integer[] array = {9,1,8,2,7,3,4,6,5};
+        ArrayList<Integer> list2 = new ArrayList<>(Arrays.asList(array));
+        Arrays.sort(array);
+        Collections.sort(list2);
+        System.out.println("array: " + Arrays.toString(array));
+        System.out.println(list2);
     }
 }

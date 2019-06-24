@@ -1,6 +1,7 @@
 package algorithm.structure;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Lucas
@@ -11,29 +12,33 @@ public class newTree {
         int value;
         Node left;
         Node right;
+        Node parent;
 
         public Node(int value){
             this.value = value;
             this.left = null;
             this.right = null;
+            this.parent = null;
         }
 
-        public Node(int value, Node left, Node right) {
+        public Node(int value, Node left, Node right, Node parent) {
             this.value = value;
             this.left = left;
             this.right = right;
+            this.parent = null;
         }
     }
 
     static Node root;
-    static ArrayList<Node> nodes = new ArrayList<>();
 
-    // 初始化 {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+
+    // 初始化 {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}  默认值不相同
     void init(int[] array){
         if (array.length == 0){
             System.out.println("error");
         }
         else {
+            ArrayList<Node> nodes = new ArrayList<>();
             root = new Node(array[0]);
             nodes.add(root);
             for (int i = 1; i < array.length; i++) {
@@ -42,8 +47,10 @@ public class newTree {
             for (int i = 0; i < nodes.size(); i++) {
                 if (2*i+1 < nodes.size()){
                     nodes.get(i).left = nodes.get(2*i+1);
+                    nodes.get(2*i+1).parent = nodes.get(i);
                     if (2*i+2 < nodes.size()){
                         nodes.get(i).right = nodes.get(2*i+2);
+                        nodes.get(2*i+2).parent = nodes.get(i);
                     }
                 }
             }
@@ -51,8 +58,25 @@ public class newTree {
     }
 
     // 获得节点
-    Node getNode(int index){
-        return nodes.get(index);
+    static Node getNode(int value){
+        if (root != null){
+            ArrayList<Node> queue = new ArrayList<>();
+            queue.add(root);
+
+            while (!queue.isEmpty()){
+                Node pop = queue.remove(0);
+                if (pop.value==value){
+                    return pop;
+                }
+                if (pop.left!=null){
+                    queue.add(pop.left);
+                }
+                if (pop.right!=null){
+                    queue.add(pop.right);
+                }
+            }
+        }
+        return null;
     }
 
     // 前序遍历
@@ -107,30 +131,65 @@ public class newTree {
                3     4  5   6
              7   8  9
      */
-    void rotate(Node node){
+    void leftRotate(Node node){
         if (node.right == null){
             return;
         }
         else {
             if (node == root){
                 Node right = node.right;
+                right.parent = null;
                 Node left = right.left;
                 right.left = node;
+                node.parent = right;
                 node.right = left;
+                left.parent = node;
                 root = right;
             }
             else {
-                int i = nodes.indexOf(node);
-                int pid = i%2==0 ? (i-2)/2 : (i-1)/2;
-                Node parent = nodes.get(pid);
-                if (i%2==0){
-                    parent.right = node.right;
-                    node.right = node.right.left;
+                Node right = node.right;
+                right.parent = node.parent;
+                if (node.parent.left == node){
+                    node.parent.left = right;
                 }
-                else {
-                    parent.left = node.right;
-                    node.right = node.right.left;
+                else node.parent.right = right;
+                Node left = right.left;
+                right.left = node;
+                node.parent = right;
+                node.right = left;
+                left.parent = node;
+            }
+        }
+    }
+
+    //  右旋
+    void rightRotate(Node node){
+        if (node.left == null){
+            return;
+        }
+        else {
+            if (node == root){
+                Node left = node.left;
+                left.parent = null;
+                Node right = left.right;
+                left.right = node;
+                node.parent = left;
+                node.left = right;
+                right.parent = node;
+                root = left;
+            }
+            else {
+                Node left = node.left;
+                left.parent = node.parent;
+                if (node.parent.right == node){
+                    node.parent.right = left;
                 }
+                else node.parent.left = left;
+                Node right = left.right;
+                left.right = node;
+                node.parent = left;
+                node.left = right;
+                right.parent = node;
             }
         }
     }
@@ -144,24 +203,32 @@ public class newTree {
            10
      */
     void insert(Node node, String direct, Node newNode){
-        int index = nodes.indexOf(node);
-        if (direct=="left"){
-            int size = nodes.size();
-            for (int i = size-1; i <= 2*index + 1; i++) {
-                if (i == 2*index + 1) nodes.add(newNode);
-                else nodes.add(null);
-            }
+        if (direct.equals("left") &&node.left!=null){
             Node left = node.left;
-            newNode.left = left;
             node.left = newNode;
-            nodes.add(node);
+            newNode.parent = node;
+            left.parent = newNode;
+            newNode.left = left;
         }
-        else {
-            int childIndex = 2*index + 2;
+        else if (direct.equals("left") &&node.left==null){
+            node.left = newNode;
+            newNode.parent = node;
+        }
+        else if (direct.equals("right") &&node.left!=null){
             Node right = node.right;
-            newNode.left = right;
             node.right = newNode;
-            nodes.add(node);
+            newNode.parent = node;
+            right.parent = newNode;
+            newNode.left = right;
+        }
+        else if (direct.equals("right") &&node.left==null){
+            node.right = newNode;
+            newNode.parent = node;
+        }
+        // 检测有没有失衡
+        Node lostBalance = lostBalance(node);
+        if (lostBalance!=null){
+            keepBlance(lostBalance);
         }
     }
 
@@ -172,36 +239,22 @@ public class newTree {
              7   8  9
      */
     // 求两个节点的最近公共祖先
-    public Node common(int a, int b){
+    public Node common(Node a, Node b){
         ArrayList<Node> aList = new ArrayList<>();
         ArrayList<Node> bList = new ArrayList<>();
 
         while (true){
-            aList.add(nodes.get(a));
-            if (a == 0){
-                break;
-            }
-            if (a%2==0){
-                a = (a-2)/2;
-            }
-            else {
-                a = (a-1)/2;
-            }
+            aList.add(a);
+            if (a==root) break;
+            a = a.parent;
         }
         /*for (Node i:aList) {
             System.out.print(" "+i.value);
         }*/
         while (true){
-            bList.add(nodes.get(b));
-            if (b == 0){
-                break;
-            }
-            if (b%2==0){
-                b = (b-2)/2;
-            }
-            else {
-                b = (b-1)/2;
-            }
+            bList.add(b);
+            if (b==root) break;
+            b = b.parent;
         }
         /*System.out.println(" ");
         for (Node i:bList) {
@@ -233,35 +286,42 @@ public class newTree {
              7   8  9
            10
      */
-    Node lostBlance(Node node){
-        int index = nodes.indexOf(node);
+    Node lostBalance(Node node){
         // 检测各个父节点，看有没有失衡
         while (true){
-            Node parent;
-            if (index%2==0){
-                index = (index-2)/2;
-                parent = nodes.get(index);
-            }
-            else {
-                index = (index-1)/2;
-                parent = nodes.get(index);
-            }
             // 存在失衡节点返回节点，不存在返回null
-            if (getHeight(parent.left) - getHeight(parent.right) >= 2 || getHeight(parent.left) - getHeight(parent.right) <= -2) return parent;
-            if (parent==root) return null;
+            if (getHeight(node.left) - getHeight(node.right) >= 2 || getHeight(node.left) - getHeight(node.right) <= -2) return node;
+            if (node==root) return null;
+            node = node.parent;
         }
     }
 
     // 确定哪种旋转方式，一次左旋，一次右旋，一次左旋一次右旋，一次右旋一次左旋
     //                   右右     左左       左右            右左
     // 根据失衡节点，首先确定大类，左子树深还是右子树深
+    // node = 失衡节点
     void keepBlance(Node node){
         // 左深
         if (getHeight(node.left) > getHeight(node)){
-
+            Node left = node.left;
+            // 左右插入，需要先左旋后右旋
+            if (left.right!=null&&(left.right.left!=null||left.right.right!=null)){
+                Node right = left.right;
+                leftRotate(left);
+                rightRotate(right);
+            }
+            else rightRotate(left);
         }
+        // 右深
         else if (getHeight(node.left) < getHeight(node)) {
-
+            Node right = node.right;
+            // 右左插入，需要先右旋后左旋
+            if (right.left!=null&&(right.left.right!=null||right.left.left!=null)){
+                Node left = right.left;
+                rightRotate(right);
+                leftRotate(left);
+            }
+            else leftRotate(right);
         }
     }
 
@@ -276,21 +336,24 @@ public class newTree {
     public static void main(String[] args) {
         newTree t = new newTree();
         t.init(new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
-        //t.preVisit(root);
+        t.preVisit(root);
         System.out.println(" ");
-        //t.deepVisit();
-        //t.rotate(t.root);
+        t.deepVisit();
+        System.out.println(" ");
+        //t.leftRotate(root);
         //t.broadVisit();
         System.out.println(" ");
-        System.out.println("common: " + t.common(7, 4).value);
-        Node testNode = t.getNode(2);
-        System.out.println("getHeight: " + t.getHeight(testNode));
+        Node node1 = getNode(7);
+        //Node node2 = getNode(4);
+        //System.out.println("common: " + t.common(node1, node2).value);
+        //Node testNode = getNode(2);
+        //System.out.println("getHeight: " + t.getHeight(testNode));
         Node newNode1 = t.new Node(10);
-        t.insert(nodes.get(7), "left", newNode1);
+        t.insert(node1, "left", newNode1);
         Node newNode2 = t.new Node(11);
         t.insert(newNode1, "left", newNode2);
         t.broadVisit();
         System.out.println(" ");
-        System.out.println("lostBlance: " + t.lostBlance(newNode1).value);
+        //System.out.println("lostBlance: " + t.lostBalance(newNode1).value);
     }
 }
