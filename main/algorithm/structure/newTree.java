@@ -25,8 +25,8 @@ public class newTree {
         }
     }
 
-    Node root;
-    ArrayList<Node> nodes = new ArrayList<>();
+    static Node root;
+    static ArrayList<Node> nodes = new ArrayList<>();
 
     // 初始化 {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
     void init(int[] array){
@@ -135,24 +135,33 @@ public class newTree {
         }
     }
 
-    // 插入节点  哪里，左/右，新节点, 原来的子树置于新节点的左边
+    // 插入节点  那个节点，插入左/右，新节点, 原来的子树置于新节点的左边
     /*
                       0
                   1       2
                3     4  5   6
              7   8  9
+           10
      */
-    void insert(int where, String direct, Node newNode){
-        Node node = getNode(where);
+    void insert(Node node, String direct, Node newNode){
+        int index = nodes.indexOf(node);
         if (direct=="left"){
+            int size = nodes.size();
+            for (int i = size-1; i <= 2*index + 1; i++) {
+                if (i == 2*index + 1) nodes.add(newNode);
+                else nodes.add(null);
+            }
             Node left = node.left;
             newNode.left = left;
             node.left = newNode;
+            nodes.add(node);
         }
         else {
+            int childIndex = 2*index + 2;
             Node right = node.right;
             newNode.left = right;
             node.right = newNode;
+            nodes.add(node);
         }
     }
 
@@ -208,16 +217,80 @@ public class newTree {
         return null;
     }
 
+    // 获得节点深度
+    int getHeight(Node node){
+        if (node==null){
+            return 0;
+        }
+        return 1 + Math.max(getHeight(node.left), getHeight(node.right));
+    }
 
+    // 寻找失去平衡的节点 从插入节点的父节点入手, node = 插入节点
+    /*
+                      0
+                  1       2
+               3     4  5   6
+             7   8  9
+           10
+     */
+    Node lostBlance(Node node){
+        int index = nodes.indexOf(node);
+        // 检测各个父节点，看有没有失衡
+        while (true){
+            Node parent;
+            if (index%2==0){
+                index = (index-2)/2;
+                parent = nodes.get(index);
+            }
+            else {
+                index = (index-1)/2;
+                parent = nodes.get(index);
+            }
+            // 存在失衡节点返回节点，不存在返回null
+            if (getHeight(parent.left) - getHeight(parent.right) >= 2 || getHeight(parent.left) - getHeight(parent.right) <= -2) return parent;
+            if (parent==root) return null;
+        }
+    }
+
+    // 确定哪种旋转方式，一次左旋，一次右旋，一次左旋一次右旋，一次右旋一次左旋
+    //                   右右     左左       左右            右左
+    // 根据失衡节点，首先确定大类，左子树深还是右子树深
+    void keepBlance(Node node){
+        // 左深
+        if (getHeight(node.left) > getHeight(node)){
+
+        }
+        else if (getHeight(node.left) < getHeight(node)) {
+
+        }
+    }
+
+    /*
+                      0
+                  1       2
+               3     4  5   6
+             7   8  9
+           10
+         11
+     */
     public static void main(String[] args) {
         newTree t = new newTree();
         t.init(new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
-        //t.preVisit(t.root);
+        //t.preVisit(root);
         System.out.println(" ");
         //t.deepVisit();
         //t.rotate(t.root);
+        //t.broadVisit();
+        System.out.println(" ");
+        System.out.println("common: " + t.common(7, 4).value);
+        Node testNode = t.getNode(2);
+        System.out.println("getHeight: " + t.getHeight(testNode));
+        Node newNode1 = t.new Node(10);
+        t.insert(nodes.get(7), "left", newNode1);
+        Node newNode2 = t.new Node(11);
+        t.insert(newNode1, "left", newNode2);
         t.broadVisit();
         System.out.println(" ");
-        System.out.println(t.common(7, 4).value);
+        System.out.println("lostBlance: " + t.lostBlance(newNode1).value);
     }
 }
