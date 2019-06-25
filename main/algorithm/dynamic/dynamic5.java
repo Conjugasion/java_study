@@ -65,34 +65,27 @@ public class dynamic5 {
      */
     static int findMin(int[] money, int aim){
         int[][] f = new int[money.length+1][aim+1];
-        for (int i = 0; i <= money.length; i++) {
-            f[i][0] = 0;
-        }
-        for (int i = 0; i <= aim; i++) {
-            f[0][i] = 0;
-        }
-        int min = 0;
-        for (int i = 1; i <= money.length; i++) {
-            for (int j = 1; j <= aim; j++) {
-                if (money[i-1] <= j){
-                    if (f[i][j] <= f[i][j-money[i-1]]+1 && f[i][j]!=0){
-                    } else {
-                        f[i][j] = f[i][j-money[i-1]]+1;
-                    }
-                }
-                else {
-                    f[i][j] = f[i-1][j];
-                }
-                if (min == 0){
-                    min = f[i][j];
-                }
-                else {
-                    min = min <= f[i][j] ? min : f[i][j];
-                }
 
+        for (int i = 0; i < money.length ; i++) {
+            for (int j = 0; j <= aim; j++) {
+                if (i==0) {
+                    f[i][j] = 0;
+                }
+                else if (j==0) {
+                    f[i][j] = 1;
+                }
+                else f[i][j] = 0;
             }
         }
-        return min;
+        for (int i = 1; i <= money.length; i++) {
+            for (int j = 0; j <= aim; j++) {
+                if (j-money[i-1] >= 0){
+                    f[i][j] = Math.min(f[i-1][j], f[i][j-money[i-1]]+1);
+                }
+                else f[i][j] = f[i-1][j];
+            }
+        }
+        return f[money.length][aim];
     }
 }
 

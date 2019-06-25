@@ -16,7 +16,7 @@ public class insert {
 
     // 正着写 n2
     static void insertSort1(int[] array){
-        if (array.length == 1 || array == null){
+        if (array == null || array.length == 1){
             return;
         }
         else {

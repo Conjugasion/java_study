@@ -677,5 +677,8 @@ public class test {
         Collections.sort(list2);
         System.out.println("array: " + Arrays.toString(array));
         System.out.println(list2);
+        String s = "#"+2+"" +1+""+2+"#";
+        String[] split = s.split("2");
+        System.out.println(Arrays.toString(split));
     }
 }
