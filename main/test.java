@@ -680,5 +680,6 @@ public class test {
         String s = "#"+2+"" +1+""+2+"#";
         String[] split = s.split("2");
         System.out.println(Arrays.toString(split));
+        System.out.println(Integer.toBinaryString(-1));
     }
 }
