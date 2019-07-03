@@ -7,6 +7,7 @@ import java.util.Date;
 /**
  * @auther Lucas
  * @date 2019/1/3 16:46
+ * 推荐使用
  */
 public class SimpleDateFormatDemo {
     public static void main(String[] args) throws ParseException {
