@@ -168,15 +168,54 @@ RuntimeException 非受查异常/运行时异常 不需要捕获，一旦抛出 
 
 在自己的代码中，如果创建一个java.lang.String类，这个类是否可以被类加载器加载？为什么？
 不可以，因为存在双亲委派模型模型。先交给 bootStrap ClassLoader，若无法加载在交给 extension ClassLoader，若还不能加载则交给 System ClassLoader
+通过双亲委托模式传递到引导加载器，而引导加载器在核心 Java API 发现这个名字的类，所以会加载该核心类，并不会加载自己写 java.lang.String类。
+这样便可以防止核心API库被随意篡改。
+public class String {
+    public static void main(String[] args) {
+        String str = "my String";
+        System.out.println(str);
+    }
+}
+错误: 在类 java.lang.String 中找不到 main 方法, 请将 main 方法定义为:
+   public static void main(String[] args)
+否则 JavaFX 应用程序类必须扩展javafx.application.Application
+
+如果我们在 classpath 路径下自定义一个名为 java.lang.MyString 类(该类是胡编的)呢？该类并不存在 java.lang中，经过双亲委托模式，传递到启动类加载器中，
+由于父类加载器路径下并没有该类，所以不会加载，将反向委托给子类加载器加载，最终会通过 System 加载器加载该类。
+但是这样做是不允许，因为 java.lang是核心API包，需要访问权限，强制加载将会报出如下异常：
+java.lang.SecurityException: Prohibited package name: java.lang
 
 
 
-说一说你对java.lang.Object对象中hashCode和equals方法的理解。在什么场景下需要重新实现这两个方法。
+说一说你对java.lang.Object对象中 hashCode和equals方法的理解。在什么场景下需要重新实现这两个方法。
+两个对象属性相同应当认为这两个对象是相同的，而不能简单的去比较两个对象的内存地址是否相同。equals 比较的是两个对象的属性，若 equals返回true，
+两个对象的hashcode必须相等；若两个对象的 hashcode相等，equals不一定为true。
+需要根据对象属性去判断两个对象是否相等的场景需要重写 hashcode 和 equals
+
+
 在jdk1.5中，引入了泛型，泛型的存在是用来解决什么问题。
+泛型的主要目标是实现 java 的类型安全。 泛型可以使编译器知道一个对象的限定类型是什么，从而检查是否有代码错误。
+消除了强制类型转换 使得代码可读性好，减少了很多出错的机会
+
+
 这样的a.hashcode() 有什么用，与a.equals(b)有什么关系。
+默认调用 object 的hashcode方法，用于计算对象的内存地址。equals在不重写的情况下，使用的是object默认的 equals，调用==比较的也是对象的内存地址。
+
+
 有没有可能2个不相等的对象有相同的hashcode。
+可能，hash冲突
+
+
 Java中的HashSet内部是如何工作的。
+hashSet基于hashMap实现，因为 hashMap 的 key 是不能重复的，value 是统一的 public final static Object PRESENT = new Object()。
+往 HashSet 中添加元素，首先判断元素（也就是key）是否存在，如果不存在这插入，如果存在着不插入，这样 HashSet 中就不存在重复值。
+
+
 什么是序列化，怎么序列化，为什么序列化，反序列化会遇到什么问题，如何解决。
+
+
+
+
 java8的新特性。
 JVM知识
 
