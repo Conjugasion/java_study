@@ -212,19 +212,53 @@ hashSet基于hashMap实现，因为 hashMap 的 key 是不能重复的，value �
 
 
 什么是序列化，怎么序列化，为什么序列化，反序列化会遇到什么问题，如何解决。
-
-
+将 JVM 中的对象持久化保存到磁盘，只要一个类实现了 java.io.Serializable 接口，那么它就可以被序列化。
+FileOutputStream fs = new FileOutputStream();
+ObjectOutputSream os = new ObjectOutputSream(fs);
+os.writeObject(对象);
+os.close();
+序列化的作用就是为了不同 jvm 之间共享实例对象;内存中的对象状态保存到一个文件中或者数据库中时候；当你想用套接字在网络上传送对象的时候；当你想通过RMI传输对象的时候；
+transient 和 static 修饰的变量不参与序列化
+serialVersionUID 不要去改动
 
 
 java8的新特性。
-JVM知识
+Lambda 表达式，Stream API，接口默认方法
+
 
 什么情况下会发生栈内存溢出。
+递归太深
+
+
 JVM的内存结构，Eden和Survivor比例。
+8:1:1
+
+
 JVM内存为什么要分成新生代，老年代，持久代。新生代中为什么要分为Eden和Survivor。
-JVM中一次完整的GC流程是怎样的，对象如何晋升到老年代，说说你知道的几种主要的JVM参 
-数。
+持久带存放字符串常量池、类的基本信息，默认大小 4m，Jdk8 已经直接取消了 Perm 区域，新建了一个分配在本地内存的元空间。
+因为新生代采用复制算法，Eden和to的存活对象复制到from，然后删除Eden和to中的对象，最后from和to互换。
+
+
+JVM中一次完整的GC流程是怎样的，对象如何晋升到老年代，说说你知道的几种主要的JVM参数。
+-XX:+printGC；-XX:+PrintGCDetails；-XX:+PrintHeapAtGC；-XX:+TraceClassLoading；
+-Xmx（最大堆的空间)；-Xms（最小堆的空间）; -Xmn (设置新生代的大小)；-XX:NewRatio；-XX:SurvivorRatio；-Xss（设置栈空间的大小）;
+-XX:+HeapDumpOnOutOfMemoryError；
+
+
 你知道哪几种垃圾收集器，各自的优缺点，重点讲下cms和G1，包括原理，流程，优缺点。
+新生代垃圾收集器：Serial，采用复制算法，单线程，在进行垃圾回收时会暂停其他所有工作线程(stop the world)
+				ParNew，Serial 的多线程版，采用复制算法，在进行垃圾回收时会暂停其他所有工作线程(stop the world)
+				Parallel Scavenge，多线程，采用复制算法，吞吐量优先,运行代码时间/(运行代码时间+垃圾收集时间)，最高效率地利用CPU时间，
+				尽快地完成程序的运算任务,在进行垃圾回收时会暂停其他所有工作线程(stop the world)
+
+老年代垃圾收集器：Serial Old，采用标记-整理算法，单线程，在进行垃圾回收时会暂停其他所有工作线程(stop the world)
+				Parallel Old,采用标记-整理算法，多线程，吞吐量优先,在进行垃圾回收时会暂停其他所有工作线程(stop the world)
+				CMS 采用标记-清除算法，多线程，主要目标是获取最短垃圾回收停顿时间，真正意义上并发垃圾收集器，它第一次实现了让垃圾收集线程和用户线程同时工作。
+				G1 基于标记-整理算法，高垃圾收集效率。可以非常精确控制停顿时间，在不牺牲吞吐量前提下，实现低停顿垃圾回收。
+				G1收集器避免全区域垃圾收集，它把堆内存划分为大小固定的几个独立区域，并且跟踪这些区域的垃圾收集进度，
+				同时在后台维护一个优先级列表，每次根据所允许的收集时间，优先回收垃圾最多的区域。
+
+
 垃圾回收算法的实现原理。
 当出现了内存溢出，你怎么排错。
 JVM内存模型的相关知识了解多少，比如重排序，内存屏障，happen-before，主内存，工作 
