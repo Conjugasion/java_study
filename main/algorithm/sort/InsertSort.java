@@ -21,7 +21,7 @@ public class InsertSort {
         /*
         1 5 6 4 0
          */
-        for (int i = 1; i < s.length; i++) {
+        /*for (int i = 1; i < s.length; i++) {
             // 当前数比前一个大，并且大于等于索引为零的数
             if (array[i] < array[i-1] && array[i] >= array[0]){
                 // 找到第一个比当前数小的数的位置
@@ -44,6 +44,26 @@ public class InsertSort {
                     array[k] = array[k-1];
                 }
                 array[0] = temp;
+            }
+        }*/
+        for (int i = 0; i < s.length; i++) {
+            for (int j = 0; j < i; j++) {
+                if (array[j] > array[i]){
+                    int temp = array[j];
+                    array[j] = array[i];
+                    array[i] = temp;
+                }
+            }
+        }
+
+        for (int i = 1; i < s.length; i++) {
+            for (int j = i-1; j >=0; j--) {
+                if (array[j+1] < array[j]){
+                    int temp = array[j];
+                    array[j] = array[j+1];
+                    array[j+1] = temp;
+                }
+                else break;
             }
         }
         System.out.println(Arrays.toString(array));

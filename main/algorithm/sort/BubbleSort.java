@@ -21,12 +21,22 @@ public class BubbleSort {
             /*
              2 4 3 5
              */
-        for (int k = 0; k < s.length - 1; k++) {
+        /*for (int k = 0; k < s.length - 1; k++) {
             for (int i = 0,j = i+1;  j <  s.length; i++, j++) {
                 if (array[i]>array[j]){
                     int temp =  array[i];
                     array[i] = array[j];
                     array[j] = temp;
+                }
+            }
+        }*/
+
+        for (int i = s.length-1; i>0; i--) {
+            for (int j =0 ; j < i-1; j++) {
+                if (array[j]>array[j+1]){
+                    int temp =  array[j];
+                    array[j] = array[j+1];
+                    array[j+1] = temp;
                 }
             }
         }

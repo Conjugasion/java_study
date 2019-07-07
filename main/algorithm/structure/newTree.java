@@ -79,6 +79,29 @@ public class newTree {
         return null;
     }
 
+    // 获取某个节点的父节点
+    Node getParent(Node node){
+        if (root != null){
+            ArrayList<Node> nodes = new ArrayList<>();
+            nodes.add(root);
+
+            while (!nodes.isEmpty()){
+                Node pop = nodes.remove(nodes.size() - 1);
+                if (pop.left==node||pop.right==node){
+                    return pop;
+                }
+                if (pop.right!=null){
+                    nodes.add(pop.right);
+                }
+                if (pop.left!=null){
+                    nodes.add(pop.left);
+                }
+            }
+        }
+        return null;
+    }
+
+
     // 前序遍历
     void preVisit(Node root){
          if (root != null){
@@ -340,6 +363,8 @@ public class newTree {
         System.out.println(" ");
         t.deepVisit();
         System.out.println(" ");
+        Node seven = getNode(7);
+        System.out.println("父节点是: "+ t.getParent(seven).value);
         //t.leftRotate(root);
         //t.broadVisit();
         System.out.println(" ");

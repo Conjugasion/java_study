@@ -567,16 +567,21 @@ public class test {
         TreeMap<String, String> treeMap = new TreeMap<>(new Comparator<String>() {
             @Override
             public int compare(String o1, String o2) {
-                return 0;
+                return o1.compareTo(o2);
+                //return -1;
             }
         });
         treeMap.put("six","6");
         treeMap.put("one","1");
         treeMap.put("four","4");
+        //treeMap.put("four","5");
         treeMap.put("two","2");
         treeMap.put("five","5");
         treeMap.put("three","3");
-        System.out.println(treeMap);
+        treeMap.keySet();
+        Stack<Integer> stack = new Stack<>();
+        
+        System.out.println(treeMap);   // six=3
     }
     /*
     compile、pattern
