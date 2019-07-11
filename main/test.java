@@ -686,5 +686,10 @@ public class test {
         String[] split = s.split("2");
         System.out.println(Arrays.toString(split));
         System.out.println(Integer.toBinaryString(-1));
+
+        // 无限循环
+        for (;;) {
+            System.out.println("hello");
+        }
     }
 }
