@@ -664,7 +664,8 @@ public class test {
         list1.add("a");
         list1.add("b");
         list1.add("a");
-        System.out.println(list1);
+        list1.add(null);
+        System.out.println("list1: " + list1);
         list1.replaceAll(x -> x+1);
         System.out.println(list1);
 
@@ -681,5 +682,35 @@ public class test {
         String[] split = s.split("2");
         System.out.println(Arrays.toString(split));
         System.out.println(Integer.toBinaryString(-1));
+    }
+
+    @Test
+    public void test24(){
+        ArrayList<ArrayList<Integer>> arrayLists = new ArrayList<>();
+        ArrayList<Integer> list1 = new ArrayList<>();
+        ArrayList<Integer> list2 = new ArrayList<>();
+        ArrayList<Integer> list3 = new ArrayList<>();
+        list1.add(1);
+        list1.add(2);
+        list2.add(1);
+        list2.add(2);
+        list2.add(3);
+        list3.add(1);
+        arrayLists.add(list1);
+        arrayLists.add(list2);
+        arrayLists.add(list3);
+        Collections.reverse(list2);
+        System.out.println("list2翻转: " + list2);
+        System.out.println("index: " + list2.indexOf(2));
+        System.out.println("不存在元素的index: " + list2.indexOf(4));
+
+        System.out.println(arrayLists);
+        arrayLists.sort(new Comparator<ArrayList<Integer>>() {
+            @Override
+            public int compare(ArrayList<Integer> o1, ArrayList<Integer> o2) {
+                return o1.size() - o2.size();
+            }
+        });
+        System.out.println("按长度排序: " + arrayLists);
     }
 }

@@ -1,7 +1,9 @@
 package algorithm.structure;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 /**
  * @author Lucas
@@ -325,6 +327,69 @@ public class newTree {
         }
     }
 
+    // 每一条根到叶子节点的路径 栈
+    static List<String> findPaths(Node root) {
+        List<String> result = new ArrayList<>();
+        List<Node> nodeList = new ArrayList<>();
+        List<String> strList = new ArrayList<>();
+
+        nodeList.add(root);
+        strList.add("");
+        while (!nodeList.isEmpty()){
+            Node curNode = nodeList.remove(nodeList.size() - 1);
+            String curStr = strList.remove(strList.size()-1);
+            if (curNode.left==null&&curNode.right==null){
+                result.add(curStr + curNode.value);
+            }
+            if (curNode.right!=null){
+                nodeList.add(curNode.right);
+                strList.add(curStr + curNode.value +"->");
+            }
+            if (curNode.left!=null){
+                nodeList.add(curNode.left);
+                strList.add(curStr + curNode.value +"->");
+            }
+        }
+        return result;
+    }
+
+    // 每一条根到叶子节点的路径 递归版
+    static List<String> findWays(Node node){
+        if (node.left!=null && node.right!=null){
+            List<String> leftWay = findWays(node.left);
+            List<String> rightWay = findWays(node.right);
+            List<String> result = new ArrayList<>();
+            for (String way:leftWay) {
+                result.add(node.value + "->" + way);
+            }
+            for (String way:rightWay) {
+                result.add(node.value + "->" + way);
+            }
+            return result;
+        }
+        else if (node.left != null){
+            List<String> leftWay = findWays(node.left);
+            List<String> result = new ArrayList<>();
+            for (String way:leftWay) {
+                result.add(node.value + "->" + way);
+            }
+            return result;
+        }
+        else if (node.right != null){
+            List<String> rightWay = findWays(node.right);
+            List<String> result = new ArrayList<>();
+            for (String way:rightWay) {
+                result.add(node.value + "->" + way);
+            }
+            return result;
+        }
+        else {
+            List<String> result = new ArrayList<>();
+            result.add(node.value + "");
+            return result;
+        }
+    }
+
     /*
                       0
                   1       2
@@ -337,23 +402,29 @@ public class newTree {
         newTree t = new newTree();
         t.init(new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
         t.preVisit(root);
-        System.out.println(" ");
+        System.out.println("从根到叶子的每一条路径: ");
+        List<String> paths = findPaths(root);
+        System.out.println(paths);
+        System.out.println("----------------");
+        List<String> ways = findWays(root);
+        System.out.println(ways);
+        System.out.println("----------------");
         t.deepVisit();
         System.out.println(" ");
         //t.leftRotate(root);
         //t.broadVisit();
-        System.out.println(" ");
+        System.out.println("----------------");
         Node node1 = getNode(7);
         //Node node2 = getNode(4);
         //System.out.println("common: " + t.common(node1, node2).value);
         //Node testNode = getNode(2);
         //System.out.println("getHeight: " + t.getHeight(testNode));
-        Node newNode1 = t.new Node(10);
-        t.insert(node1, "left", newNode1);
-        Node newNode2 = t.new Node(11);
-        t.insert(newNode1, "left", newNode2);
-        t.broadVisit();
-        System.out.println(" ");
+        //Node newNode1 = t.new Node(10);
+        //t.insert(node1, "left", newNode1);
+        //Node newNode2 = t.new Node(11);
+        //t.insert(newNode1, "left", newNode2);
+        //t.broadVisit();
+        //System.out.println(" ");
         //System.out.println("lostBlance: " + t.lostBalance(newNode1).value);
     }
 }
