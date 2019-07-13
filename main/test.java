@@ -2,13 +2,10 @@ import org.apache.log4j.Logger;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import javax.swing.text.StyledEditorKit;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Future;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Pattern;
@@ -687,9 +684,45 @@ public class test {
         System.out.println(Arrays.toString(split));
         System.out.println(Integer.toBinaryString(-1));
 
-        // 无限循环
-        for (;;) {
-            System.out.println("hello");
+        int[] seq = new int[]{3,1,2};
+        int[] copy = Arrays.copyOfRange(seq,0,seq.length);
+        System.out.println(Arrays.toString(seq));
+        Arrays.sort(seq);
+        int i = 0;
+        for (; i < 3; i++) {
+            System.out.println(i);
+        }
+
+        System.out.println("ab"+'c');
+        TreeMap<Integer,Integer> map = new TreeMap<>();
+        Iterator<String> iterator = list1.iterator();
+        ArrayList<String> str1 = new ArrayList<>();
+        str1.add("3");
+        str1.add("4");
+        str1.add("34");
+        str1.add("32");
+        str1.add("43");
+        str1.add("342");
+        str1.add("5");
+        Collections.sort(str1);
+        System.out.println(str1);
+
+        String[] str2 = {"3","4","34","32","43","342","5"};
+        Arrays.sort(str2);
+        System.out.println(Arrays.toString(str2));
+
+        // array必须是Integer[]，而不是int[]
+        Arrays.sort(array, new Comparator<Integer>(){
+            public int compare(Integer o1, Integer o2){
+                if (Integer.valueOf(String.valueOf(o1)+String.valueOf(o2)) < Integer.valueOf(String.valueOf(o2)+String.valueOf(o1))){
+                    return -1;
+                }
+                else return 1;
+            }
+        });
+        StringBuilder builder = new StringBuilder();
+        for(int in:array){
+            builder.append(in);
         }
     }
 }
