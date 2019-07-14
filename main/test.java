@@ -9,6 +9,9 @@ import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 
 /**
@@ -704,8 +707,11 @@ public class test {
         str1.add("43");
         str1.add("342");
         str1.add("5");
+        str1.addAll(5,str1);      // 指定插入的索引位置
+        System.out.println("addAll: " + str1);
         Collections.sort(str1);
-        System.out.println(str1);
+        System.out.println("Collections sort: " + str1);
+        System.out.println("Collections binarySearch: " + Collections.binarySearch(str1, "342"));
 
         String[] str2 = {"3","4","34","32","43","342","5"};
         Arrays.sort(str2);
@@ -724,5 +730,31 @@ public class test {
         for(int in:array){
             builder.append(in);
         }
+    }
+
+    @Test
+    public void test24(){
+        HashSet<Long> sortSet = new HashSet<>();
+        sortSet.add(2L);
+        sortSet.add(6L);
+        sortSet.add(1L);
+        System.out.println("初始打印顺序: " + sortSet);
+        ArrayList<Long> setList = new ArrayList<>(sortSet);
+        System.out.println("set转list之后的顺序: " + setList);
+        //setList.addAll(sortSet);
+        String num = String.valueOf(setList.get(0));
+        System.out.println(Integer.valueOf("29296875"));
+
+
+        // 移除指定元素 要用包装类！！！不然默认为删除指定索引。
+        new ArrayList<Integer>().remove((Integer) 1);
+
+        // 引用类型数组转ArrayList比较方便
+        String[] str = {"a","b"};
+        ArrayList<String> list = new ArrayList<>(Arrays.asList(str));
+
+        // 基本类型 比如int long double数组转ArrayList比较麻烦，用Stream/遍历
+        int[] array = {1,2,3};
+        List<Integer> integers= IntStream.of(array).boxed().collect(Collectors.toList());
     }
 }
