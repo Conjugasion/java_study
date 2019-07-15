@@ -1,6 +1,7 @@
 import org.apache.log4j.Logger;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.omg.PortableInterceptor.INACTIVE;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -752,9 +753,52 @@ public class test {
         // 引用类型数组转ArrayList比较方便
         String[] str = {"a","b"};
         ArrayList<String> list = new ArrayList<>(Arrays.asList(str));
+        System.out.println("list: " + list);
 
         // 基本类型 比如int long double数组转ArrayList比较麻烦，用Stream/遍历
-        int[] array = {1,2,3};
+        int[] array = {1,2,3,2};
         List<Integer> integers= IntStream.of(array).boxed().collect(Collectors.toList());
+        //ArrayList<Integer> integers= (ArrayList)IntStream.of(array).boxed().collect(Collectors.toList());
+        //new HashSet<Integer>().removeAll()
+        ArrayList<Integer> removedList = new ArrayList<>();
+        removedList.add(2);
+        HashSet<Integer> removedSet = new HashSet<>();
+        removedSet.add(2);
+        //integers.removeAll(removedList);     // 移除所有removed包含的元素，包括重复和不重复元素
+        integers.removeAll(removedSet);     // 移除所有removed包含的元素，包括重复和不重复元素
+        //integers.remove((Integer)2);       // 仅移除一个
+        System.out.println("integers: " + integers);
+    }
+
+    // set集合并、差、交
+    @Test
+    public void test25(){
+        Set<Integer> result = new HashSet<Integer>();
+        Set<Integer> set1 = new HashSet<Integer>(){{
+            add(1);
+            add(3);
+            add(5);
+        }};
+
+        Set<Integer> set2 = new HashSet<Integer>(){{
+            add(1);
+            add(2);
+            add(3);
+        }};
+
+        result.clear();
+        result.addAll(set1);
+        result.retainAll(set2);
+        System.out.println("交集："+result);
+
+        result.clear();
+        result.addAll(set1);
+        result.removeAll(set2);
+        System.out.println("差集："+result);
+
+        result.clear();
+        result.addAll(set1);
+        result.addAll(set2);
+        System.out.println("并集："+result);
     }
 }
