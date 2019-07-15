@@ -348,6 +348,16 @@ public class newTree {
         }
     }
 
+    // 求树深度
+    int TreeDepth(Node root) {
+        if (root == null){
+            return 0;
+        }
+        int leftnum = TreeDepth(root.left);
+        int rightnum = TreeDepth(root.right);
+        return Math.max(leftnum,rightnum)+1;
+    }
+
     /*
                       0
                   1       2
@@ -359,12 +369,15 @@ public class newTree {
     public static void main(String[] args) {
         newTree t = new newTree();
         t.init(new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
+        System.out.println("前序遍历：");
         t.preVisit(root);
         System.out.println(" ");
+        System.out.println("深度遍历：");
         t.deepVisit();
         System.out.println(" ");
         Node seven = getNode(7);
-        System.out.println("父节点是: "+ t.getParent(seven).value);
+        System.out.println("7的父节点是: " + t.getParent(seven).value);
+        System.out.println("树深度是：" + t.TreeDepth(root));
         //t.leftRotate(root);
         //t.broadVisit();
         System.out.println(" ");
@@ -373,10 +386,11 @@ public class newTree {
         //System.out.println("common: " + t.common(node1, node2).value);
         //Node testNode = getNode(2);
         //System.out.println("getHeight: " + t.getHeight(testNode));
-        Node newNode1 = t.new Node(10);
-        t.insert(node1, "left", newNode1);
+        //Node newNode1 = t.new Node(10);
+        //t.insert(node1, "left", newNode1);
         Node newNode2 = t.new Node(11);
-        t.insert(newNode1, "left", newNode2);
+        //t.insert(newNode1, "left", newNode2);
+        System.out.println("广度遍历：");
         t.broadVisit();
         System.out.println(" ");
         //System.out.println("lostBlance: " + t.lostBalance(newNode1).value);
