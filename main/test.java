@@ -801,4 +801,36 @@ public class test {
         result.addAll(set2);
         System.out.println("并集："+result);
     }
+
+    //
+    @Test
+    public void test26(){
+        char[] chars = {'a','b','c','d','e'};
+        //String s = new String(chars);
+        String s = String.valueOf(chars);
+        System.out.println("String's subString: " + s.substring(1,3));    // 包头不包尾 bc
+        System.out.println("StringBuilder's subString: " + new StringBuilder(s).substring(1,3));
+        String[] str = {"a","b","c"};
+        System.out.println("String[]转String: " + String.join("", str));  // String[]转String
+
+        // 翻转单词顺序
+        String word = "student. a am I";
+        String[] strs = word.split(" ");
+        int i=0;
+        int j=strs.length-1;
+        while (i<=j){
+            String temp = strs[i];
+            strs[i] = strs[j];
+            strs[j] = temp;
+            i++;
+            j--;
+        }
+        System.out.println(String.join(" ", strs));
+        String badStr1 = "";
+        String badStr2 = " ";
+        //badStr1' isEmpty: true,badStr1' length: 0
+        //badStr2' isEmpty: false,badStr2' length: 1
+        System.out.println("badStr1' isEmpty: " + badStr1.isEmpty() + ",badStr1' length: " + badStr1.length());
+        System.out.println("badStr2' isEmpty: " + badStr2.isEmpty() + ",badStr2' length: " + badStr2.length());
+    }
 }
