@@ -832,5 +832,6 @@ public class test {
         //badStr2' isEmpty: false,badStr2' length: 1
         System.out.println("badStr1' isEmpty: " + badStr1.isEmpty() + ",badStr1' length: " + badStr1.length());
         System.out.println("badStr2' isEmpty: " + badStr2.isEmpty() + ",badStr2' length: " + badStr2.length());
+        Arrays.sort(new int[]{1,2,3});
     }
 }
