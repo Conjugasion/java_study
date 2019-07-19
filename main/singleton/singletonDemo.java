@@ -8,7 +8,7 @@ package singleton;
 public class singletonDemo {
     static String word = "I'm singleton";
     private singletonDemo(){
-        System.out.println("singletonDemo is created! ");
+        System.out.println("singletonDemo is created!");
     }
     private static singletonDemo singletonDemo = new singletonDemo();
     public singletonDemo getInstance(){

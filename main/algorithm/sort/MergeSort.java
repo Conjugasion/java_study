@@ -38,7 +38,7 @@ public class MergeSort {
     }
 
     // 合并
-    static void merge(int[] array, int left, int mid, int right){
+    /*static void merge(int[] array, int left, int mid, int right){
         // 拆成两个数组
         int[] l = new int[mid-left+1];
         int[] r = new int[right-mid];
@@ -75,6 +75,46 @@ public class MergeSort {
                 array[n] = r[k];
                 n++;
             }
+        }
+    }*/
+
+    static void merge(int[] array, int left, int mid, int right){
+        if (left >= right){
+            return;
+        }
+        int[] result = new int[right-left+1];
+        int i = left;
+        int j = mid+1;
+        int n = 0;
+
+        while (i<=mid&&j<=right){
+            if (array[i] <= array[j]){
+                result[n] = array[i];
+                n++;
+                i++;
+            }
+            else {
+                result[n] = array[j];
+                n++;
+                j++;
+            }
+        }
+
+        if (i<=mid){
+            for (int k = i; k <=mid ; k++) {
+                result[n] = array[k];
+                n++;
+            }
+        }
+        if (j<=right){
+            for (int k = j; k <= right; k++) {
+                result[n] = array[k];
+                n++;
+            }
+        }
+
+        for (int k = left; k <= right ; k++) {
+            array[k] = result[k-left];
         }
     }
 }

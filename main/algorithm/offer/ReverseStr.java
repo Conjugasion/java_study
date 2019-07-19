@@ -1,6 +1,7 @@
 package algorithm.offer;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 /**
  * @author Lucas
@@ -11,9 +12,16 @@ public class ReverseStr {
     public static void main(String[] args) {
         String[] s = {"a", "b", "c", "d", "e", "f"};
         // 左移两位 （a'b'）'   (ba fedc)'  cdefab
-        reverse(s, 0, 1);
-        reverse(s, 2, 5);
-        reverse(s, 0, 5);
+        //reverse(s, 0, 1);
+        //reverse(s, 2, 5);
+        //reverse(s, 0, 5);
+        System.out.println(Arrays.toString(s));
+        Arrays.asList(s).sort(new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return -1;
+            }
+        });
         System.out.println(Arrays.toString(s));
     }
 

@@ -1,17 +1,18 @@
 import org.apache.log4j.Logger;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.omg.PortableInterceptor.INACTIVE;
 
-import javax.swing.text.StyledEditorKit;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Future;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 
 /**
@@ -567,16 +568,21 @@ public class test {
         TreeMap<String, String> treeMap = new TreeMap<>(new Comparator<String>() {
             @Override
             public int compare(String o1, String o2) {
-                return 0;
+                return o1.compareTo(o2);
+                //return -1;
             }
         });
         treeMap.put("six","6");
         treeMap.put("one","1");
         treeMap.put("four","4");
+        //treeMap.put("four","5");
         treeMap.put("two","2");
         treeMap.put("five","5");
         treeMap.put("three","3");
-        System.out.println(treeMap);
+        treeMap.keySet();
+        Stack<Integer> stack = new Stack<>();
+        
+        System.out.println(treeMap);   // six=3
     }
     /*
     compile、pattern
@@ -682,6 +688,152 @@ public class test {
         String[] split = s.split("2");
         System.out.println(Arrays.toString(split));
         System.out.println(Integer.toBinaryString(-1));
+
+        int[] seq = new int[]{3,1,2};
+        int[] copy = Arrays.copyOfRange(seq,0,seq.length);
+        System.out.println(Arrays.toString(seq));
+        Arrays.sort(seq);
+        int i = 0;
+        for (; i < 3; i++) {
+            System.out.println(i);
+        }
+
+        System.out.println("ab"+'c');
+        TreeMap<Integer,Integer> map = new TreeMap<>();
+        Iterator<String> iterator = list1.iterator();
+        ArrayList<String> str1 = new ArrayList<>();
+        str1.add("3");
+        str1.add("4");
+        str1.add("34");
+        str1.add("32");
+        str1.add("43");
+        str1.add("342");
+        str1.add("5");
+        str1.addAll(5,str1);      // 指定插入的索引位置
+        System.out.println("addAll: " + str1);
+        Collections.sort(str1);
+        System.out.println("Collections sort: " + str1);
+        System.out.println("Collections binarySearch: " + Collections.binarySearch(str1, "342"));
+
+        String[] str2 = {"3","4","34","32","43","342","5"};
+        Arrays.sort(str2);
+        System.out.println(Arrays.toString(str2));
+
+        // array必须是Integer[]，而不是int[]
+        Arrays.sort(array, new Comparator<Integer>(){
+            public int compare(Integer o1, Integer o2){
+                if (Integer.valueOf(String.valueOf(o1)+String.valueOf(o2)) < Integer.valueOf(String.valueOf(o2)+String.valueOf(o1))){
+                    return -1;
+                }
+                else return 1;
+            }
+        });
+        StringBuilder builder = new StringBuilder();
+        for(int in:array){
+            builder.append(in);
+        }
+    }
+
+    @Test
+    public void test24(){
+        HashSet<Long> sortSet = new HashSet<>();
+        sortSet.add(2L);
+        sortSet.add(6L);
+        sortSet.add(1L);
+        System.out.println("初始打印顺序: " + sortSet);
+        ArrayList<Long> setList = new ArrayList<>(sortSet);
+        System.out.println("set转list之后的顺序: " + setList);
+        //setList.addAll(sortSet);
+        String num = String.valueOf(setList.get(0));
+        System.out.println(Integer.valueOf("29296875"));
+
+
+        // 移除指定元素 要用包装类！！！不然默认为删除指定索引。
+        new ArrayList<Integer>().remove((Integer) 1);
+
+        // 引用类型数组转ArrayList比较方便
+        String[] str = {"a","b"};
+        ArrayList<String> list = new ArrayList<>(Arrays.asList(str));
+        System.out.println("list: " + list);
+
+        // 基本类型 比如int long double数组转ArrayList比较麻烦，用Stream/遍历
+        int[] array = {1,2,3,2};
+        List<Integer> integers= IntStream.of(array).boxed().collect(Collectors.toList());
+        //ArrayList<Integer> integers= (ArrayList)IntStream.of(array).boxed().collect(Collectors.toList());
+        //new HashSet<Integer>().removeAll()
+        ArrayList<Integer> removedList = new ArrayList<>();
+        removedList.add(2);
+        HashSet<Integer> removedSet = new HashSet<>();
+        removedSet.add(2);
+        //integers.removeAll(removedList);     // 移除所有removed包含的元素，包括重复和不重复元素
+        integers.removeAll(removedSet);     // 移除所有removed包含的元素，包括重复和不重复元素
+        //integers.remove((Integer)2);       // 仅移除一个
+        System.out.println("integers: " + integers);
+    }
+
+    // set集合并、差、交
+    @Test
+    public void test25(){
+        Set<Integer> result = new HashSet<Integer>();
+        Set<Integer> set1 = new HashSet<Integer>(){{
+            add(1);
+            add(3);
+            add(5);
+        }};
+
+        Set<Integer> set2 = new HashSet<Integer>(){{
+            add(1);
+            add(2);
+            add(3);
+        }};
+
+        result.clear();
+        result.addAll(set1);
+        result.retainAll(set2);
+        System.out.println("交集："+result);
+
+        result.clear();
+        result.addAll(set1);
+        result.removeAll(set2);
+        System.out.println("差集："+result);
+
+        result.clear();
+        result.addAll(set1);
+        result.addAll(set2);
+        System.out.println("并集："+result);
+    }
+
+    //
+    @Test
+    public void test26(){
+        char[] chars = {'a','b','c','d','e'};
+        //String s = new String(chars);
+        String s = String.valueOf(chars);
+        System.out.println("String's subString: " + s.substring(1,3));    // 包头不包尾 bc
+        System.out.println("StringBuilder's subString: " + new StringBuilder(s).substring(1,3));
+        String[] str = {"a","b","c"};
+        System.out.println("String[]转String: " + String.join("", str));  // String[]转String
+
+        // 翻转单词顺序
+        String word = "student. a am I";
+        String[] strs = word.split(" ");
+        int i=0;
+        int j=strs.length-1;
+        while (i<=j){
+            String temp = strs[i];
+            strs[i] = strs[j];
+            strs[j] = temp;
+            i++;
+            j--;
+        }
+        System.out.println(String.join(" ", strs));
+        String badStr1 = "";
+        String badStr2 = " ";
+        //badStr1' isEmpty: true,badStr1' length: 0
+        //badStr2' isEmpty: false,badStr2' length: 1
+        System.out.println("badStr1' isEmpty: " + badStr1.isEmpty() + ",badStr1' length: " + badStr1.length());
+        System.out.println("badStr2' isEmpty: " + badStr2.isEmpty() + ",badStr2' length: " + badStr2.length());
+        Arrays.sort(new int[]{1,2,3});
     }
 
     @Test
