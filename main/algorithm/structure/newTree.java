@@ -1,7 +1,8 @@
 package algorithm.structure;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * @author Lucas
@@ -129,6 +130,22 @@ public class newTree {
         }
     }
 
+    // 深度遍历 Stack
+    void deepVisit2(){
+        if (root != null){
+            Stack<Node> stack = new Stack<>();
+            stack.push(root);
+            while (!stack.isEmpty()){
+                Node pop = stack.pop();
+                if (pop!=null){
+                    System.out.print(pop.value + " ");
+                    stack.push(pop.right);
+                    stack.push(pop.left);
+                }
+            }
+        }
+    }
+
     // 广度遍历
     void broadVisit(){
         if (root != null){
@@ -146,6 +163,22 @@ public class newTree {
             }
         }
     }
+    // 广度遍历 queue
+    void broadVisit2(){
+        if (root != null){
+            Queue<Node> queue = new LinkedList<>();
+            queue.offer(root);
+            while (!queue.isEmpty()){
+                Node node = queue.poll();
+                if (node!=null){
+                    System.out.print(node.value + " ");
+                    queue.offer(node.left);
+                    queue.offer(node.right);
+                }
+            }
+        }
+    }
+
 
     // 指定节点左旋
     /*
@@ -391,7 +424,10 @@ public class newTree {
         Node newNode2 = t.new Node(11);
         //t.insert(newNode1, "left", newNode2);
         System.out.println("广度遍历：");
-        t.broadVisit();
+        t.broadVisit2();
+        System.out.println(" ");
+        System.out.println("深度遍历：");
+        t.deepVisit2();
         System.out.println(" ");
         //System.out.println("lostBlance: " + t.lostBalance(newNode1).value);
     }

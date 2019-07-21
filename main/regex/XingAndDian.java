@@ -43,19 +43,19 @@ public class XingAndDian {
         String group = matcher.group();
         System.out.println("regex1 group: " + group);
 
-        //**************loonkingAt()********************
+        //**************loonkingAt() 以指定regex开头********************
 
         String t1 = "123aabbcc456";
         String p1 = "\\d+";
         Pattern compile1 = Pattern.compile(p1);
         Matcher matcher1 = compile1.matcher(t1);
-        System.out.println("regex2: " + matcher1.lookingAt());
+        System.out.println("regex2 loonkingAt(): " + matcher1.lookingAt());
 
         // ****************find()***************************
-        // find之后，才能使用start、end和group方法
+        // find之后，才能使用start、end和group方法，包头不包尾
         // ***************start()和end()*************************
         // ******************group()****************************
-        String t2 = "aeebcbadebaaa";
+        String t2 = "aebcbadebaaa";
         String p2 = "a.?e";
         Pattern compile2 = Pattern.compile(p2);
         Matcher matcher2 = compile2.matcher(t2);

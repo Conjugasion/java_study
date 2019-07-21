@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -774,7 +775,7 @@ public class test {
     // set集合并、差、交
     @Test
     public void test25(){
-        Set<Integer> result = new HashSet<Integer>();
+        Set<Integer> result = new HashSet<>();
         Set<Integer> set1 = new HashSet<Integer>(){{
             add(1);
             add(3);
@@ -801,6 +802,7 @@ public class test {
         result.addAll(set1);
         result.addAll(set2);
         System.out.println("并集："+result);
+        result.contains(1);
     }
 
     //
@@ -864,5 +866,47 @@ public class test {
             }
         });
         System.out.println("按长度排序: " + arrayLists);
+
+        System.out.println(Integer.valueOf("11111111111111111111111"));
+        System.out.println(Integer.MIN_VALUE);
+
+    }
+
+    // 正则匹配
+    @Test
+    public void test28(){
+        //Pattern pattern = Pattern.compile("ab*ac*a");     // true
+        //Pattern pattern = Pattern.compile("aa.a");        // false
+        Pattern pattern = Pattern.compile("");              // true
+        //Pattern pattern = Pattern.compile(".");              // true
+        Matcher matcher = pattern.matcher("aaa");
+        System.out.println(matcher.find());
+
+        //Pattern pattern2 = Pattern.compile(" aaa ");
+        //Matcher matcher2 = pattern2.matcher("aaa");         // false
+        Pattern pattern2 = Pattern.compile(".");
+        Matcher matcher2 = pattern2.matcher(" ");        // true
+        System.out.println(matcher2.matches());
+
+        Pattern pattern3 = Pattern.compile("");
+        Matcher matcher3 = pattern3.matcher("1e-1");
+        System.out.println("是不是数字：" + matcher3.matches());
+        Exception ioException = new IOException();
+        Exception e = new Exception();
+        boolean signalm,decimal = false;                      // 同时定义多个变量
+        System.out.println(decimal);
+        System.out.println("是不是数字：" + Float.valueOf("-1E-16"));
+        for (int i =0 ,j = 0; i!=8 ; i++,j+=2) {
+            System.out.println("i: " + i + ", j: " + j);
+        }
+        LinkedList<String> list = new LinkedList<>();
+        String s = null;
+        list.offer(s);       // 非空
+        if (!list.isEmpty()){
+            System.out.println("list isn't empty");
+        }
+        System.out.println(new StringBuilder());
+        System.out.println('1'-48);
+        System.out.println(Float.valueOf("12.123"));
     }
 }
