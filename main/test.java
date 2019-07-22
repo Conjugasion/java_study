@@ -908,5 +908,10 @@ public class test {
         System.out.println(new StringBuilder());
         System.out.println('1'-48);
         System.out.println(Float.valueOf("12.123"));
+
+        String s2 = " ";
+        if (s2.trim().isEmpty()){
+            System.out.println("s2 is empty");
+        }
     }
 }
