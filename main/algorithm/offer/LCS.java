@@ -14,13 +14,13 @@ public class LCS {
     public static void main(String[] args) {
         int[] source = {2, 3, 5, 4, 8, 10, 6, 7};
         int[] target = {2, 3, 7, 5, 9, 1, 10, 4, 8, 6};
-        System.out.println(Arrays.toString(find(source, target)));
+        System.out.println("最长公共子序列：" + Arrays.toString(find(source, target)));
         String str1 = "belong";
         String str2 = "cnblongs";
-        System.out.println(find(str1,str2));
+        System.out.println("最长公共字串：" + find(str1,str2));
     }
 
-    //最长公共子序列
+    //最长公共子序列  不必要连续
     static int[] find(int[] source, int[] target){
         int[][] dp = new int[source.length+1][target.length+1];
         /*
@@ -60,7 +60,7 @@ public class LCS {
         return result;
     }
 
-    //最长公共字串
+    //最长公共字串 必须连续
     static String find(String source, String target){
         int num = 0;
         int[][] dp = new int[source.length()+1][target.length()+1];
@@ -80,14 +80,14 @@ public class LCS {
                 else dp[i][j]=0;
             }
         }
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (int[] i : possible) {
             if (dp[i[0]][i[1]]==num){
                 for (int j = num; j > 0; j--) {
-                    result += source.toCharArray()[i[0]-j];
+                    result.append(source.toCharArray()[i[0] - j]);
                 }
             }
         }
-        return result;
+        return result.toString();
     }
 }
