@@ -1,6 +1,7 @@
 package algorithm.structure;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 /**
  * @author Lucas
@@ -83,22 +84,46 @@ public class searchTree {
     }
 
     // 中序遍历
-    void midVisit(Node root){
+    static Stack<Node> nodeStack = new Stack<Node>();
+    void midVisit(Node root, Stack<Node> nodeStack){
         if (root != null){
-            midVisit(root.left);
-            System.out.print(root.value + " ");
-            midVisit(root.right);
+            midVisit(root.left, nodeStack);
+            nodeStack.push(root);
+            midVisit(root.right, nodeStack);
         }
     }
 
+    // 返回第k个节点
+    static int index = 0; //计数器
+    static Node findK(Node pRoot, int k){
+
+        if(pRoot != null){ //中序遍历寻找第k个
+            Node node = findK(pRoot.left,k);
+            if(node != null)
+                return node;
+            index ++;
+            if(index == k)
+                return pRoot;
+            node = findK(pRoot.right,k);
+            if(node != null)
+                return node;
+        }
+        return null;
+    }
+
     public static void main(String[] args) {
+        // -150 -5 0 12 15 20 20 25 100 126 200 1000
         int[] array = {20, 15, 200, 25, -5, 0, 100, 20, 12, 126, 1000, -150};
         searchTree searchTree = new searchTree();
         searchTree.init(array);
-        searchTree.midVisit(searchTree.root);
+        //searchTree.midVisit(searchTree.root, nodeStack);
+        /*for (Node n:nodeStack) {
+            System.out.print(n.value + " ");
+        }*/
         System.out.println("\r");
         searchTree.Node insertNode = searchTree.new Node(123);
         searchTree.insert(insertNode);
-        searchTree.midVisit(searchTree.root);
+        searchTree.midVisit(searchTree.root, nodeStack);
+        System.out.println("寻找第k个节点：" + findK(searchTree.root, 10).value);
     }
 }

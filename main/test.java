@@ -914,4 +914,11 @@ public class test {
             System.out.println("s2 is empty");
         }
     }
+
+    @Test
+    public void test29(){
+        int[] a = {2,1,4,6,0,9,3};
+        Arrays.sort(a, 2,5);     // 包头不包尾
+        System.out.println(Arrays.toString(a));
+    }
 }
