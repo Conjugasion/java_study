@@ -453,8 +453,8 @@ synchronized的原理是什么，一般用在什么地方(比如加在静态方�
 可重入锁:线程可以进入它拥有的锁所同步的代码块
 公平锁:加锁前先查看是否有排队等待的线程，有的话优先处理排在前面的线程，先来先得
 非公平锁:随机获得锁
-乐观锁:假设一定会发生并发冲突，通过阻塞其他所有线程来保证数据的完整性。比如Synchronized
-悲观锁:假设不会发生并发冲突，直接不加锁去完成某项更新，如果冲突就返回失败。比如CAS机制
+悲观锁:假设一定会发生并发冲突，通过阻塞其他所有线程来保证数据的完整性。比如Synchronized
+乐观锁:假设不会发生并发冲突，直接不加锁去完成某项更新，如果冲突就返回失败。比如CAS机制
 
 
 用过哪些原子类，他们的原理是什么。
@@ -1157,31 +1157,306 @@ Ehcache jvm堆内存缓存，如果redis出现了大规模的宕机，导致ngin
 开源框架知识
 
 简单讲讲tomcat结构，以及其类加载器流程，线程模型等。
+Tomcat的核心组件就Connector和Container，一个Connector+一个Container（Engine）构成一个Service，Service就是对外提供服务的组件
+BootStrap引导加载器，extension扩展加载器，system系统加载器，common加载器(负责加载/common目录的类库，这儿存放的类库可被tomcat以及所有的应用使用)
+tomcat支持四种线程模型:BIO、NIO、APR和AIO
+
+
 tomcat如何调优，涉及哪些参数 。
+1）吞吐量  2）Responsetime  3）Cpuload  4）MemoryUsage
+-server、-Xms和-Xmx设置成一样大、-Xmn合理设置新生代大小(Sun官方推荐配置为整个堆的3/8)、-Xss设置栈大小
+Tomcat容器内优化：打开tomcat安装目录\conf\server.xml文件,可以设置一堆参数
+
+
 讲讲Spring加载流程。
+初始化环境—>加载配置文件—>实例化Bean—>调用Bean显示信息
+
+
 Spring AOP的实现原理。
+将与业务无关，却被业务模块共同调用的逻辑封装起来，
+Spring提供了两种方式生成代理对象：JDKProxy和Cglib具体使用哪种方式生成由AopProxyFactory根据AdvisedSupport对象的配置来决定。
+
+
 讲讲Spring事务的传播属性。
+PROPAGATION_REQUIRED:如果当前没有事务，就创建一个新事务，如果当前存在事务，就加入当前事务(都执行成功才提交，有一个失败就回滚)
+PROPAGATION_REQUIRES_NEW:无论当前是否存在事务，都创建一个新事务(事务成败与否，不会影响其它事务)
+PROPAGATION_NESTED:如果当前存在事务，则在嵌套事务内执行。如果当前没有事务，则执行与PROPAGATION_REQUIRED类似的操作(内层事务失败与否不会影响外层事务，外层事务回滚，内层事务也回滚)
+
+
 Spring如何管理事务的。
+PlatformTransactionManager：事务管理器，主要用于平台相关事务的管理。
+TransacitonDefinition：事务定义信息，用来定义事务相关属性。
+TransationStatus：事务具体运行状态，事务管理过程中，每个时间点事务的状态信息。
+
+
 Spring怎么配置事务（具体说出一些关键的xml 元素）。
+1）基于XML的事务配置  2）基于注解方式的事务配置(@Transactional)。
+编程式事务使用TransactionTemplate或者直接使用底层的PlatformTransactionManager。
+声明式事务是建立在AOP之上的。其本质是对方法前后进行拦截，然后在目标方法开始之前创建或者加入一个事务，在执行完目标方法之后根据执行情况提交或者回滚事务。
+声明式事务管理要优于编程式事务管理，这正是spring倡导的非侵入式的开发方式。
+
+
 说说你对Spring的理解，非单例注入的原理？它的生命周期？循环注入的原理，aop的实现原理，说说aop中的几个术语，它们是怎么相互工作的。
-Springmvc中DispatcherServlet初始化过程。
+IOC和AOP框架
+IOC控制反转，我们需要对象时不需要自己去创建，直接调用spring即可
+DI依赖注入：spring使用java bean对象的set方法或者带参数的构造方法，在创建对象的过程中将其属性自动设置为设定值
+           set方法注入、构造方法注入、静态工厂方法注入、实例工厂方法注入
+AOP面向切面编程，将一个个对象某些类似的方面横向抽象成一个切面，对这个切面进行一些如权限验证，事务管理，记录日志等公共操作
+生命周期：创建(实例化:分配内存空间、初始化:属性注入)-使用-销毁。IOC容器启动时，并没有初始化所有对象，只有调用getBean()才会触发bean的初始化操作。
+循环注入：两个或多个Bean相互之间的持有对方，比如A引用B，B引用C，C引用A。
+		 构造器循环依赖，无法解决，抛出BeanCurrentlyInCreationException
+		 setter方法循环注入，
+
+
 netty的线程模型，netty如何基于reactor模型上实现的。
+多路复用IO，select、poll、epoll
+
+
 为什么选择netty。
+稳定，API使用简单，开发门槛低
+
+
 什么是TCP粘包，拆包。解决方式是什么。
+TCP粘包：socket读取时，读到了实际意义上的两个或多个数据包的内容，同时将其作为一个数据包进行处理。
+TCP拆包：socket读取时，没有完整地读取一个数据包，只读取一部分。
+解决方法：数据段定长，位数不足的空位补齐；
+		 消息头+消息体，消息头中一般会包含消息体的长度、消息类型等信息；
+		 特殊字符(比如回车符)作为消息数据的结尾，以实现消息数据的分段
+		 通过复杂的应用层协议
+
+
 netty的fashwheeltimer的用法，实现原理，是否出现过调用不够准时，怎么解决。
+时间轮算法
+
+
 netty的心跳处理在弱网下怎么办。
+心跳机制:在长链接中双方没有数据交互的时候互相发送数据(可能是空包，也可能是特殊数据)，对方收到该数据之后也回复相应的数据用以确保双方都在线。
+一般实现心跳机制由两种方式：TCP协议自带的心跳机制来实现；在应用层实现。
+通常采用应用层自定义实现：Client启动一个定时器，不断发送心跳；Server收到心跳后，做出回应；Server启动一个定时器，判断Client是否存在，
+					   这里做判断有两种方法：时间差和简单标识。
+
+
 netty的通讯协议是什么样的。
+
+
 springmvc用到的注解，作用是什么，原理。
+DispatcherServlet前端控制器，HandlerMapping处理器映射，Controller，VierResolver视图解析器
+SpringMVC运行原理：
+1.客户端提交请求到DispatchServlet
+2.DispatchServlet查询一个或多个HandleMapping，找到处理请求的Controller
+3.DispatchServlet将请求交给Controller
+4.Controller调用相应的xxxService方法，返回ModelAndView
+5. DispatcherServlet查询一个或多个ViewResoler视图解析器，找到ModelAndView指定的视图
+6.View视图将结果显示到客户端
+常用注解：
+@Controller 声明Action组件
+@Service 声明Service组件 @Service("myMovieLister")
+@Repository 声明Dao组件
+@Component 泛指组件, 当不好归类时.
+@RequestMapping("/menu") 请求映射
+@Resource 用于注入，(j2ee提供的)默认按名称装配，@Resource(name="beanName")
+@Autowired 用于注入，(srping提供的)默认按类型装配
+@Transactional(rollbackFor={Exception.class})事务管理
+@ResponseBody
+@Scope("prototype") 设定bean的作用域
+
+
 springboot启动机制。
+@SpringBootApplication
+public class Application {
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
+}
+
+@SpringBootApplication详解：
+@SpringBootConfiguration             // 继承了Configuration，表示当前是注解类
+@EnableAutoConfiguration             // 开启springboot的注解功能，springboot的四大神器之一，其借助@import的帮助
+@ComponentScan(excludeFilters = {    // 扫描路径设置（具体使用待确认）
+public @interface SpringBootApplication {
+...
+}
+
+虽然定义使用了多个Annotation进行了原信息标注，但实际上重要的只有三个Annotation：
+@Configuration（@SpringBootConfiguration点开查看发现里面还是应用了@Configuration）
+@EnableAutoConfiguration
+@ComponentScan
+
+@Configuration：使用注解方式
+基于XML的配置形式是这样：
+<bean id="mockService" class="..MockServiceImpl">         
+    ...
+</bean>
+而基于JavaConfig的配置形式是这样的：
+@Configuration
+public class MockConfiguration{
+    @Bean
+    public MockService mockService(){
+        return new MockServiceImpl();
+    }
+}
+
+@ComponentScan：
+自动扫描并加载符合条件的组件（比如@Component和@Repository等）或者bean定义，将这些bean定义加载到IoC容器中。
+
+@EnableAutoConfiguration：
+借助@Import的帮助，将所有符合自动配置条件的bean定义加载到IoC容器
+
+
+1、什么是 Spring Boot？
+Spring Boot 是 Spring 开源组织下的子项目，是 Spring 组件一站式解决方案，主要是简化了使用 Spring 的难度，简省了繁重的配置，提供了各种启动器，开发者能快速上手。
+
+
+2、为什么要用 Spring Boot？
+Spring Boot 优点非常多，如：
+独立运行
+简化配置
+自动配置
+无代码生成和XML配置
+应用监控
+上手容易
+...
+
+
+3、Spring Boot 的核心配置文件有哪几个？它们的区别是什么？
+Spring Boot 的核心配置文件是 application 和 bootstrap 配置文件。
+application 配置文件这个容易理解，主要用于 Spring Boot 项目的自动化配置。
+bootstrap 配置文件有以下几个应用场景：
+使用 Spring Cloud Config 配置中心时，这时需要在 bootstrap 配置文件中添加连接到配置中心的配置属性来加载外部配置中心的配置信息；
+一些固定的不能被覆盖的属性；
+一些加密/解密的场景；
+
+
+4、Spring Boot 的配置文件有哪几种格式？它们有什么区别？
+.properties 和 .yml，它们的区别主要是书写格式不同。
+.properties
+app.user.name = javastack
+
+.yml
+app:
+  user:
+    name: javastack
+另外，.yml 格式不支持 @PropertySource 注解导入配置。
+
+
+5、Spring Boot 的核心注解是哪个？它主要由哪几个注解组成的？
+启动类上面的注解是@SpringBootApplication，它也是 Spring Boot 的核心注解，主要组合包含了以下 3 个注解：
+@SpringBootConfiguration：组合了 @Configuration 注解，实现配置文件的功能。
+@EnableAutoConfiguration：打开自动配置的功能，也可以关闭某个自动配置的选项，如关闭数据源自动配置功能： @SpringBootApplication(exclude = { DataSourceAutoConfiguration.class })。
+@ComponentScan：Spring组件扫描。
+
+
+6、开启 Spring Boot 特性有哪几种方式？
+1）继承spring-boot-starter-parent项目
+2）导入spring-boot-dependencies项目依赖
+
+
+7、Spring Boot 需要独立的容器运行吗？
+可以不需要，内置了 Tomcat/ Jetty 等容器。
+
+
+8、运行 Spring Boot 有哪几种方式？
+1）打包用命令或者放到容器中运行
+2）用 Maven/ Gradle 插件运行
+3）直接执行 main 方法运行
+
+
+9、Spring Boot 自动配置原理是什么？
+注解 @EnableAutoConfiguration, @Configuration, @ConditionalOnClass 就是自动配置的核心，首先它得是一个配置文件，其次根据类路径下是否有这个类去自动配置。
+
+
+10、Spring Boot 的目录结构是怎样的？
+cn
+ +- javastack
+     +- MyApplication.java
+     |
+     +- customer
+     |   +- Customer.java
+     |   +- CustomerController.java
+     |   +- CustomerService.java
+     |   +- CustomerRepository.java
+     |
+     +- order
+         +- Order.java
+         +- OrderController.java
+         +- OrderService.java
+         +- OrderRepository.java
+
+这个目录结构是主流及推荐的做法，而在主入口类上加上 @SpringBootApplication 注解来开启 Spring Boot 的各项能力，如自动配置、组件扫描等。
+
+
+11、你如何理解 Spring Boot 中的 Starters？
+Starters可以理解为启动器，它包含了一系列可以集成到应用里面的依赖包，你可以一站式集成 Spring 及其他技术，而不需要到处找示例代码和依赖包。
+如你想使用 Spring JPA 访问数据库，只要加入 spring-boot-starter-data-jpa 启动器依赖就能使用了。Starters包含了许多项目中需要用到的依赖，
+它们能快速持续的运行，都是一系列得到支持的管理传递性依赖。
+
+
+12、如何在 Spring Boot 启动的时候运行一些特定的代码？
+可以实现接口 ApplicationRunner 或者 CommandLineRunner，这两个接口实现方式一样，它们都只提供了一个 run 方法。
+
+
+13、Spring Boot 有哪几种读取配置的方式？
+Spring Boot 可以通过 @PropertySource,@Value,@Environment, @ConfigurationProperties 来绑定变量。
+
+
+14、Spring Boot 支持哪些日志框架？推荐和默认的日志框架是哪个？
+Spring Boot 支持 Java Util Logging, Log4j2, Lockback 作为日志框架，如果你使用 Starters 启动器，Spring Boot 将使用 Logback 作为默认日志框架。
+
+
+15、SpringBoot 实现热部署有哪几种方式？
+主要有两种方式：
+Spring Loaded
+Spring-boot-devtools
+
+
+16、你如何理解 Spring Boot 配置加载顺序？
+在 Spring Boot 里面，可以使用以下几种方式来加载配置。
+1）properties文件；
+2）YAML文件；
+3）系统环境变量；
+4）命令行参数；
+……
+
+
+17、Spring Boot 如何定义多套不同环境配置？
+提供多套配置文件，运行时指定具体的配置文件。如：
+applcation.properties
+application-dev.properties
+application-test.properties
+application-prod.properties
+
+
+18、Spring Boot 可以兼容老 Spring 项目吗，如何做？
+可以兼容，使用 @ImportResource 注解导入老 Spring 项目配置文件。
+
+
+19、保护 Spring Boot 应用有哪些方法？
+在生产中使用HTTPS
+使用Snyk检查你的依赖关系
+升级到最新版本
+启用CSRF保护
+使用内容安全策略防止XSS攻击
+...
+
+
+20、Spring Boot 2.X 有什么新特性？与 1.X 有什么区别？
+配置变更
+JDK 版本升级
+第三方类库升级
+响应式 Spring 编程支持
+HTTP2.0 支持
+配置属性绑定
+...
 
 
 架构设计与分布式
 
 多人同时操作同一条数据，如何保证不出错
-利用数据库层面的锁、事务、给数据加上last update time；代码层面的锁
+利用数据库层面的锁、事务、给数据加上一列last update time；代码层面的锁
 
 
 2PC和3PC简述
+分布式事务/分布式协议/分布式一致性算法
 两阶段提交：分为准备阶段和提交阶段，提议的节点称为协调者，参与投票的节点称为参与者。
            准备阶段，协调者发起一个提议，分别询问各参与者是否接受；
            提交阶段，协调者根据参与者的反馈，提交或中止事务，如果参与者全部同意则提交，只要有一个参与者不同意就中止。
@@ -1203,10 +1478,10 @@ springboot启动机制。
 
 
 分布式集群下如何做到唯一序列号。
-数据库自增长序列或字段：在单个数据库或读写分离或一主多从的情况下，只有一个主库可以生成，有单点故障的风险
-UUID：全球唯一；没有排序，无法保证趋势递增；使用字符串存储，查询的效率比较低；存储空间大
-Redis生成ID：利用Redis的原子操作 INCR和INCRBY。比如一个集群中有5台Redis。可以初始化每台Redis的值分别是1,2,3,4,5，然后步长都是5
-Twitter的snowflake算法
+1.数据库自增长序列或字段：在单个数据库或读写分离或一主多从的情况下，只有一个主库可以生成，有单点故障的风险
+2.UUID：全球唯一；没有排序，无法保证趋势递增；使用字符串存储，查询的效率比较低；存储空间大
+3.Redis生成ID：利用Redis的原子操作 INCR和INCRBY。比如一个集群中有5台Redis。可以初始化每台Redis的值分别是1,2,3,4,5，然后步长都是5
+4.Twitter的snowflake算法
 
 
 设计一个秒杀系统，30分钟没付款就自动关闭交易。
@@ -1224,30 +1499,146 @@ Twitter的snowflake算法
 思路2：将要促销的商品数量以list的方式存入redis中，每当用户抢到一件促销商品则从队列中删除一个数据，确保商品不会超卖。
 
 
-如何使用redis和zookeeper实现分布式锁？ 有什么区别优缺点，会有什么问题，分别适用什么场景。（延伸：如果知道redlock，讲讲他的算法实现，争议在哪里）
-如果有人恶意创建非法连接，怎么解决。
+如何使用redis和zookeeper实现分布式锁？ 有什么区别优缺点，会有什么问题，分别适用什么场景。（如果知道redlock，讲讲算法实现，争议在哪里）
+1.基于数据库表主键唯一做分布式锁
+利用主键唯一的特性，如果有多个请求同时提交到数据库的话，数据库会保证只有一个操作可以成功，那么我们就可以认为操作成功的那个线程获得了该方法的锁，
+当方法执行完毕之后，想要释放锁的话，删除这条数据库记录即可。
+
+2.基于表字段Version做分布式锁
+为每个表设计一个Version字段，然后每次写sql都要带着Version字段。
+-- 添加版本号控制字段
+ALTER TABLE table ADD COLUMN version INT DEFAULT '0' NOT NULL AFTER t_bonus;
+
+-- 线程1查询，当前left_count为1，则有记录，当前版本号为1234
+select left_count, version from t_bonus where id = 10001 and left_count > 0
+
+-- 线程2查询，当前left_count为1，有记录，当前版本号为1234
+select left_count, version from t_bonus where id = 10001 and left_count > 0
+
+-- 线程1,更新完成后当前的version为1235，update状态为1，更新成功
+update t_bonus set version = 1235, left_count = left_count-1 where id = 10001 and version = 1234
+
+-- 线程2,更新由于当前的version为1235，udpate状态为0，更新失败，再针对相关业务做异常处理
+update t_bonus set version = 1235, left_count = left_count-1 where id = 10001 and version = 1234
+
+3.基于数据库排他锁做分布式锁
+使用 select for update，数据库会在查询过程中给行/表增加排他锁。我们可以认为获得排他锁的线程即可获得分布式锁，当获取到锁之后，
+可以执行方法的业务逻辑，执行完方法之后，通过connection.commit()操作来释放锁。
+
+4.基于Redis做分布式锁
+4.1 基于Redis的 SETNX()、EXPIRE() 方法做分布式锁
+setnx key value，该方法是原子的，若当前已经存在key，则设置key失败返回0，如果key不存在，则设置key成功返回1；
+expire key seconds，设置key的过期时间；
+步骤一、setnx(lockkey, 1) 如果返回 0，则说明占位失败；如果返回 1，则说明占位成功
+步骤二、expire() 命令对 lockkey 设置超时时间，为的是避免死锁问题。
+步骤三、执行完业务代码后，可以通过 delete 命令删除 key。
+存在的问题：setnx成功后、expire执行前，若服务器宕机，仍然可能会出现死锁
+
+4.2 基于Redis的 SETNX()、GET()、GETSET()方法做分布式锁
+getset key value，设置新值返回旧值；
+步骤一、setnx(lockkey,当前时间+过期超时时间)，如果返回1，则获取锁成功，如果返回0，则没有获取锁，转2
+步骤二、get(lockkey)获得oldExpireTime，若小于当前时间，说明锁已经过期，别的请求可以获取锁
+步骤三、getset(lockkey,当前时间+过期超时时间)获得currentExpireTime
+步骤四、比较oldExpireTime和currentExpireTime，若两者相等，说明成功获取到锁，若不相等，说明get和getset期间有别的请求获取到了锁
+步骤五、在获取到所之后，当前线程可以开始业务处理，当执行完毕后，比较执行时间和锁过期超时时间，若小于超时时间，则执行del lockkey释放锁，若大于锁超时时间，则不需要进行锁处理
+
+5.基于 RedLock 做分布式锁
+它基于N个完全独立的Redis节点(通常情况下N可以设置成5)
+步骤一、client获取当前时间t0
+步骤二、使用4.2 的方法向N个节点申请锁，client需要设置访问接口超时时间(远小于锁超时时间)，比如锁自动释放的时间是 10s，那么接口超时大概设置
+5-50ms。这样可以在有 redis 节点宕机后，访问该节点时能尽快超时，跳到下一个节点去申请锁。
+步骤三、client通过当前时间t1减去t0，计算获得锁消耗的时间t2，如果t2小于锁超时时间并且client在超过半数的节点上获得锁，则认为锁获取成功
+步骤四、如果client获取锁失败了，client会依次删除已经获取的节点锁。
+
+6.基于 ZooKeeper 做分布式锁
+
+
+
 分布式事务的原理，优缺点，如何使用分布式事务。
+两阶段提交、三阶段提交、Paxos
+优点是可以管理多机事务，拥有无限扩展性 缺点是易用性难，有延时风险
+
+
 什么是一致性hash。
+一致性Hash算法是对2^32取模，将整个哈希值空间顺时针组织成一个虚拟的圆环(0~2^32-1)；然后将服务器根据IP进行哈希，确定其在环上的位置。
+接着分配数据到服务器：将数据key使用相同的函数计算哈希值，并确定此数据在环上的位置，从此位置沿环顺时针“行走”，第一台遇到的服务器就是其定位到的服务器。
+容错性和可扩展性强
+一致性Hash算法在服务器节点太少时，容易因为节点分部不均匀而造成数据倾斜，可以引入虚拟节点。
+
+
 什么是restful，讲讲你理解的restful。
+面向资源；url不包含动词：GET /zoos/ID/animals：列出某个指定动物园的所有动物
+表述性状态转移。URI统一资源标识符，URL统一资源定位符
+每一个URI代表一种资源；客户端通过四个HTTP动词(post增del删put改get查)，对服务器资源进行操作，实现"状态转化"。
+
+
 如何设计一个良好的API。
+明确职责；
+单一性原则：一个接口只做一件事；
+协议规范：采用 http/https/ftp；
+路径规则：由于api获取的是一种资源，所以网址中尽量为名词，而非动词，比如/api/v1.0/Pruduct/2019；
+http请求方式：get(获取)，post(新增)，put(修改)和delete(删除)
+域名：域名分为主域名和专有域名，主域名适合api长期不变或变化较少的业务，专有域名是解决具体的专有业务的，比如主域名:www.baidu.com  百度文库 https://wenku.baidu.com/ 百度公益 http://gongyi.baidu.com
+适度过滤信息：当记录数比较多时(如 SELECT * FROM TBName)，因适当添加一些条件对数据进行过滤，如TOP,分页,分组，排序和WHERE条件等，比如 ?limit=100：返回100条数据，?offset=101：从第101条数据开始返回
+返回数据格式：采用json (1)失败情况(状态码、错误码和错误描述) (2)成功情况(状态码，标识id,数据对象)
+
+
 如何设计建立和保持100w的长连接。
-解释什么是MESI协议(缓存一致性)。
+Netty NIO框架，增加xmx最大堆内存
+
+
+解释什么是 MESI 协议(缓存一致性)
+任何多核系统中的缓存都处于如下四种状态之中：
+失效（Invalid）缓存段，要么已经不在缓存中，要么它的内容已经过时。为了达到一致性目的，这种状态的段将会被忽略。一旦缓存段被标记为失效，那效果就等同于它从来没被加载到缓存中。
+共享（Shared）缓存段，它是和主内存内容保持一致的一份拷贝，在这种状态下的缓存段只能被读取，不能被写入。多组缓存可以同时拥有针对同一内存地址的共享缓存段，这就是名称的由来。
+独占（Exclusive）缓存段，和S状态一样，也是和主内存内容保持一致的一份拷贝。区别在于，如果一个处理器持有了某个E状态的缓存段，那其他处理器就不能同时持有它，所以叫“独占”。这意味着，如果其他处理器原本也持有同一缓存段，那么它会马上变成“失效”状态。
+已修改（Modified）缓存段，属于脏段，它们已经被所属的处理器修改了。如果一个段处于已修改状态，那么它在其他处理器缓存中的拷贝马上会变成失效状态，
+这个规律和E状态一样。此外，已修改缓存段如果被丢弃或标记为失效，那么先要把它的内容回写到内存中——这和回写模式下常规的脏段处理方式一样。
+
+
 说说你知道的几种HASH算法，简单的也可以。
+MD4、MD5、SHA-1，应用：文件校验，数字签名、鉴权协议
+常用的构造散列函数的方法：
+ 直接寻址法：取关键字或关键字的某个线性函数值为散列地址
+ 数字分析法：寻找冲突小的数字部分
+ 平方取中法：取关键字平方后的中间几位作为散列地址
+ 随机数法、除数取余法
+解决冲突的办法：线性探查法、双散列函数法、链表法
+
+
 什么是paxos算法， 什么是zab协议。
-一个在线文档系统，文档可以被编辑，如何防止多人同时对同一份文档进行编辑更新。
+
+
+一个在线文档系统，文档可以被编辑，如何防止多人同时对同一份文档进行编辑更新
+点击编辑的时候，利用redis的setNX进行加锁，并expire设置过期时间；使用版本号进行控制
+
+
 线上系统突然变得异常缓慢，你如何查找问题。
+第一步
+top命令，查看CPU、内存、磁盘、I/O、网络带宽哪个因素导致系统变慢
+如果是cpu占用过高，查看占用cpu高的进程，jstack生成进程的栈信息，看是否发生频繁 Full GC，如果是，需要查看一下堆内存快照，看看是否有内存泄漏；
+如果是磁盘占用过高，及时清理磁盘；如果是带宽占用过大，请找网络工程师。如果都不是走第二步。
+第二步
+检查应用服务器Tomcat的线程池配置是否合理，看一下请求排队是否严重，如果严重则需要重新设置合理的线程池。同样，检查一下数据库的连接池设置是否合理，
+是否需要增大数据库连接池，同时检查一下是否有慢sql，如果有慢sql，则进行优化（优化方案是查看执行计划，设置合理的索引等）。
+第三步
+查看访问慢的服务的调用链，到底是因为调用哪个服务过慢，导致整体变慢，联系相关系统的负责人进行排查和解决。
+第四部
+检查web服务器的请求日志，看一下是否存在DDos攻击，如果有DDoS攻击，则将攻击者的IP添加到防火墙的黑名单里。
+
+
 说说你平时用到的设计模式。
-Dubbo的原理，有看过源码么，数据怎么流转的，怎么实现集群，负载均衡，服务注册 
-和发现，重试转发，快速失败的策略是怎样的 。
+Dubbo的原理，有看过源码么，数据怎么流转的，怎么实现集群，负载均衡，服务注册和发现，重试转发，快速失败的策略是怎样的 。
 一次RPC请求的流程是什么。
 自己实现过rpc么，原理可以简单讲讲。Rpc要解决什么问题。
-异步模式的用途和意义。
+
+
 编程中自己都怎么考虑一些设计原则的，比如开闭原则，以及在工作中的应用。
-设计一个社交网站中的“私信”功能，要求高并发、可扩展等等。 画一下架构图。
+对扩展开放，对修改封闭
+
+
 MVC模式，即常见的MVC框架。
-聊下曾经参与设计的服务器架构并画图，谈谈遇到的问题，怎么解决的。
 应用服务器怎么监控性能，各种方式的区别。
-如何设计一套高并发支付方案，架构如何设计。
 如何实现负载均衡，有哪些算法可以实现。
 Zookeeper的用途，选举的原理是什么。
 Zookeeper watch机制原理。
@@ -1260,7 +1651,7 @@ Mybatis的底层实现原理。
 如何做限流策略，令牌桶和漏斗算法的使用场景。
 什么叫数据一致性，你怎么理解数据一致性。
 分布式服务调用方，不依赖服务提供方的话，怎么处理服务方挂掉后，大量无效资源请求的浪费，如果只是服务提供方吞吐不高的时候该怎么做，
-如果服务挂了，那么一会重启，该怎么做到最小的资源浪费，流量半开的实现机制是什么。
+如果服务挂了，那么一会儿重启，该怎么做到最小的资源浪费，流量半开的实现机制是什么。
 dubbo的泛化调用怎么实现的，如果是你，你会怎么做。
 远程调用会有超时现象，如果做到优雅的控制，JDK自带的超时机制有哪些，怎么实现的。
 
@@ -1281,17 +1672,14 @@ lucence内部结构是什么。
 一、基本概念
 1.主键、外键、超键、候选键
 超键：在关系中能唯一标识元组的属性集称为关系模式的超键。一个属性可以为作为一个超键，多个属性组合在一起也可以作为一个超键。超键包含候选键和主键。
-
 候选键：是最小超键，即没有冗余元素的超键。
-
 主键：数据库表中对储存数据对象予以唯一和完整标识的数据列或属性的组合。一个数据列只能有一个主键，且主键的取值不能缺失，即不能为空值（Null）。
-
 外键：在一个表中存在的另一个表的主键称此表的外键。
 
 2.为什么用自增列作为主键
-如果我们定义了主键(PRIMARY KEY)，那么InnoDB会选择主键作为聚集索引、
+如果我们定义了主键(PRIMARY KEY)，那么InnoDB会选择主键作为聚集索引；
 
-如果没有显式定义主键，则InnoDB会选择第一个不包含有NULL值的唯一索引作为主键索引、
+如果没有显式定义主键，则InnoDB会选择第一个不包含有NULL值的唯一索引作为主键索引；
 
 如果也没有这样的唯一索引，则InnoDB会选择内置6字节长的ROWID作为隐含的聚集索引(ROWID随着行记录的写入而主键递增，这个ROWID不像ORACLE的ROWID那样可引用，是隐含的)。
 
@@ -1344,14 +1732,10 @@ lucence内部结构是什么。
 
 8.视图的优缺点
 优点：
-
-1对数据库的访问，因为视图可以有选择性的选取数据库里的一部分。
-
-2)用户通过简单的查询可以从复杂查询中得到结果。
-
-3)维护数据的独立性，试图可从多个表检索数据。
-
-4)对于相同的数据可产生不同的视图。
+对数据库的访问，因为视图可以有选择性的选取数据库里的一部分。
+用户通过简单的查询可以从复杂查询中得到结果。
+维护数据的独立性，试图可从多个表检索数据。
+对于相同的数据可产生不同的视图。
 
 缺点：
 
@@ -1373,12 +1757,12 @@ delete删除表中数据，可以加where字句。
 
 （5） TRUNCATE 和DELETE只删除数据，而DROP则删除整个表（结构和数据）。
 
-（6） truncate与不带where的delete ：只删除数据，而不删除表的结构（定义）drop语句将删除表的结构被依赖的约束（constrain),
-	  触发器（trigger)索引（index);依赖于该表的存储过程/函数将被保留，但其状态会变为：invalid。
+（6） truncate与不带where的delete ：只删除数据，而不删除表的结构（定义）drop语句将删除表的结构被依赖的约束(constrain),
+	  触发器(trigger)索引(index);依赖于该表的存储过程/函数将被保留，但其状态会变为：invalid。
 
-（7） delete语句为DML（data maintain Language),这个操作会被放到 rollback segment中,事务提交后才生效。如果有相应的 tigger,执行的时候将被触发。
+（7） delete语句为DML(data maintain Language),这个操作会被放到 rollback segment中,事务提交后才生效。如果有相应的 tigger,执行的时候将被触发。
 
-（8） truncate、drop是DLL（data define language),操作立即生效，原数据不放到 rollback segment中，不能回滚。
+（8） truncate、drop是DLL(data define language),操作立即生效，原数据不放到 rollback segment中，不能回滚。
 
 （9） 在没有备份情况下，谨慎使用 drop 与 truncate。要删除部分数据行采用delete且注意结合where来约束影响范围。回滚段要足够大。
 	 要删除表用drop;若想保留表而将表中数据删除，如果于事务无关，用truncate即可实现。如果和事务有关，或老师想触发trigger,还是用delete。
@@ -1510,12 +1894,9 @@ WHERE
 2 .数据操纵语言DML
 
 数据操纵语言DML主要有三种形式：
-
-1) 插入：INSERT
-
-2) 更新：UPDATE
-
-3) 删除：DELETE
+ 插入：INSERT
+ 更新：UPDATE
+ 删除：DELETE
 
 3. 数据定义语言DDL
 
@@ -1529,13 +1910,12 @@ DDL操作是隐性提交的！不能rollback
 4. 数据控制语言DCL
 
 数据控制语言DCL用来授予或回收访问数据库的某种特权，并控制数据库操纵事务发生的时间及效果，对数据库实行监视等。如：
-
-1) GRANT：授权。
-
-2) ROLLBACK [WORK] TO [SAVEPOINT]：回退到某一点。回滚---ROLLBACK；回滚命令使数据库状态回到上次最后提交的状态。其格式为：
+ GRANT：授权。
+ 
+ ROLLBACK [WORK] TO [SAVEPOINT]：回退到某一点。回滚---ROLLBACK；回滚命令使数据库状态回到上次最后提交的状态。其格式为：
 SQL>ROLLBACK;
 
-3) COMMIT [WORK]：提交。
+ COMMIT [WORK]：提交。
 
 在数据库的插入、删除和修改操作时，只有当事务在提交到数据
 库时才算完成。在事务提交前，只有操作数据库的这个人才能有权看
@@ -2029,32 +2409,23 @@ set innodb_lock_wait_timeout=1000; —设置当前会话 Innodb 行锁等待超�
 
 2.有哪些锁（乐观锁悲观锁），select 时怎么加排它锁?
 悲观锁（Pessimistic Lock）:
-
 悲观锁特点:先获取锁，再进行业务操作。
-
 即"悲观"的认为获取锁是非常有可能失败的，因此要先确保获取锁成功再进行业务操作。通常所说的“一锁二查三更新”即指的是使用悲观锁。
-通常来讲在数据库上的悲观锁需要数据库本身提供支持，即通过常用的select … for update操作来实现悲观锁。当数据库执行select for update时会获取被select中的数据行的行锁，
+悲观锁依靠数据库的锁机制实现，即通过常用的select … for update操作来实现悲观锁。当数据库执行select for update时会获取被select中的数据行的行锁，
 因此其他并发执行的select for update如果试图选中同一行则会发生排斥（需要等待行锁被释放），因此达到锁的效果。select for update获取的行锁会在当前事务结束时自动释放，因此必须在事务中使用。
-
 补充：
 不同的数据库对select for update的实现和支持都是有所区别的，
-
 oracle支持select for update no wait，表示如果拿不到锁立刻报错，而不是等待，MySQL就没有no wait这个选项。
 MySQL还有个问题是select for update语句执行中所有扫描过的行都会被锁上，这一点很容易造成问题。因此如果在MySQL中用悲观锁务必要确定走了索引，而不是全表扫描。
-乐观锁（Optimistic Lock）:
 
+乐观锁（Optimistic Lock）:
 1.乐观锁，也叫乐观并发控制，它假设多用户并发的事务在处理时不会彼此互相影响，各事务能够在不产生锁的情况下处理各自影响的那部分数据。
 在提交数据更新之前，每个事务会先检查在该事务读取数据后，有没有其他事务又修改了该数据。如果其他事务有更新的话，那么当前正在提交的事务会进行回滚。
-
 2.乐观锁的特点先进行业务操作，不到万不得已不去拿锁。即“乐观”的认为拿锁多半是会成功的，因此在进行完业务操作需要实际更新数据的最后一步再去拿一下锁就好。
 乐观锁在数据库上的实现完全是逻辑的，不需要数据库提供特殊的支持。
-
 3.一般的做法是在需要锁的数据上增加一个版本号，或者时间戳，
-
 实现方式举例如下：
-
-乐观锁（给表加一个版本号字段） 这个并不是乐观锁的定义，给表加版本号，是数据库实现乐观锁的一种方式。
-
+大多数基于数据版本（Version）记录机制实现。
 SELECT data AS old_data, version AS old_version FROM …;
 根据获取的数据进行业务操作，得到new_data和new_version
 UPDATE SET data = new_data, version = new_version WHERE version = old_version
@@ -2068,17 +2439,24 @@ if (updated row > 0) {
 
 }
 
-注意：
+拓展：ORM框架中悲观锁乐观锁的应用
+1.Hibernate的悲观锁：
+String hqlStr ="from TUser as user where user.name=Max";  
+Query query = session.createQuery(hqlStr);  
+query.setLockMode("user",LockMode.UPGRADE); //加锁  
+List userList = query.list();//执行查询，获取数据  
 
+2.Hibernate的乐观锁
+通过class描述符的optimistic-lock属性结合version描述符指定。
+
+注意：
 乐观锁在不发生取锁失败的情况下开销比悲观锁小，但是一旦发生失败回滚开销则比较大，因此适合用在取锁失败概率比较小的场景，可以提升系统并发性能
 乐观锁还适用于一些比较特殊的场景，例如在业务操作过程中无法和数据库保持连接等悲观锁无法适用的地方。
+
 总结：
 悲观锁和乐观锁是数据库用来保证数据并发安全防止更新丢失的两种方法，例子在select ... for update前加个事务就可以防止更新丢失。悲观锁和乐观锁大部分场景下差异不大，一些独特场景下有一些差别，一般我们可以从如下几个方面来判断。
-
 响应速度： 如果需要非常高的响应速度，建议采用乐观锁方案，成功就执行，不成功就失败，不需要等待其他并发去释放锁。
-
 冲突频率： 如果冲突频率非常高，建议采用悲观锁，保证成功率，如果冲突频率大，乐观锁会需要多次重试才能成功，代价比较大。
-
 重试代价： 如果重试代价大，建议采用悲观锁。
 
 
@@ -2086,87 +2464,66 @@ if (updated row > 0) {
 1.数据库的主从复制
 主从复制的几种方式:
 同步复制:
-
 所谓的同步复制，意思是master的变化，必须等待slave-1,slave-2,...,slave-n完成后才能返回。 这样，显然不可取，也不是MySQL复制的默认设置。比如，在WEB前端页面上，用户增加了条记录，需要等待很长时间。
 
 异步复制:
-
 如同AJAX请求一样。master只需要完成自己的数据库操作即可。至于slaves是否收到二进制日志，是否完成操作，不用关心,MySQL的默认设置。
 
 半同步复制:
-
 master只保证slaves中的一个操作成功，就返回，其他slave不管。 这个功能，是由google为MySQL引入的。
 
 2.数据库主从复制分析的 7 个问题?
 问题1：master的写操作，slaves被动的进行一样的操作，保持数据一致性，那么slave是否可以主动的进行写操作？
-
 假设slave可以主动的进行写操作，slave又无法通知master，这样就导致了master和slave数据不一致了。因此slave不应该进行写操作，至少是slave上涉及到复制的数据库不可以写。实际上，这里已经揭示了读写分离的概念。
 
 问题2：主从复制中，可以有N个slave,可是这些slave又不能进行写操作，要他们干嘛？
-
 实现数据备份:
 类似于高可用的功能，一旦master挂了，可以让slave顶上去，同时slave提升为master。
 
 异地容灾:比如master在北京，地震挂了，那么在上海的slave还可以继续。
 主要用于实现scale out,分担负载,可以将读的任务分散到slaves上。
-【很可能的情况是，一个系统的读操作远远多于写操作，因此写操作发向master，读操作发向slaves进行操作】
+(很可能的情况是，一个系统的读操作远远多于写操作，因此写操作发向master，读操作发向slaves进行操作)
 
 问题3：主从复制中有master,slave1,slave2,...等等这么多MySQL数据库，那比如一个JAVA WEB应用到底应该连接哪个数据库?
-
 我们在应用程序中可以这样，insert/delete/update这些更新数据库的操作，用connection(for master)进行操作，
-
 select用connection(for slaves)进行操作。那我们的应用程序还要完成怎么从slaves选择一个来执行select，例如使用简单的轮循算法。
-
 这样的话，相当于应用程序完成了SQL语句的路由，而且与MySQL的主从复制架构非常关联，一旦master挂了，某些slave挂了，那么应用程序就要修改了。能不能让应用程序与MySQL的主从复制架构没有什么太多关系呢？
 找一个组件，application program只需要与它打交道，用它来完成MySQL的代理，实现SQL语句的路由。
 MySQL proxy并不负责，怎么从众多的slaves挑一个？可以交给另一个组件(比如haproxy)来完成。
-
 这就是所谓的MySQL READ WRITE SPLITE，MySQL的读写分离。
 
 问题4：如果MySQL proxy , direct , master他们中的某些挂了怎么办？
-
 总统一般都会弄个副总统，以防不测。同样的，可以给这些关键的节点来个备份。
 
 问题5：当master的二进制日志每产生一个事件，都需要发往slave，如果我们有N个slave,那是发N次，还是只发一次？如果只发一次，发给了slave-1，那slave-2,slave-3,...它们怎么办？
-
 显然，应该发N次。实际上，在MySQL master内部，维护N个线程，每一个线程负责将二进制日志文件发往对应的slave。master既要负责写操作，
 还得维护N个线程，负担会很重。可以这样，slave-1是master的从，slave-1又是slave-2,slave-3,...的主，同时slave-1不再负责select。 slave-1将master的复制线程的负担，转移到自己的身上。这就是所谓的多级复制的概念。
 
 问题6：当一个select发往MySQL proxy，可能这次由slave-2响应，下次由slave-3响应，这样的话，就无法利用查询缓存了。
-
 应该找一个共享式的缓存，比如memcache来解决。将slave-2,slave-3,...这些查询的结果都缓存至mamcache中。
 
 问题7：随着应用的日益增长，读操作很多，我们可以扩展slave，但是如果master满足不了写操作了，怎么办呢？
-
-scale on ?更好的服务器？ 没有最好的，只有更好的，太贵了。。。
+scale on ?更好的服务器？ 没有最好的，只有更好的，太贵了...
 scale out ? 主从复制架构已经满足不了。
-可以分库【垂直拆分】：表多，把关系紧密（比如同一模块）的表切分出来放在一个server上
-分表【水平拆分】：表的数据多，把表的数据按某种规则（比如按ID散列）切分到多个数据库(server)上，
+可以分库(垂直拆分)：表多，把关系紧密（比如同一模块）的表切分出来放在一个server上
+分表(水平拆分)：表的数据多，把表的数据按某种规则（比如按ID散列）切分到多个数据库(server)上，
 
 3.mysql 高并发环境解决方案?
-MySQL 高并发环境解决方案： 分库 分表 分布式 增加二级缓存。。。。。
-
+MySQL 高并发环境解决方案： 分库 分表 分布式 增加二级缓存...
 需求分析：互联网单位 每天大量数据读取，写入，并发性高。
-
 现有解决方式：水平分库分表，由单点分布到多点数据库中，从而降低单点数据库压力。
-
 集群方案：解决DB宕机带来的单点DB不能访问问题。
-
 读写分离策略：极大限度提高了应用中Read数据的速度和并发量。无法解决高写入压力。
 
 4.数据库崩溃时事务的恢复机制（REDO日志和UNDO日志）?
-转载：MySQL REDO日志和UNDO日志
-
+MySQL REDO日志和UNDO日志
 Undo Log:
-
-Undo Log是为了实现事务的原子性，在MySQL数据库InnoDB存储引擎中，还用了Undo Log来实现多版本并发控制(简称：MVCC)。
-
+Undo Log是为了实现事务的原子性，在MySQL数据库InnoDB存储引擎中，还用了Undo Log来实现多版本并发控制(MVCC)。
 事务的原子性(Atomicity)事务中的所有操作，要么全部完成，要么不做任何操作，不能只做部分操作。如果在执行的过程中发生了错误，要回滚(Rollback)到事务开始前的状态，就像这个事务从来没有执行过。
 原理Undo Log的原理很简单，为了满足事务的原子性，在操作任何数据之前，首先将数据备份到一个地方（这个存储数据备份的地方称为UndoLog）。
 然后进行数据的修改。如果出现了错误或者用户执行了ROLLBACK语句，系统可以利用Undo Log中的备份将数据恢复到事务开始之前的状态。
 
 之所以能同时保证原子性和持久化，是因为以下特点：
-
 更新数据前记录Undo log。
 为了保证持久性，必须将数据在事务提交前写到磁盘。只要事务成功提交，数据必然已经持久化。
 Undo log必须先于数据持久化到磁盘。如果在G,H之间系统崩溃，undo log是完整的， 可以用来回滚事务。
@@ -2176,6 +2533,5 @@ Undo log必须先于数据持久化到磁盘。如果在G,H之间系统崩溃，
 如果能够将数据缓存一段时间，就能减少IO提高性能。但是这样就会丧失事务的持久性。因此引入了另外一种机制来实现持久化，即Redo Log。
 
 Redo Log:
-
 原理和Undo Log相反，Redo Log记录的是新数据的备份。在事务提交前，只要将Redo Log持久化即可，不需要将数据持久化。
 当系统崩溃时，虽然数据没有持久化，但是Redo Log已经持久化。系统可以根据Redo Log的内容，将所有数据恢复到最新的状态。
