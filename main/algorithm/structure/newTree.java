@@ -391,6 +391,28 @@ public class newTree {
         return Math.max(leftnum,rightnum)+1;
     }
 
+    // 求树深度 非递归版
+    int TreeDepth2(Node root){
+        if (root!=null){
+            Stack<Object[]> s1 = new Stack<>();
+            s1.push(new Object[]{root,1});      // (node, depth)
+            int maxDepth = 0;
+            while (!s1.empty()){
+                Object[] pop = s1.pop();
+                if (pop[0]!=null){
+                    Node node = (Node)pop[0];
+                    int depth = (Integer)pop[1];
+                    maxDepth = maxDepth > depth ? maxDepth : depth;
+                    s1.push(new Object[]{node.right,depth+1});
+                    s1.push(new Object[]{node.left,depth+1});
+                }
+            }
+            return maxDepth;
+        }else{
+            return 0;
+        }
+    }
+
     /*
                       0
                   1       2
@@ -410,7 +432,8 @@ public class newTree {
         System.out.println(" ");
         Node seven = getNode(7);
         System.out.println("7的父节点是: " + t.getParent(seven).value);
-        System.out.println("树深度是：" + t.TreeDepth(root));
+        System.out.println("递归版树深度是：" + t.TreeDepth(root));
+        System.out.println("非递归版树深度是：" + t.TreeDepth2(root));
         //t.leftRotate(root);
         //t.broadVisit();
         System.out.println(" ");

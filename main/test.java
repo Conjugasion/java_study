@@ -920,5 +920,29 @@ public class test {
         int[] a = {2,1,4,6,0,9,3};
         Arrays.sort(a, 2,5);     // 包头不包尾
         System.out.println(Arrays.toString(a));
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>(new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return 0;
+            }
+        });
+        minHeap.offer(5);
+        minHeap.offer(8);
+        minHeap.offer(1);
+        minHeap.remove(1);
+        System.out.println(minHeap.peek());
+        while (!minHeap.isEmpty()){
+            System.out.print(minHeap.poll());
+        }
+        System.out.println("");
+        TreeSet<Integer> treeSet = new TreeSet();
+        treeSet.add(5);
+        treeSet.add(8);
+        treeSet.add(1);
+        for (int i:treeSet) {
+            System.out.print(i + " ");
+        }
+        int[] ints = Arrays.copyOfRange(a, 1, 1);  // []
+        System.out.println(ints.length);
     }
 }
