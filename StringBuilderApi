@@ -1,0 +1,47 @@
+1.deleteCharAt(int index)
+该方法的作用是删除指定位置的字符，然后将剩余的内容形成新的字符串。例如：
+StringBuilder sb = new StringBuilder(“KMing”);
+sb. deleteCharAt(1);    // King
+
+2.delete(int start,int end)
+StringBuilder sb = new StringBuilder(“TestString”);
+sb. delete (1,4);
+该代码的作用是删除索引值1(包括)到索引值4(不包括)之间的所有字符，剩余的字符形成新的字符串。则对象sb的值是”TString”。
+
+3.insert(int offset, int/String/boolean b)
+在StringBuilder对象中插入内容，然后形成新的字符串。例如：
+StringBuilder sb = new StringBuilder(“TestString”);
+sb.insert(4,false);
+该示例代码的作用是在对象sb的索引值4的位置插入false值，形成新的字符串，则执行以后对象sb的值是”TestfalseString”。
+
+4.StringBuilder reverse()
+该方法的作用是将StringBuffer对象中的内容反转，然后形成新的字符串。例如：
+StringBuilder sb = new StringBuilder(“abc”);
+sb.reverse();
+经过反转以后，对象sb中的内容将变为”cba”。
+
+5.trimToSize方法
+public void trimToSize()
+该方法的作用是将StringBuffer对象的中存储空间缩小到和字符串长度一样的长度，减少空间的浪费，和String的trim()是一样的作用，不在举例。
+
+6.getChars方法
+该方法的作用是将字符串的子字符串复制给数组。
+getChars(int start,int end,char chars[],int charStart); 
+StringBuilder sb = new StringBuilder("I love You");
+int begin = 0;
+int end = 5;
+//注意ch字符数组的长度一定要大于等于begin到end之间字符的长度
+//小于的话会报ArrayIndexOutOfBoundsException
+//如果大于的话，大于的字符会以空格补齐
+char[] ch = new char[end-begin];
+sb.getChars(begin, end, ch, 0);
+System.out.println(ch);
+结果：I lov
+
+7.StringBuilder replace(int start, int end, String str)
+stringBuilder str = new stringBuilder("cHarAt");
+stringBuilder.replace(2,3,"A");   // cHArAt
+
+8.void setCharAt(int index, char ch)
+StringBuilder stringBuilder = new StringBuilder("charAt");
+stringBuilder.setCharAt(1,'H');    // cHarAt

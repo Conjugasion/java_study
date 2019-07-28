@@ -1,0 +1,102 @@
+// An highlighted block
+1、equals   :   比较两个字符串是否相等 返回值是boolean
+	String a = "abc";
+	String b = "abc";
+	if(a.equals(b)){
+		System.out.println("a=b");
+	}
+	
+2、equalsInogeCase:忽略字符串的大小写，两个字符串是否相等 返回值是boolean；
+String a = "Abc";
+	String b = "abc";
+	if(a.equals(b)){
+		System.out.println("a=b");//false
+	}
+	
+3、startsWith：测试此字符串是否以指定的前缀开始；boolean
+	public static void main(String[] args) {
+
+		Scanner sc = new Scanner(System.in);
+		String a = sc.nextLine();
+
+		boolean flag = a.startsWith("旗木");
+
+		if (flag) {
+			System.out.println("姓旗木");
+		}
+
+		boolean flag2 = a.endsWith("卡卡西");
+
+		if (flag2) {
+			System.out.println("叫卡卡西");
+		}
+
+		for (int i = 0; i < a.length(); i++) {
+			System.out.print(a.charAt(i));
+
+		}
+
+	}
+}
+
+4  endsWith：测试此字符串是否以指定的后缀结束。boolean
+boolean flag2 = a.endsWith("卡卡西");
+
+		if (flag2) {
+			System.out.println("叫卡卡西");
+		}
+		
+5  charAt ：返回指定索引处的 char 值。返回值char
+  string a = “asjdhajkh”;
+  char b=a.charAt(0);//'a'
+  
+6  length: 返回此字符串的长度 返回值int
+    string a = “asjdhajkh”;//9
+	a.length();
+	
+7  indexOf :返回指定字符在此字符串中第一次出现处的索引; int
+   string a = “asjdhajkh”;
+   a.indexOf(a);// 0
+   
+8  lastIndexOf:回指定字符在此字符串中最后一次出现处的索引。int
+ string a = “abca”;
+   a.indexOf(a);//3
+
+9  Integer.parseInt()：将字符串参数作为有符号的十进制整数进行解析。
+ String a = "845674857";
+
+		  int b = Integer.parseInt(a);
+
+		  System.out.println(b);
+   Boolean.parseBoolean() ：将字符串参数作为有符号的boolean进行解析。
+   String a = "false";
+
+		  boolean b =Boolean.parseBoolean(a)；
+
+		  System.out.println(b);
+   Float .....
+
+10 split ：根据给定正则表达式的匹配拆分此字符串。返回值是字符串数组
+String a = {123,3435,565,7,78}
+String[] arr=a.split(",")
+arr[]= {{123}，{3435}，{565}，{7}，{78}}
+
+
+11 subString（int a） ： 返回一个新的字符串，它是此字符串的一个子字符串。该子字符串从指定索引处的字符开始，直到此字符串末尾。返回值是string
+String a = {12233467}；
+String b= a.subString(1)
+b="2233467";
+
+12 contains ： 当且仅当此字符串包含指定的 char 值序列时，返回 true
+string a = {2761892367}
+String b = {2}
+b.contains(a)// true
+
+13 toCharArray：  将此字符串转换为一个新的字符数组。返回 char[]
+String a ={12345}
+a.toCharArray();
+char a = {{1}{2}{3}{4}{5}}
+
+14 trim  :返回字符串的副本，忽略前导空白和尾部空白。  返回 String
+String a = "  236754 745 63 627  "  ;
+

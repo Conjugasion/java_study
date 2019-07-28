@@ -944,5 +944,24 @@ public class test {
         }
         int[] ints = Arrays.copyOfRange(a, 1, 1);  // []
         System.out.println(ints.length);
+
+        String str = "charAt";
+        System.out.println(str.charAt(1));    // h
+        StringBuilder stringBuilder = new StringBuilder("charAt");
+        stringBuilder.setCharAt(1,'H');    // cHarAt
+        System.out.println(stringBuilder);
+        stringBuilder.replace(2,3,"A");   // cHArAt
+        System.out.println(stringBuilder);
+        stringBuilder.insert(1,"C");
+        System.out.println(stringBuilder);    // cCHArAt
+        char[] test = new char[4];
+        test[0] = '0';
+        stringBuilder.getChars(1,4,test,1);   // 0CHA
+        System.out.println(test);
+    }
+
+    @Test
+    public void test30(){
+
     }
 }

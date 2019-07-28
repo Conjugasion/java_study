@@ -1,0 +1,29 @@
+1. 三角函数方法
+public static double sin(double radians)             //正弦函数
+public static double cos(double radians)             //余弦函数
+public static double tan(double radians)             //正切函数
+public static double toRadians(double degree)        //度转换成弧度
+public static double toDegree(double radians)        //弧度转换成度
+public static double asin(double a)                  //反正弦
+public static double acos(double a)                  //反余弦
+public static double atan(double a)                  //反正切
+2. 指数函数方法
+public static double exp(double x)                   //e^x
+public static double log(double x)                   //ln（x）
+public static double log10(double x)                 //log 10（x）
+public static double pow(double a,double b)          //a^b
+public static double sqrt(double x)                  //√x
+3. 取整方法
+public static double ceil(double x)                 // 得到不小于某数的最大整数
+public static double floor(double x)                //得到不大于某数的最小整数
+public static double rint(double x)                 //返回值为最接近参数的double值。如果这两个整数的double值都同样接近，就取偶数
+public static int round(float x)                    //返回（int）Math.floor（x+0.5）
+public static long round(double x)                  //返回（long）Math.floor（x+0.5）
+4. min,max,abs,random方法
+min()返回两个数的最小值
+
+max()返回两个数的最大值
+
+abs()返回一个数的绝对值
+
+random()可以生成大于等于0.0且小于1.0的double型随机数
