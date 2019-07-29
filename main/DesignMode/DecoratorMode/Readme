@@ -1,0 +1,54 @@
+1、定义：可以动态地给某个对象增加一些额外的职责。
+
+2、模式结构：
+（1）Component（抽象构件）：定义了对象的接口，是具体构件和抽象装饰类的共同父类，可以动态地给对象增加方法。
+（2）ConcreteComponent（具体构件）：定义了具体的构件对象，实现了抽象构件中的方法。
+（3）Decorator（抽象装饰类）：抽象构件类的子类，用来给具体构件增加职责，具体职责在子类中实现。
+（4）ConcreteDecorator（具体装饰类）：用于向构建添加具体的职责。
+
+3、具体分析
+装饰模式利用了“合成复用原则”，在对构件添加新的职责时使用关联关系，使得系统具有很好的松耦合性。该模式的核心是抽象装饰类，其示例代码如下：
+public class Decorator extends Component
+{
+    private Component component;
+    public Decorator(Component component)
+    {
+        this.component = component;
+    }
+    public void operation()
+    {
+        component.operation();
+    }
+}
+
+抽象装饰类 Decorator 中定义了 Component 对象用于对父类对象的引用，实现 Component 接口中的方法，但该方法并未真正实现，
+其真正实现交给了具体装饰类来完成。具体装饰类里可以定义新的方法，如果方法直接被 operation（）方法调用使用，则被称为透明装饰模式；
+如果方法直接供客户端使用，则称为半透明装饰模式。示例代码如下：
+public class ConcreteDecorator extends Decorator
+{
+    public ConcreteDecorator(Component component)
+    {
+        super(component);
+    }
+    public void operation()
+    {
+        super.operation();
+        addedBehavior();//半透明装饰模式
+    }
+    public void addedBehavior()
+    {
+        //新增方法
+    }
+}
+
+4、模式优缺点：
+（1）优点：可以提供比继承更为灵活的扩展功能的方式。
+（2）缺点：编写比继承更容易出错，排除错误困难。
+
+5、模式应用：
+JDK 中 Java IO 中， InputStream、OutputStream、Reader、Writer等都用到了该模式。
+
+6、适用场景
+（1）如果需要在不影响其它对象的情况下，以动态、透明的方式给对象添加职责，可以使用装饰模式，这几乎就是装饰模式的主要功能
+（2）如果不合适使用子类来进行扩展的时候，可以考虑使用装饰模式，因为装饰模式是使用的“对象组合”的方式。所谓不适合用子类扩展的方式，
+    比如：扩展功能需要的子类太多，造成子类数目呈爆炸性增长。

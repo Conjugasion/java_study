@@ -1,7 +1,6 @@
 import org.apache.log4j.Logger;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.omg.PortableInterceptor.INACTIVE;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,7 +12,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.LongStream;
 
 
 /**
@@ -331,7 +329,7 @@ public class test {
         a[0][0] = false;
         b[0][0] = true;
         System.out.println(b[0][0]);
-        logger.debug("debug");
+        logger.debug("Debug");
 
         boolean c = false;
         boolean d = true;

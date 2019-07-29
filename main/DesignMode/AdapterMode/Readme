@@ -1,0 +1,44 @@
+1、定义：将一个类的接口转化成多个类可以兼容的接口，使其协同工作而无需修改现有类的内部结构。
+2、模式结构：
+（1）Target（目标抽象类）：定义了特定的工作接口。
+（2）Adapter（适配器类）：模式的核心类，作为转换器对Target和Adaptee进行适配。
+（3）Adaptee（适配者类）：定义了需要适配的接口。
+（4）Client（客户类）：针对目标抽象类编程，调用其定义的方法。
+
+
+3、类适配器和对象适配器的比较：
+
+类适配器中，适配器类通过实现 Target接口 并继承Adaptee类，实现适配目的。
+public class Adapter extends Adaptee implements Target
+{
+    //request()方法为Target接口里所定义的方法
+    public void request()
+    {
+        specificRequest();//该方法为Adaptee类里定义的方法
+    }
+}
+
+
+对象适配器中，适配器类通过继承 Target类(具体类/抽象类均可) 并关联一个Adaptee对象，实现适配目的。
+public class Adapter extends Target
+{
+    private Adaptee adaptee;//所关联的适配者类的对象
+    public Adapter(Adaptee adaptee)
+    {
+        this.adaptee=adaptee;
+    }
+    public void request()
+    {
+        adaptee.specificRequest();
+    }
+}
+
+4、模式优缺点：
+（1）优点：将目标类和适配者类解耦，更换添加适配器方便简单，增加了类的复用性。
+（2）缺点：类适配器模式一次只能适配一个适配者类，目标抽象类只能为接口，具有一定的局限性；对象适配器模式很难置换适配者类的方法。
+
+5、模式应用：
+（1）通过 JDBC 连接数据库时加载数据库驱动利用了适配器模式。不同数据库的驱动都是介于 JDBC 接口和数据库引擎接口（如Oracle）之间的适配器软件。
+（2）框架 Spring 的组成之一 Spring AOP 中，BeforeAdvice、AfterAdvice、ThrowsAdvice 三种通知类型是借助适配器模式实现的，AdvisorAdapter 是一个适配器接口，源码如下：
+
+

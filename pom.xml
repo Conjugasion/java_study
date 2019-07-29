@@ -63,7 +63,7 @@
                             <addClasspath>true</addClasspath>
                             <useUniqueVersions>false</useUniqueVersions>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>chongzai.zi</mainClass>
+                            <mainClass>Chongzai.zi</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
