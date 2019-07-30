@@ -1,4 +1,4 @@
-package Enum;
+package EnumDemo;
 
 /**
  * @author Lucas
@@ -38,7 +38,7 @@ public enum Color {
     abstract String getInfo();
 
     public static void main(String[] args) {
-        for (Color color: Color.values()) {
+        for (Color color:Color.values()) {
             System.out.println("name: " + color.name() + " ,desc: " + color.getDesc() + ", info: " + color.getInfo());
         }
     }
