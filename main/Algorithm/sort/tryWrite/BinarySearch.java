@@ -1,4 +1,4 @@
-package algorithm.sort.tryWrite;
+package Algorithm.sort.tryWrite;
 
 /**
  * @author Lucas

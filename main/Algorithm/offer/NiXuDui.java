@@ -1,8 +1,6 @@
-package algorithm.offer;
+package Algorithm.offer;
 
 import java.util.*;
-import java.util.stream.*;
-
 
 
 /**

@@ -1,4 +1,4 @@
-package algorithm.offer;
+package Algorithm.offer;
 
 import java.util.Iterator;
 import java.util.LinkedHashMap;

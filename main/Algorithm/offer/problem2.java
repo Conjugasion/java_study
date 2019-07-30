@@ -1,4 +1,4 @@
-package algorithm.offer;
+package Algorithm.offer;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

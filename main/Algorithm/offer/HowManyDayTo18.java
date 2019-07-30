@@ -1,4 +1,4 @@
-package algorithm.offer;
+package Algorithm.offer;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

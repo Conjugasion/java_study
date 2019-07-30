@@ -1,4 +1,4 @@
-package algorithm.sort.tryWrite;
+package Algorithm.sort.tryWrite;
 
 import java.util.Arrays;
 

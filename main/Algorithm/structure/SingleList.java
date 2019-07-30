@@ -1,4 +1,4 @@
-package algorithm.structure;
+package Algorithm.structure;
 
 /**
  * @author Lucas

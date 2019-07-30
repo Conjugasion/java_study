@@ -1,4 +1,4 @@
-package algorithm.structure;
+package Algorithm.structure;
 
 import java.util.ArrayList;
 import java.util.Stack;

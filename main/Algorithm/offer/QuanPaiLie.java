@@ -1,6 +1,4 @@
-package algorithm.offer;
-
-import java.util.ArrayList;
+package Algorithm.offer;
 
 /**
  * @author Lucas
