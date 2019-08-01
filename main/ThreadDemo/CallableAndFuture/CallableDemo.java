@@ -1,4 +1,4 @@
-package ThreadDemo.CallableDemo;
+package ThreadDemo.CallableAndFuture;
 
 import java.util.concurrent.Callable;
 
@@ -19,6 +19,7 @@ public class CallableDemo implements Callable {
         for (int i = 1; i <= a; i++) {
             sum = sum + i;
         }
+        Thread.sleep(5000);
         return sum;
     }
 }

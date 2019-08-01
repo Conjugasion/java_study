@@ -1,4 +1,4 @@
-package Internet;
+package Internet.UDP;
 
 import java.io.IOException;
 import java.net.*;

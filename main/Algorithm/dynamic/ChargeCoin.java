@@ -6,29 +6,30 @@ package Algorithm.dynamic;
  */
 public class ChargeCoin {
     public static void main(String[] args) {
-        int[] money = {1, 2, 5};
-        int amount = 8;
+        int[] money = {5, 3, 6};
+        int amount = 7;
         System.out.println(find(money, amount));
     }
 
 
-    // dp[i] = min(dp[i-1],dp[i-3],dp[i-2])+1
-    // dp[i] 表示金额i的最优解
+    // i表示要找的金额，dp[i]表示需要的最小钞票数
+    // dp[i] = min{dp[amount-面值1], dp[amount-面值2], dp[amount-面值3]......} + 1
     static int find(int[] money, int amount){
         if (amount==0) return 0;
         if(money.length==0) return -1;
-        for (int i:money) {
-            if (i==amount){
-                return 1;
-            }
-        }
         int[] dp = new int[amount+1];
-        dp[0] = 0;
-        for (int i = 0; i < money.length; i++) {
-            dp[money[i]] = 1;
+        for (int i = 0; i < dp.length; i++) {
+            dp[i] = -1;
         }
-        for (int i = 5; i <= amount; i++) {
-            dp[i] = Math.min(Math.min(dp[i-1],dp[i-2]),dp[i-5])+1;
+        dp[0] = 0;
+        for (int i = 0; i <= amount; i++) {        // 依次寻找amount=0/1/2/3...的最少钞票数
+            for (int j = 0; j < money.length; j++) {
+                if (i>=money[j] && dp[i-money[j]]!=-1){      // 要求 i大于当前面值 && i-money[j]金额需要存在可行解
+                    if (dp[i]==-1 || dp[i] > dp[i-money[j]]+1){    // 要求 i金额目前还没可行解 || i金额可行解较差
+                        dp[i] = dp[i-money[j]] + 1;
+                    }
+                }
+            }
         }
         return dp[amount];
     }

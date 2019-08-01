@@ -1,4 +1,4 @@
-package Internet;
+package Internet.BlOSocket;
 
 import java.io.IOException;
 import java.io.InputStream;

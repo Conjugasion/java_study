@@ -10,6 +10,7 @@ import java.util.Map;
  */
 public class dynamic2 {
     public static void main(String[] args) {
+        int n = 10;
         Map<Integer, Integer> price = new HashMap<>();
         price.put(1, 1);
         price.put(2, 5);
@@ -21,13 +22,13 @@ public class dynamic2 {
         price.put(8, 20);
         price.put(9, 24);
         price.put(10, 30);
-        System.out.println(cut(price, 4));
+        System.out.println(cut(price, n));
 
         Map<Integer, Integer> midResult = new HashMap<>();
         for (int i = 1; i <= 10; i++) {
             midResult.put(i, -1);
         }
-        System.out.println(cut(price, midResult, 4));
+        System.out.println(cut(price, midResult, n));
 
     }
 
