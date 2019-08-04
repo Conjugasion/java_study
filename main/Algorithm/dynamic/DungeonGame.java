@@ -15,11 +15,14 @@ import java.util.Collections;
  */
 public class DungeonGame {
     public static void main(String[] args) {
-        int[][] dungeon = {{-2,-3,3},{-5,-10,1},{10,30,-5}};
+       // int[][] dungeon = {{-2,-3,3},{-5,-10,1},{10,30,-5}};
+        int[][] dungeon = {{3},{2},{-6}};
+
         /*ArrayList<Integer> allPath = new ArrayList<>();
         find(dungeon, dungeon.length, dungeon.length, 0, 0, 0, allPath);
         Collections.sort(allPath);
         System.out.println("回溯法de最少初始血量：" + allPath.get(0));*/
+        System.out.println("动态规划法de最少初始血量：" + find(dungeon));
     }
 
     // 回溯法，枚举法，不对
@@ -40,35 +43,51 @@ public class DungeonGame {
 
     // 动态规划
     // dp[i][j] 表示从第i行第j列能走到右下角的最少起始血量 [0,+]
-    // initSelf[i][j] 表示第i行第j列的数字变成1的代价
+    // 假如仅一个格子dungeon[0][0]，若dungeon[0][0]>0，dp[0][0]=1;
+    //                           若dungeon[0][0]=0，dp[0][0]=1;
+    //                           若dungeon[0][0]<0，dp[0][0]=1-dungeon[0][0];
+    //                           即dp[0][0]=max{1，1-dungeon[0][0]}
     // min = min{dp[i+1][j], dp[i][j+1]}
-    // initSelf[i][j] = 1- dungeon[i][j]
-    //
-
+    // if (Math.max(1, 1-matrix[i][j]) + matrix[i][j] >= min), dp[i][j] = Math.max(1, 1-matrix[i][j]);
+    // if (Math.max(1, 1-matrix[i][j]) + matrix[i][j] < min), dp[i][j] = min - matrix[i][j]
 
     static int find(int[][] matrix){
-        int[][] dp = new int[matrix.length][matrix.length];
-        for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix.length; j++) {
+        int xlength = matrix.length;
+        int ylength = matrix[0].length;
+        int[][] dp = new int[xlength][ylength];
+        for (int i = 0; i < xlength; i++) {
+            for (int j = 0; j < ylength; j++) {
                 dp[i][j] = -1;
             }
         }
-
-        // 辅助数组
-        int[][] initSelf = new int[matrix.length][matrix.length];
-        for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix.length; j++) {
-                if (matrix[i][j] <= 0){
-                    initSelf[i][j] = 1- matrix[i][j];
+        for (int i = xlength-1; i >= 0; i--) {
+            for (int j = ylength-1; j >= 0; j--) {
+                if (i==xlength-1&&j!=ylength-1){
+                    // 如果初始血量+当前格子的血量 >= 下一步要走位置的最低初始血量，则不需要额外增加血量
+                    if (Math.max(1, 1-matrix[i][j]) + matrix[i][j] >= dp[i][j+1]) {
+                        dp[i][j] = Math.max(1, 1-matrix[i][j]);
+                    // 如果初始血量+当前格子的血量 < 下一步要走位置的最低初始血量，则需要额外增加血量
+                    }else {
+                        dp[i][j] = dp[i][j+1] - matrix[i][j];
+                    }
+                }else if (i!=xlength-1&&j==ylength-1){
+                    if (Math.max(1, 1-matrix[i][j]) + matrix[i][j] >= dp[i+1][j]) {
+                        dp[i][j] = Math.max(1, 1-matrix[i][j]);
+                    }else {
+                        dp[i][j] = dp[i+1][j] - matrix[i][j];
+                    }
+                }else if (i==xlength-1&&j==ylength-1){
+                    dp[i][j] = Math.max(1, 1-matrix[i][j]);
                 }else {
-                    initSelf[i][j] = 0;
+                    int min = Math.min(dp[i+1][j], dp[i][j+1]);
+                    if (Math.max(1, 1-matrix[i][j]) + matrix[i][j] >= min) {
+                        dp[i][j] = Math.max(1, 1-matrix[i][j]);
+                    }else {
+                        dp[i][j] = min - matrix[i][j];
+                    }
                 }
             }
         }
-
-        if (initSelf[matrix.length-1][matrix.length-1] == 0){
-            dp[matrix.length-1][matrix.length-1] = 0;
-        }
-        return 1;
+        return dp[0][0];
     }
 }

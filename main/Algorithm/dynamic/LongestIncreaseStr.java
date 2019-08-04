@@ -7,7 +7,7 @@ package Algorithm.dynamic;
  * 例如1,3,2,3,1,4, 最长子序列为1,2,3,4
  * 2 1 4 3 6 5 6
  */
-public class LongestSubStr {
+public class LongestIncreaseStr {
     public static void main(String[] args) {
         int[] str = {2,1,4,3,6,5,1};
         System.out.println(find(str));

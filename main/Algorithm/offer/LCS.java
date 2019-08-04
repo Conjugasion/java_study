@@ -6,6 +6,7 @@ import java.util.Arrays;
 /**
  * @author Lucas
  * @date 2019-06-17 22:05
+ * 最长公共子序列(可以不连续)
  * 2 3 5 6 7 1
  * 1 3 6 7 8 9 1
  * 3 6 7 1
@@ -24,8 +25,8 @@ public class LCS {
     static int[] find(int[] source, int[] target){
         int[][] dp = new int[source.length+1][target.length+1];
         /*
-        if s[i]==t[i], dp[i][j] = dp[i-1][j-1]+1
-        if s[i]!=t[i], dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+        if s[i]==t[j], dp[i][j] = dp[i-1][j-1]+1
+        if s[i]!=t[j], dp[i][j] = max(dp[i-1][j], dp[i][j-1])
          */
         for (int i = 0; i <= source.length; i++) {
             for (int j = 0; j <= target.length; j++) {

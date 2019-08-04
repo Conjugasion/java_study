@@ -6,7 +6,7 @@ import java.util.Arrays;
 /**
  * @author Lucas
  * @date 2019/7/26 11:18
- * 马走日，n*n棋盘找一条没有走过的路
+ * 马走日，n*n棋盘找一条能走遍所有点的路
  */
 public class ZouXiangQi {
     public static void main(String[] args) {

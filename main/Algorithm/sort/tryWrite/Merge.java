@@ -17,14 +17,17 @@ public class Merge {
     static void sort(int[] array, int left, int right){
         if (left < right){
             int mid = (left+right)/2;
+            // 对左边进行排序
             sort(array, left, mid);
+            // 对右边进行排序
             sort(array, mid+1, right);
+            // 将左、右的有序数组进行合并
             merge(array, left, mid, right);
         }
     }
 
 
-    // 合并两个数组
+    // 合并两个有序数组
     static void merge(int[] array, int left, int mid, int right){
         int[] temp = new int[right-left+1];
         int n = 0;
