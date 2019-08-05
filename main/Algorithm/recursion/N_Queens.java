@@ -45,11 +45,15 @@ public class N_Queens {
         mark[x][y] = 1;
         int n = mark.length;
         // 更新棋盘的八个方向
-        for (int i = 0; i < 8; i++) {
-            int m = 1;
-            while(x+m*dx[i]>=0 && y+m*dy[i]>=0 && x+m*dx[i]<=n-1 && y+m*dy[i]<=n-1){  // 只有在棋盘内才能置为1
-                mark[x+m*dx[i]][y+m*dy[i]] = 1;
-                m++;
+
+        for (int i = 0; i < mark.length; i++) {    // 最多向外延伸mark.length个单位
+            for (int j = 0; j < 8; j++) {
+                int newX = x+i*dx[j];              // 更新坐标
+                int newY = y+i*dy[j];
+
+                if (newX>=0&&newY>=0&&newX<mark.length&&newY<mark.length){
+                    mark[newX][newY] = 1;
+                }
             }
         }
     }
