@@ -933,7 +933,9 @@ public class test {
     }
 
     @Test
-    public void test30(){
-
+    public void test30() throws ClassNotFoundException {
+        ClassLoader loader = ClassLoader.getSystemClassLoader();
+        Class<?> test = loader.loadClass("test");
+        System.out.println(test);
     }
 }

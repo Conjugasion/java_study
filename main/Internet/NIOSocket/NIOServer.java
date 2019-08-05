@@ -14,6 +14,8 @@ import java.util.Set;
  * @author Lucas
  * @date 2019/7/30 16:28
  * 利用Selector可使一个单独的线程管理多个 Channel
+ * NIO 的核心：Channel、Buffer、Selector
+ *
  */
 public class NIOServer {
     // 通道管理器(Selector)
