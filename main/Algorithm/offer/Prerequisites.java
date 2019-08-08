@@ -1,9 +1,6 @@
 package Algorithm.offer;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Lucas
@@ -20,28 +17,41 @@ import java.util.Set;
  */
 public class Prerequisites {
     public static void main(String[] args) {
-        System.out.println(canFinish(2, new int[][]{{1,0}}));
+        System.out.println(canFinish(3, new int[][]{{1,0},{1,2},{0,1}}));
     }
 
     static boolean canFinish(int numCourses, int[][] prerequisites) {
-        HashMap<Integer, Integer> outin = new HashMap<>();     // 前驱 : 后驱
+        HashMap<Integer, ArrayList<Integer>> outin = new HashMap<>();     // 前驱 : 后驱
         for(int[] i:prerequisites){
-            outin.put(i[0], i[1]);
+            if (!outin.containsKey(i[0])){
+                outin.put(i[0], new ArrayList<Integer>(){{add(i[1]);}});
+            }else {
+                outin.get(i[0]).add(i[1]);
+            }
         }
 
         while (true){
-            Set<Integer> head = outin.keySet();                     // 所有前驱
+            Set<Integer> head = new HashSet<>(outin.keySet());      // 所有前驱
             int preSize = head.size();                              // 未删除前的数量
             if (head.size()==0) {
                 return true;
             }
-            HashSet<Integer> rear = new HashSet<>(outin.values());  // 所有后驱
+
+            HashSet<Integer> rear = new HashSet<>();                // 所有后驱, 去重
+            for (int i: head) {
+                ArrayList<Integer> rears = outin.get(i);
+                for (int ii:rears) {
+                    rear.add(ii);
+                }
+            }
+
             for (int h:head) {
                 if (!rear.contains(h)){
                     outin.remove(h);
                 }
             }
-            int postSize = head.size();                              // 删除后的数量
+
+            int postSize = outin.keySet().size();                   // 删除后的数量
             if (preSize==postSize) return false;
         }
     }
