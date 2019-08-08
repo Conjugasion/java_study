@@ -34,12 +34,21 @@ public class ZeroOneBag {
         }
 
         int result =Integer.MIN_VALUE;
-        for (int i = 1; i <= w.length; i++) {
+        /*for (int i = 1; i <= w.length; i++) {
             for (int j = 0; j <= m; j++) {
                 if (j>=w[i-1] ){
                     dp[i][j] = Math.max(dp[i-1][j], dp[i-1][j-w[i-1]] + v[i-1]);
                 }else dp[i][j] = dp[i-1][j];
                 result = result >= dp[i][j] ? result : dp[i][j];
+            }
+        }*/
+
+        for (int i = 0; i <= m; i++) {                // i指容量
+            for (int j = 1; j <= w.length; j++) {     // 使用前j个物品
+                if (i>=w[j-1]){
+                    dp[j][i] = Math.max(dp[j-1][i], dp[j-1][i-w[j-1]] + v[j-1]);
+                }else dp[j][i] = dp[j-1][i];
+                result = result >= dp[j][i] ? result : dp[j][i];
             }
         }
         return result;

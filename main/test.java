@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Matcher;
@@ -937,5 +938,9 @@ public class test {
         ClassLoader loader = ClassLoader.getSystemClassLoader();
         Class<?> test = loader.loadClass("test");
         System.out.println(test);
+
+        // 队列！
+        Queue<Object> queue = new LinkedList<>();
+
     }
 }

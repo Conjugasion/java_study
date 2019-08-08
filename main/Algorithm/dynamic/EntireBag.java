@@ -22,7 +22,7 @@ public class EntireBag {
         }
     }
 
-    // dp[i] = max{dp[i-1], dp[i-2], ... , dp[i-11]} + 对应的v[]
+    // dp[i] = max{dp[i-1], dp[i-2], ... , dp[i-11]} + 对应的v[1/2/3/4...]
     // dp[i] 表示i容量下能获得的最大价值
     static int maxValue(int[] w, int[] v, int m){
         int[] dp = new int[m+1];

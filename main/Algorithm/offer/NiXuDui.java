@@ -112,6 +112,7 @@ public class NiXuDui {
             for (int k = i; k >= left; k--) {
                 temp[n] = array[k];
                 n--;
+                count++;
             }
         }
         if (j>=mid+1){

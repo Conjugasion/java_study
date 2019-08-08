@@ -5,7 +5,7 @@ package Algorithm.offer;
  * @date 2019-07-22 21:06
  * 给定一系列数字，找出和为target所有组合的数量
  */
-public class TargetSum {
+public class TargetSum1 {
     public static void main(String[] args) {
         int[] array = {2, 3, 5, 8, 1, 4};
         int target = 5;
