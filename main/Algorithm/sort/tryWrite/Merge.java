@@ -9,7 +9,7 @@ import java.util.Arrays;
 public class Merge {
     public static void main(String[] args) {
         int[] array = {2, 4, 1, 5, 13, 7, 12, 1, 19};
-        sort(array, 0, array.length-1);
+        sortExercise1(array, 0, array.length-1);
         System.out.println(Arrays.toString(array));
     }
 
@@ -61,6 +61,53 @@ public class Merge {
         }
         for (int k = 0; k < temp.length; k++) {
             array[k+left] = temp[k];
+        }
+    }
+
+    // 排序练习
+    static void sortExercise1(int[] array, int start, int end){
+        if (start < end){
+            int mid = (start+end)/2;
+            sortExercise1(array, start, mid);
+            sortExercise1(array, mid+1, end);
+            mergeExercise1(array, start, mid, end);
+        }
+    }
+
+    // 合并练习
+    static void mergeExercise1(int[] array, int start, int mid, int end){
+        if (start < end){
+            int i = start;
+            int j = mid+1;
+            int[] temp = new int[end-start+1];
+            int n = 0;
+
+            while (i<=mid && j<=end){
+                if (array[i]<=array[j]){
+                    temp[n] = array[i];
+                    n++;i++;
+                }else {
+                    temp[n] = array[j];
+                    n++;j++;
+                }
+            }
+
+            if (i<=mid){
+                for (int k = i; k <= mid; k++) {
+                    temp[n] = array[k];
+                    n++;
+                }
+            }
+            if (j<=end){
+                for (int k = j; k <= end; k++) {
+                    temp[n] = array[k];
+                    n++;
+                }
+            }
+
+            for (int k = start; k <= end; k++) {
+                array[k] = temp[k-start];
+            }
         }
     }
 }

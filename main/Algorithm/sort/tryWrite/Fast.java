@@ -9,7 +9,7 @@ import java.util.Arrays;
 public class Fast {
     public static void main(String[] args) {
         int[] array = {2, 4, 1, 5, 13, 7, 12, 1, 19};
-        fastSort(array, 0, array.length-1);
+        fastExercise1(array, 0, array.length-1);
         System.out.println(Arrays.toString(array));
     }
 
@@ -40,6 +40,32 @@ public class Fast {
 
             fastSort(array, left, j-1);
             fastSort(array, j+1, right);
+        }
+    }
+
+    // 练习
+    static void fastExercise1(int[] array, int start, int end){
+        if (start<end){
+            int pivot = array[start];
+            int i = start;
+            int j = end;
+
+            while (i<j){
+                if (pivot<=array[j]){
+                    j--;
+                }else if (pivot>=array[i]){
+                    i++;
+                }else {
+                    int temp = array[i];
+                    array[i] = array[j];
+                    array[j] = temp;
+                }
+            }
+            array[start] = array[j];
+            array[j] = pivot;
+
+            fastExercise1(array, start, j-1);
+            fastExercise1(array, j+1, end);
         }
     }
 }
