@@ -77,7 +77,12 @@ public class NoRepeatedSubStr {
                     lengthMap.put(begin, lengthMap.get(begin)+1);
                 }
             }else {
-                begin = appear.lastIndexOf(chars[k])+1;
+                for (int i = begin; i < k; i++) {
+                    if (appear.get(i)==chars[k]) {
+                        begin = i+1;                      // 找到和chars[k]相同的元素的所在位置
+                        break;
+                    }
+                }
                 lengthMap.put(begin, k-begin+1);
             }
             appear.add(chars[k]);

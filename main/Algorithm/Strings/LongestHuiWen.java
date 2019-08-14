@@ -15,7 +15,7 @@ public class LongestHuiWen {
         System.out.println(huiWen(s));
     }
 
-    // 偶数个，奇数个(中心点
+    // 偶数个，奇数个(中心点)
     static int huiWen(String s){
         char[] chars = s.toCharArray();
         HashMap<Character, Integer> charsMap = new HashMap<>();
