@@ -246,7 +246,7 @@ JVM内存为什么要分成新生代，老年代，永久代。新生代中为�
 
 JVM中一次完整的GC流程是怎样的，对象如何晋升到老年代，说说你知道的几种主要的JVM参数。
 -XX:+printGC(打印GC)；-XX:+PrintGCDetails；(打印GC细节)-XX:+PrintHeapAtGC；(在GC时打印堆状况)-XX:+TraceClassLoading；(打印class加载细节)
--Xmx（最大堆的空间)；-Xms（最小堆的空间）; -Xmn (设置新生代的大小)；-XX:NewRatio(新生代和老年代比例)；-XX:SurvivorRatio；
+-Xmx（最大堆的空间)；-Xms（最小堆的空间）; -Xmn (设置新生代的大小)；-XX:NewRatio(新生代和老年代比例，默认1:2)；-XX:SurvivorRatio；
 -Xss (设置栈空间的大小); -XX:+HeapDumpOnOutOfMemoryError；
 
 

@@ -960,5 +960,9 @@ public class test {
         queue.offer(3);      // 队尾
         System.out.println(queue.element());
         System.out.println(queue.peek());
+
+        int i = 10000;
+        Integer j = new Integer(10000);
+        System.out.println(i==j);    // 自动装箱、拆箱
     }
 }
