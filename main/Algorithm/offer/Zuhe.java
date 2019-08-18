@@ -15,7 +15,7 @@ public class Zuhe {
 
         ArrayList<Integer> list=new ArrayList<>();
         HashSet<String> result = new HashSet<>();
-        combine(array,0,4,result,list);
+        combine(array,0,3,result,list);   // C53
         System.out.println(result);
 
         // 将数组指定范围内的数字 全排列

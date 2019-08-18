@@ -10,16 +10,21 @@ import java.util.*;
  */
 public class NiXuDui {
     public static void main(String[] args) {
-        /*int[] array = new int[9700];
-        for (int i = 0; i < array.length; i++) {
-            array[i] = array.length-i;
-        }*/
-        //System.out.println(InversePairs(array));
-        int[] array = {1,2,3,4,5,6,7,0,-1};
-        System.out.println(part(array, 0, array.length-1));
+        Random r = new Random();
+        for (int i = 0; i < 10; i++) {
+            int[] array = new int[10];
+            for (int j = 0; j < 10; j++) {
+                array[j] = r.nextInt(20);
+            }
+            System.out.println("array = " + Arrays.toString(array));
+            System.out.println("InversePairs1方法：" + InversePairs1(array));
+            System.out.println("InversePairs2方法：" + InversePairs2(array));
+            System.out.println("----------------");
+        }
     }
 
-    public static int InversePairs(int [] array) {
+    // 方法1
+    public static int InversePairs1(int[] array) {
         int[] clone = array.clone();
         //return sum(array)%1000000007;
         int[] midResult = new int[array.length];
@@ -52,78 +57,56 @@ public class NiXuDui {
         else return 0;
     }
 
-    static int sum(int[] array){
-        if (array.length == 0 || array.length == 1){
+
+
+    // 方法2 归并思想
+    static int InversePairs2(int[] array) {
+        if(array==null || array.length<=0){
             return 0;
         }
-        if (array.length == 2){
-            if (array[0]>array[1]){
-                return 1;
-            }
-            else {
-                return 0;
-            }
-        }
-        int[] subArray = Arrays.copyOfRange(array, 1, array.length);
-        int partNum = InversePairs(subArray);
-        int count = 0;
-        for (int i:subArray){
-            if(array[0] > i){
-                count++;
-            }
-        }
-        return partNum + count;
+        int pairsNum=mergeSort(array,0,array.length-1);
+        return pairsNum;
     }
 
-    // 归并思想
-    static int part(int[] array, int left, int right){
-        if (array.length==0||array.length==1) return 0;
-        if (left < right){
-            int mid = (left+right)/2;
-            int leftSum = part(array, left, mid);
-            int rightSum = part(array, mid+1, right);
-            int mergeSum = merge(array, left, mid, right);
-            return (leftSum+rightSum+mergeSum);
+    static int mergeSort(int[] array,int left,int right){
+        if(left==right){
+            return 0;
         }
-        return 0;
+        int mid=(left+right)/2;
+        int leftNum=mergeSort(array,left,mid);
+        int rightNum=mergeSort(array,mid+1,right);
+        return (Sort(array,left,mid,right)+leftNum+rightNum)%1000000007;
     }
 
-    static int merge(int[] array, int left, int mid, int right){
-        int i = mid;
-        int j = right;
-        int[] temp = new int[right-left+1];
-        int n = right-left;
-        int count = 0;
-
-        while (i>=left&&j>=mid+1){
-            if (array[j] < array[i]){
-                temp[n] = array[i];
-                i--;
-                n--;
-                count++;
-            }
-            else {
-                temp[n] = array[j];
-                j--;
-                n--;
+    static int Sort(int[] array,int left,int middle,int right){
+        int current1=middle;
+        int current2=right;
+        int current3=right-left;
+        int temp[]=new int[right-left+1];
+        int pairsnum=0;
+        while(current1>=left && current2>=middle+1){
+            if(array[current1]>array[current2]){
+                temp[current3--]=array[current1--];
+                pairsnum+=(current2-middle);     //这个地方是current2-middle！！！！
+                if(pairsnum>1000000007)//数值过大求余
+                {
+                    pairsnum%=1000000007;
+                }
+            }else{
+                temp[current3--]=array[current2--];
             }
         }
-        if (i>=left){
-            for (int k = i; k >= left; k--) {
-                temp[n] = array[k];
-                n--;
-                count++;
-            }
+        while(current1>=left){
+            temp[current3--]=array[current1--];
         }
-        if (j>=mid+1){
-            for (int k = j; k >= mid+1; k--) {
-                temp[n] = array[k];
-                n--;
-            }
+        while(current2>=middle+1){
+            temp[current3--]=array[current2--];
         }
-        for (int k = 0; k <= right-left; k++) {
-            array[k+left] = temp[k];
+        //将临时数组赋值给原数组
+        int i=0;
+        while(left<=right){
+            array[left++]=temp[i++];
         }
-        return count;
+        return pairsnum;
     }
 }

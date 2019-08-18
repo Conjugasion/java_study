@@ -12,7 +12,10 @@ import java.util.regex.Pattern;
  */
 public class DecodeString {
     public static void main(String[] args) {
-        System.out.println(regex("3[a]2[b4[F]c]"));
+        String s = "HG[3|B[2|CA]]F";
+        System.out.println(regex2(s));
+
+
     }
 
     // 正则匹配
@@ -20,6 +23,40 @@ public class DecodeString {
         Pattern compile1 = Pattern.compile("\\d+\\[[a-zA-Z]+\\]");
         Pattern compile2 = Pattern.compile("\\d+");
         Pattern compile3 = Pattern.compile("[a-zA-Z]+");
+
+        while (true){
+            Matcher matcher1 = compile1.matcher(s);
+            if (matcher1.find()){
+                String g1 = matcher1.group();
+                System.out.println(g1);                       // 3[a]
+
+                Matcher matcher2 = compile2.matcher(g1);
+                matcher2.find();
+                int num = Integer.valueOf(matcher2.group());
+                System.out.println(num);                      // 3
+
+                Matcher matcher3 = compile3.matcher(g1);
+                matcher3.find();
+                String letter = matcher3.group();
+                StringBuilder letters = new StringBuilder(letter);
+
+                for (int i = 1; i < num; i++) {
+                    letters.append(letter);
+                }
+                System.out.println(letters);                   // aaa
+
+                s = s.replace(g1, letters);
+            }else break;
+        }
+        return s;
+    }
+
+    // 正则匹配
+    // HG[3|B[2|CA]]F
+    static String regex2(String s){
+        Pattern compile1 = Pattern.compile("\\[\\d+\\|[A-Z]+]");
+        Pattern compile2 = Pattern.compile("\\d+");
+        Pattern compile3 = Pattern.compile("[A-Z]+");
 
         while (true){
             Matcher matcher1 = compile1.matcher(s);

@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.locks.Lock;
@@ -964,5 +965,13 @@ public class test {
         int i = 10000;
         Integer j = new Integer(10000);
         System.out.println(i==j);    // 自动装箱、拆箱
+
+        String s = String.format("数字是%#X和%.2fs", 10, 20.0);   // 数字是0XA和20.00s
+        System.out.println(s);
+        System.out.println((((long)Math.pow(2, 58-1))*80)/(((long)Math.pow(2,58))-1));
+        // System.out.println(new BigInteger(String.valueOf(Math.pow(2, 58-1)*80)));
+
+        String string = Integer.toBinaryString(-3);
+        System.out.println(string);         // 负数输出补码形式
     }
 }

@@ -7,11 +7,11 @@ import java.util.*;
  * @date 2019/8/8 17:38
  * 输入: 2, [[1,0]]
  * 输出: true
- * 解释: 总共有 2 门课程。学习课程 1 之前，你需要完成课程 0。所以这是可能的。
+ * 解释: 总共有 2 门课程。学习课程 0 之前，你需要完成课程 1。所以这是可能的。
  *
  * 输入: 2, [[1,0],[0,1]]
  * 输出: false
- * 解释: 总共有 2 门课程。学习课程 1 之前，你需要先完成​课程 0；并且学习课程 0 之前，你还应先完成课程 1。这是不可能的。
+ * 解释: 总共有 2 门课程。学习课程 0 之前，你需要先完成​课程 1；并且学习课程 1 之前，你还应先完成课程 0。这是不可能的。
  *
  * 拓扑排序, 将没有前驱的节点剔除，若最后集合中没有节点说明true，剔除不掉了说明有环false
  */
@@ -29,24 +29,23 @@ public class Prerequisites {
                 outin.get(i[0]).add(i[1]);
             }
         }
+        System.out.println(outin);
 
         while (true){
-            Set<Integer> head = new HashSet<>(outin.keySet());      // 所有前驱
+            Set<Integer> head = outin.keySet();      // 所有前驱
             int preSize = head.size();                              // 未删除前的数量
             if (head.size()==0) {
                 return true;
             }
 
-            HashSet<Integer> rear = new HashSet<>();                // 所有后驱, 去重
+            HashSet<Integer> rears = new HashSet<>();                // 所有后驱, 去重
             for (int i: head) {
-                ArrayList<Integer> rears = outin.get(i);
-                for (int ii:rears) {
-                    rear.add(ii);
-                }
+                ArrayList<Integer> rear = outin.get(i);
+                rears.addAll(rear);
             }
 
             for (int h:head) {
-                if (!rear.contains(h)){
+                if (!rears.contains(h)){
                     outin.remove(h);
                 }
             }
