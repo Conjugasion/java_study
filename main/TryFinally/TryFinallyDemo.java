@@ -14,9 +14,9 @@ public class TryFinallyDemo {
             return 10/i;
         }catch (ArithmeticException e){
             e.printStackTrace();
-            return -1;
+            return -1;      // try和finally必须要有一个return
         }finally {
-            return -2;   // 以finally为准
+            //return -2;   // 以finally为准
         }
     }
 }

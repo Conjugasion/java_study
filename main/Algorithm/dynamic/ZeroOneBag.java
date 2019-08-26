@@ -22,7 +22,7 @@ public class ZeroOneBag {
 
     // dp[i][j]=max{dp[i-1][j],dp[i-1][j-c[i]]+w[i]}
     // dp[i][j] 表示将第n件物品放入背包能获得最大价值
-    static int maxValue(int[] w, int[] v, int m){
+    public static int maxValue(int[] w, int[] v, int m){
         int[][] dp = new int[w.length+1][m+1];
         // 初始化dp，i=0表示一件物品都不选，i=1表示将第1件物品放入背包
         for (int i = 0; i < w.length; i++) {

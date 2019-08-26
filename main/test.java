@@ -973,5 +973,18 @@ public class test {
 
         String string = Integer.toBinaryString(-3);
         System.out.println(string);         // 负数输出补码形式
+
+        System.out.println('c'-'a');
+        System.out.println(Math.sqrt(4.0));
+        System.out.println((2.0-2)==0);
+
+        ArrayList<Object> arr1 = new ArrayList<>();
+        ArrayList<Object> arr2 = new ArrayList<>();
+        arr1.add(1);
+        arr1.add(1);
+        arr1.add(1);
+        arr2.add(1);
+        arr1.remove((Integer)1);
+        System.out.println(arr1);
     }
 }
