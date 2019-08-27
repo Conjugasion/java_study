@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Matcher;
@@ -986,5 +987,8 @@ public class test {
         arr2.add(1);
         arr1.remove((Integer)1);
         System.out.println(arr1);
+        ReentrantLock lock = new ReentrantLock();
+        lock.lock();;
+        lock.unlock();
     }
 }
