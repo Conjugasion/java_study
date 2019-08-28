@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -990,5 +991,14 @@ public class test {
         ReentrantLock lock = new ReentrantLock();
         lock.lock();;
         lock.unlock();
+
+        /*ConcurrentHashMap<String, String> map = new ConcurrentHashMap<>();    // ConcurrentHashMap的key和value不能为null
+        map.put(null, null);*/
+        /*Hashtable<Integer,Integer> table = new Hashtable<>();              // Hashtable的key和value不能为null
+        table.put(null, null);*/
+        LinkedHashMap<Integer, Integer> linkMap = new LinkedHashMap<>();     // LinkedHashMap的key和value都能为null
+        linkMap.put(null,null);
+        TreeMap<Integer, Integer> treeMap = new TreeMap<>();                 // TreeMap的key不能为null，value可以为null
+        treeMap.put(1, null);
     }
 }
