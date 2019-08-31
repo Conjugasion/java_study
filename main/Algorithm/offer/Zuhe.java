@@ -1,6 +1,7 @@
 package Algorithm.offer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 
 /**
@@ -19,11 +20,11 @@ public class Zuhe {
         System.out.println(result);
 
         // 将数组指定范围内的数字 全排列
-        /*ArrayList<int[]> result = new ArrayList<>();
-        pailie(array,0, 4, result);
-        for (int[] i:result) {
+        ArrayList<int[]> result1 = new ArrayList<>();
+        pailie(array,0, 4, result1);
+        for (int[] i:result1) {
             System.out.println(Arrays.toString(i));
-        }*/
+        }
     }
 
     // 带重复数字  组合
