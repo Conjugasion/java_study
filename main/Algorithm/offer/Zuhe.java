@@ -1,6 +1,7 @@
 package Algorithm.offer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 
 /**
@@ -10,20 +11,30 @@ import java.util.HashSet;
  */
 public class Zuhe {
     public static void main(String[] args) {
-        int[] array = {1,2,2,3,4};
-        int m = 3;
+        int[] array1 = {1,2,2,3,4};
+        int m = 3;     // 取几个
 
         ArrayList<Integer> list=new ArrayList<>();
-        HashSet<String> result = new HashSet<>();
-        combine(array,0,3,result,list);   // C53
-        System.out.println(result);
+        HashSet<String> result1 = new HashSet<>();
+        combine(array1,0,m,result1,list);   // C53
+        System.out.println(result1);
+        System.out.println("---------------------");
 
-        // 将数组指定范围内的数字 全排列
-        /*ArrayList<int[]> result = new ArrayList<>();
-        pailie(array,0, 4, result);
-        for (int[] i:result) {
+        // 将数组指定范围内的数字 全排列  带重复数字
+        ArrayList<int[]> result2 = new ArrayList<>();
+        pailie(array1,0, 4, result2);
+        for (int[] i:result2) {
             System.out.println(Arrays.toString(i));
-        }*/
+        }
+        System.out.println("----------------------");
+
+        // 将数组指定范围内的数字 全排列  不带重复数字
+        int[] array2 = {1,2,3,4};
+        ArrayList<int[]> result3 = new ArrayList<>();
+        pailieNoRepeated(array2,0, 3, result3);
+        for (int[] i:result3) {
+            System.out.println(Arrays.toString(i));
+        }
     }
 
     // 带重复数字  组合
@@ -71,6 +82,26 @@ public class Zuhe {
                 array[i] = array[from];
                 array[from] = s2;
             }
+        }
+    }
+
+    // 排列 不带重复数字
+    static void pailieNoRepeated(int[] array, int from, int to, ArrayList<int[]> result){
+        if (from == to) {
+            int[] num = new int[to+1];
+            for (int i = 0; i <= to; i++) {
+                num[i] = array[i];
+            }
+            result.add(num);
+        }
+        for (int i = from; i <= to; i++) {
+            int s1 = array[i];
+            array[i] = array[from];
+            array[from] = s1;
+            pailieNoRepeated(array, from+1, to, result);
+            int s2 = array[i];
+            array[i] = array[from];
+            array[from] = s2;
         }
     }
 
