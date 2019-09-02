@@ -1000,5 +1000,19 @@ public class test {
         linkMap.put(null,null);
         TreeMap<Integer, Integer> treeMap = new TreeMap<>();                 // TreeMap的key不能为null，value可以为null
         treeMap.put(1, null);
+        int k = 4;
+        System.out.println(k<<=1);   // k = k<<1
+        System.out.println(k);
+        Stack<Integer> min = new Stack<>();
+        // System.out.println(min.peek());
+        ArrayList<ArrayList<Integer>> result = new ArrayList<>();
+
+        result.sort(new Comparator<ArrayList<Integer>>() {
+            @Override
+            public int compare(ArrayList<Integer> o1, ArrayList<Integer> o2) {
+                return 0;
+            }
+        });
+        System.out.println(result.indexOf(null));    // 不存在返回-1
     }
 }
