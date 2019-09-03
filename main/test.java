@@ -1015,4 +1015,15 @@ public class test {
         });
         System.out.println(result.indexOf(null));    // 不存在返回-1
     }
+
+    @Test
+    public void test31(){
+        int[] arr = {1,2};
+        // int[]转Integer[]
+        Integer[] arrBoxed = Arrays.stream(arr).boxed().toArray(value -> new Integer[value]);
+        // Integer[]转int[]
+        Arrays.stream(arrBoxed).mapToInt(Integer::intValue).toArray();
+        List<Integer> arrList = Arrays.stream(arr).boxed().collect(Collectors.toList());
+        System.out.println(arrList);
+    }
 }

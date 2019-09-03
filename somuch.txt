@@ -7,6 +7,10 @@ boolean 1b, byte 1b, char 2b, short 2b, int 4b, long 8b, float 4b, double 8b
 String类能被继承吗，为什么。
 不能，final修饰
 
+JDK8中的接口Interface可以实现具体方法
+1、default void method(){...};         普通方法，必须写default
+2、public static void method(){...};   类方法，只能用public或者省略不写
+
 
 String，Stringbuffer，StringBuilder的区别。
 不可变类， 可变线程安全，  可变线程不安全
@@ -918,7 +922,13 @@ kafka的broker支持主备模式。rabbitMQ支持miror的queue，主queue失效�
 kafka采用zookeeper对集群中的broker、consumer进行管理，可以注册topic到zookeeper上；通过zookeeper的协调机制，producer保存对应topic的broker
 信息，可以随机或者轮询发送到broker上；并且producer可以基于语义指定分片，消息发送到broker的某分片上。rabbitMQ的负载均衡需要单独的loadbalancer进行支持。
 
-kafka 主从同步：leader和follower
+kafka 主从同步：leader和follower。创建副本的单位是topic的Partition，每个Partition都有一个leader和零或多个followers.所有的读写操作都由
+leader处理，一般Partition的数量都比broker的数量多的多，各分区的leader均匀的分布在brokers中。所有的followers都复制leader的日志，日志中的
+消息和顺序都和leader中的一致。flowers像普通的consumer那样从leader那里拉取消息并保存在自己的日志文件中。
+
+Kafka判断一个节点是否活着有两个条件：
+1、节点必须可以维护和ZooKeeper的连接，Zookeeper通过心跳机制检查每个节点的连接。
+2、如果节点是个follower,他必须能及时的同步leader的写操作，延时不能太久。
 
 
 利用mq怎么实现最终一致性。
