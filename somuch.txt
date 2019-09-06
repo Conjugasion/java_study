@@ -595,6 +595,13 @@ Exchanger:交换器,两个线程到达同步点后交换数据
 
 
 用过线程池吗，如果用过，请说明原理，并说说newCache和newFixed有什么区别，构造函数的各个参数的含义是什么，比如coreSize，maxsize等。
+一般需要根据任务的类型来配置线程池大小：
+如果是CPU密集型任务，就需要尽量压榨CPU，参考值可以设为 核心数+1
+如果是IO密集型任务，参考值可以设置为2*核心数
+
+ThreadPoolExecutor的addThread(Runnable firstTask)方法用提交的firstTask任务创建一个Worker对象，然后调用线程工厂threadFactory创建一个
+新的线程t，然后将线程t的引用赋值给Worker对象的成员变量thread，接着通过(HashSet<Worker>)workers.add(w)将Worker对象添加到工作集中。
+
 ThreadPoolExecutor(......)
 corePoolSize核心线程数量，maxsize核心线程+非核心线程数量，keepAliveTime非核心线程最大闲置时间，timeUnit时间单位，workQueue等待队列
 threadFactory工厂方法，Reject拒绝机制
@@ -955,6 +962,13 @@ RabbitMQ消息可以设置过期时间。手动找出过期数据，批量重导
 
 
 缓存
+
+Redis为什么这么快
+1、完全基于内存，绝大部分请求是纯粹的内存操作，非常快速。
+2、采用单线程，避免了不必要的上下文切换和竞争条件，也不存在多进程或者多线程导致的切换而消耗 CPU；
+3、使用多路I/O复用模型，非阻塞IO；
+4、使用底层模型不同，它们之间底层实现方式以及与客户端之间通信的应用协议不一样，Redis直接自己构建了VM 机制 ，因为一般的系统调用系统函数的话，会浪费一定的时间去移动和请求；
+
 
 常见的缓存策略有哪些，如何做到缓存(比如redis)与DB里的数据一致性，你们项目中用到了什么缓存系统，如何设计的。
 缓存策略的分类：
@@ -2376,6 +2390,12 @@ Sharding-JDBC直接封装JDBC API，可以理解为增强版的JDBC驱动，用�
 
 
 MYSQL的主从延迟怎么解决。
+当主库的TPS并发较高时，产生的DDL(数据定义语言)数量超过slave一个sql线程所能承受的范围，那么延时就产生了，当然还有就是可能与slave的大型query语句产生了锁等待。
+1、最简单的减少slave同步延时的方案就是在架构上做优化，尽量让主库的DDL快速执行。还有就是主库是写，对数据安全性较高，比如sync_binlog=1，innodb_flush_log_at_trx_commit = 1 
+之类的设置，而slave则不需要这么高的数据安全，完全可以将sync_binlog设置为0或者关闭binlog，innodb_flushlog也可以设置为0来提高sql的执行效率。
+2、使用比主库更好的硬件设备作为slave。这台slave只用于备份master，不用提供读服务，其他slave同步该台slave。
+3、增加slave，分散读压力，从而降低slave压力。
+
 master服务器负责写操作，多台slave服务器负责读操作，所以master和slave之间要保持数据一致性。
 一主多从、多主一从、级联复制 
 						-> Slave
