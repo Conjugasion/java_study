@@ -1013,7 +1013,10 @@ public class test {
                 return 0;
             }
         });
-        System.out.println(result.indexOf(null));    // 不存在返回-1
+        System.out.println("不存在返回" + result.indexOf(null));    // 不存在返回-1
+        for (ArrayList<Integer> r:result) {
+            System.out.println(r + "存在");
+        }
     }
 
     @Test

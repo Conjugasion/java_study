@@ -2,6 +2,7 @@ package Algorithm.structure;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * @author Lucas
@@ -96,6 +97,24 @@ public class tree {
             preVisit(root.right);
         }
     }
+
+    static void preVisitStack(node root){
+        if (root!=null){
+            Stack<node> s = new Stack<>();
+            node temp = root;
+            while (temp!=null||!s.isEmpty()){
+                if (temp!=null){
+                    s.push(temp);
+                    System.out.print(temp.value + " ");
+                    temp = temp.left;
+                }else {
+                    node pop = s.pop();
+                    temp = pop.right;
+                }
+            }
+        }
+    }
+
     // 中序遍历二叉树
     public static void midVisit(node root){
         if (root != null){
@@ -104,6 +123,24 @@ public class tree {
             midVisit(root.right);
         }
     }
+
+    static void midVisitStack(node root){
+        if (root!=null){
+            Stack<node> s = new Stack<>();
+            node temp = root;
+            while (temp!=null||!s.isEmpty()){
+                if (temp!=null){
+                    s.push(temp);
+                    temp = temp.left;
+                }else {
+                    node pop = s.pop();
+                    System.out.print(pop.value + " ");
+                    temp = pop.right;
+                }
+            }
+        }
+    }
+
     // 后序遍历二叉树
     public static void postVisit(node root){
         if (root != null){
@@ -112,6 +149,11 @@ public class tree {
             System.out.print(root.value + " ");
         }
     }
+
+    static void postVisitStack(node root){
+
+    }
+
     // 深度遍历
     public static void deepVisit(node root){
         if (root != null){
@@ -158,9 +200,15 @@ public class tree {
              7   8  9
          */
         //preVisit(t.root); // 0 1 3 7 8 4 9 2 5 6
+        //System.out.println();
+        //preVisitStack(t.root);
         //midVisit(t.root); // 7 3 8 1 9 4 0 5 2 6
-        //postVisit(t.root); // 7 8 3 9 4 1 5 6 2 0
-        deepVisit(t.root);   // 0 1 3 7 8 4 9 2 5 6
+        //System.out.println();
+        //midVisitStack(t.root);
+        postVisit(t.root); // 7 8 3 9 4 1 5 6 2 0
+        System.out.println();
+        postVisitStack(t.root);
+        //deepVisit(t.root);   // 0 1 3 7 8 4 9 2 5 6
         //broadVisit(t.root);  // 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
     }
 }
