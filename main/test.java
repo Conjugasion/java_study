@@ -1028,5 +1028,17 @@ public class test {
         Arrays.stream(arrBoxed).mapToInt(Integer::intValue).toArray();
         List<Integer> arrList = Arrays.stream(arr).boxed().collect(Collectors.toList());
         System.out.println(arrList);
+
+        byte b = 127;
+        int i = Integer.MAX_VALUE + 1;
+        System.out.println((byte)(b+1));     // 越界 -128
+        System.out.println(i);     // 越界 -2147483648
+        System.out.println(1.0/0);    // Infinity
+        System.out.println(1.0/0.0);  // Infinity
+        // System.out.println(1/0);      // 抛异常
+        System.out.println(Double.NaN);   // NaN 属性代表一个“不是数字”的值
+        System.out.println(0.0/0);
+        System.out.println(Integer.toBinaryString(10));   // 1010
+        System.out.println((char)65);          // A
     }
 }
