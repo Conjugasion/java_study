@@ -8,7 +8,7 @@ package Algorithm.offer;
 public class QuanPaiLie {
     public static void main(String[] args) {
         String[] str = {"a", "b", "c", "d", "a"};
-        pailie(str, 0, 4);
+        pailie(str, 0, str.length-1);
     }
 
     // 带重复数字 递归版
@@ -23,8 +23,9 @@ public class QuanPaiLie {
         for (int i = from; i <= to; i++) {
             boolean isSwap = true;
             for (int j = from; j < i; j++) {
-                if (str[j] == str[i]){
+                if (str[j].equals(str[i])) {
                     isSwap = false;
+                    break;
                 }
             }
             if (isSwap){
@@ -32,9 +33,8 @@ public class QuanPaiLie {
                 str[i] = str[from];
                 str[from] = s1;
                 pailie(str, from+1, to);
-                String s2 = str[i];
-                str[i] = str[from];
-                str[from] = s2;
+                str[from] = str[i];
+                str[i] = s1;
             }
         }
     }

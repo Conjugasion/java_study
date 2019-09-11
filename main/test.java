@@ -16,6 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 
 /**
@@ -1021,7 +1022,7 @@ public class test {
 
     @Test
     public void test31(){
-        int[] arr = {1,2};
+        int[] arr = {1,2,3};
         // int[]转Integer[]
         Integer[] arrBoxed = Arrays.stream(arr).boxed().toArray(value -> new Integer[value]);
         // Integer[]转int[]
@@ -1040,5 +1041,14 @@ public class test {
         System.out.println(0.0/0);
         System.out.println(Integer.toBinaryString(10));   // 1010
         System.out.println((char)65);          // A
+        arrList = arrList.stream().sorted((o1, o2) -> o2 - o1).collect(Collectors.toList());
+        System.out.println(arrList);
+        arrList.sort((o1, o2) -> (o2 - o1));
+        System.out.println("asda".lastIndexOf('a'));
+    }
+
+    @Test
+    public void test32(){
+        
     }
 }
