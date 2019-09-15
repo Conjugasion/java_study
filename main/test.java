@@ -1049,6 +1049,57 @@ public class test {
 
     @Test
     public void test32(){
-        
+        int[] nums = {2,3,1,0,2,5,3};
+        Integer[] numsBoxed = Arrays.stream(nums).boxed().toArray(Integer[]::new);
+        HashSet<Integer> set = new HashSet<>();
+        set.add(2);
+        ArrayList<Integer> list = new ArrayList<>(Arrays.asList(numsBoxed));
+        list.addAll(set);
+        System.out.println(list);
+        // 环视
+        Pattern compile = Pattern.compile("(?!b)[a-z]");    // a-z中不匹配b，别的都匹配
+        Matcher aaa = compile.matcher("cd");
+        while (aaa.find()){
+            System.out.println(aaa.group());
+        }
+
+        System.out.println("------------");
+        // 字母、数字组合，不区分大小写，不能纯数字或者纯字母，6-16个字符。
+        /*
+        通用正则：^[a-z0-9]{6,16}$    字母数字组合，6-16个字符
+        排除纯字母：(?!^[a-z]+$)
+        排除纯数字：(?!^[0-9]+$)
+        组合起来：(?!^[a-z]+$)(?!^[0-9]+$)^[a-z0-9]{6,16}$
+         */
+        // String regex = "(?![0-9]{6,16})(?![a-z]{6,16})[0-9a-z]{6,16}";     // 先去匹配，然后用过滤条件筛选，所以结果是aaaaa1
+        String regex = "(?!^[a-z]+$)(?!^[0-9]+$)^[a-z0-9]{6,16}$";
+        Pattern compile1 = Pattern.compile(regex);
+        Matcher num = compile1.matcher("aaaaaa1aaaaaaa");
+        //System.out.println(num.matches());
+        while (num.find()){
+            System.out.println(num.group());
+        }
+
+        System.out.println("-------------");
+        String regex1 = "\\([[\\u4e00-\\u9fa5]]+\\)";
+        Pattern compile2 = Pattern.compile(regex1);
+        Matcher m1 = compile2.matcher("((你好))");
+        while (m1.find()){
+            System.out.println(m1.group());
+        }
+
+        System.out.println("--------------");
+        // 先用AAA去匹配，匹配出来的结果用AAAA/AA去匹配，若成功匹配，则剔除。
+        // String regex2 = "(?!AAAA)AAA";     // 输出AAA
+        String regex2 = "(?!AA)AAA";          // 没有输出
+        Pattern compile3 = Pattern.compile(regex2);
+        Matcher m2 = compile3.matcher("AAA");
+        while (m2.find()){
+            System.out.println(m2.group());
+        }
+        OptionalInt max = Arrays.stream(new int[]{1, 2, 3}).max();
+        String s = "2??";
+        System.out.println(s.replace('?', '0'));
+        System.out.println(s);
     }
 }
