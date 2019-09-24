@@ -404,7 +404,7 @@ synchronized的实现原理
 使用monitorenter和monitorexit指令实现。
 monitorenter指令是在编译后插入到同步代码块的开始位置，而monitorexit是插入到方法结束处和异常处。
 每个monitorenter必须有对应的monitorexit与之配对。
-synchronized上锁对象的对象头里的重量级锁标志指向monitor，monitor中保存了当前抢到锁的线程
+synchronized上锁对象的对象头里的重量级锁标志指向monitor，monitor中保存了当前抢到锁的线程。
 
 各种锁
 锁一共有4种状态，级别从低到高依次是：无锁状态、偏向锁状态、轻量级锁状态和重量级锁状态。
