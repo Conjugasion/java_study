@@ -58,6 +58,12 @@ bucket中；当出现hash冲突时，则采用synchronized关键字。链表超�
 你怎么知道tryLock的时间呢?在时间范围里还好,假如超过了呢?所以使用Synchronized是最好的选择。
 
 
+ThreadLocal详解
+在Thread类中包含一个ThreadLocal.ThreadLocalMap成员变量threadLocals，ThreadLocalMap是ThreadLocal类的一个静态内部类，键为线程对象，值为对应线程的变量副本。
+实际上，每个线程Thread持有一个ThreadLocalMap类型的实例threadLocals，结合ThreadLocalMap的构造方法可以理解成每个线程Thread都持有一个Entry型
+的数组table，ThreadLocal确定了一个数组下标，而这个下标就是value存储的对应位置
+
+
 有没有有顺序的Map实现类，如果有，他们是怎么保证有序的。
 linkedHashmap： hashmap+双向链表记录顺序
 treeMap： 自定义排序，自动维护顺序， 红黑树
@@ -980,7 +986,7 @@ Redis为什么这么快
 
 思路：保持缓存的"新鲜性"，每当数据发生变化的时候（数据被修改，或被删除的情况下），要同步更新缓存信息，确保用户不会在缓存取到旧的数据。
 解决办法：对于读操作，若缓存没有命中，读取数据库，然后将数据set到缓存；
-		 对于写操作，先删除缓存，然后修改数据库，下次查询该条数据时再将其加入缓存。
+		 对于写操作，先删除相应缓存，然后修改数据库，下次查询该条数据时再将其加入缓存。
 
 
 如何防止缓存穿透、缓存击穿、缓存雪崩和缓存刷新。
@@ -2769,18 +2775,13 @@ dubbo的泛化调用怎么实现的，如果是你，你会怎么做。
 远程调用会有超时现象，如果做到优雅的控制，JDK自带的超时机制有哪些，怎么实现的。
 
 
-搜索
-
-elasticsearch了解多少，说说你们公司es的集群架构，索引数据大小，分片有多少，以及一些调优手段。elasticsearch的倒排索引是什么。
-elasticsearch 索引数据多了怎么办，如何调优，部署。
-elasticsearch是如何实现master选举的。
-详细描述一下Elasticsearch索引文档的过程。
-详细描述一下Elasticsearch搜索的过程。
-Elasticsearch在部署时，对Linux的设置有哪些优化方法？
-lucence内部结构是什么。
-
 
 数据库知识
+
+mysql 数据库varchar(100)可以存储多少个汉字，多少个数字？
+4.0版本以下，varchar(100)，指的是100字节，如果存放UTF8汉字时，只能存33个（每个汉字3字节） 
+5.0版本以上，varchar(100)，指的是100字符，无论存放的是数字、字母还是UTF8汉字（每个汉字3字节），都可以存放100个。
+
 
 join和union的区别
 union 并操作，会把两张表的结果合并，不保留重复；union all 保留重复
@@ -3855,3 +3856,8 @@ Undo log必须先于数据持久化到磁盘。如果在G,H之间系统崩溃，
 Redo Log:
 原理和Undo Log相反，Redo Log记录的是新数据的备份。在事务提交前，只要将Redo Log持久化即可，不需要将数据持久化。
 当系统崩溃时，虽然数据没有持久化，但是Redo Log已经持久化。系统可以根据Redo Log的内容，将所有数据恢复到最新的状态。
+
+
+5.binlog的作用
+binlog是一个二进制格式的文件，用于记录用户对数据库更新的SQL语句信息，例如更改数据库表和更改内容的SQL语句都会记录到binlog里，但是对库表的查询不会记录。
+主要用于数据库的主从复制和数据恢复。

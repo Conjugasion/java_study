@@ -1102,4 +1102,16 @@ public class test {
         System.out.println(s.replace('?', '0'));
         System.out.println(s);
     }
+
+    @Test
+    public void test33(){
+        HashMap<String, Integer> map = new HashMap<>();
+        map.put("a", 1);
+        map.put("b", 2);
+        map.put("c", 1);
+        map.put("d", 4);
+        map.put("e", 2);
+        Collection<Integer> values = map.values();   // [1, 2, 1, 4, 2]
+        System.out.println(values);
+    }
 }
