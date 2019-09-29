@@ -1113,14 +1113,5 @@ public class test {
         map.put("e", 2);
         Collection<Integer> values = map.values();   // [1, 2, 1, 4, 2]
         System.out.println(values);
-        /*//保持引用，防止自动垃圾回收
-        List<String> list = new ArrayList<String>();
-
-        int i = 0;
-
-        while(true){
-            //通过intern方法向常量池中手动添加常量
-            list.add(String.valueOf(i++).intern());
-        }*/
     }
 }
