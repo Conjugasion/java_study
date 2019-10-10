@@ -1315,7 +1315,7 @@ class="org.springframework.web.servlet.view.BeanNameViewResolver"/>
 class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/>
 <bean id="restTemplate" class="org.springframework.web.client.RestTemplate"/>
 </beans>
-下面这个 web.xml 仅仅配置了 DispatcherServlet，这件最简单的配置便能满足应用程序配置运行时组件的需求。
+下面这个 web.xml 仅仅配置了 DispatcherServlet，便能满足应用程序配置运行时组件的需求。
 
 <web-app>
 <display-name>Archetype Created Web Application</display-name>
