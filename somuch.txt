@@ -365,6 +365,138 @@ LongAdder中会维护一个或多个变量，这些变量共同组成一个long�
 AtomicLong差不多，高并发下LongAdder吞吐量明显更高，但有着更高的空间复杂度。
 
 
+强软弱虚--Java中的四种引用类型
+软引用：SoftReference<T>，Java堆内存不够的时候会回收被软引用的对象，主要用于缓存(比如大图片缓存)
+弱引用(重要)：WeakReference<T>，被GC发现就会被回收。如果没有被回收，调用get()可以get到
+虚引用：PhantomReference<T>，不管有没有被回收，调用get()不可以get到(因为它指向堆内内存)。唯一作用：用于管理堆外内存，DirectByteBuffer变量指向一块堆外内存，当要释放堆外内存时，
+DirectByteBuffer的某个信息会被加到一个被GC监听的队列中，并调用底层cpp方法释放堆外内存。
+
+ThreadLocal--弱引用
+Thread类有一个名叫threadlocals的ThreadlocalMap对象，key是ThreadLocal对象，value是存入ThreadLocal的对象。
+ThreadLocal。set(Threadlocal<?> key, Object value){
+	内部有一个Entry[]，即一组key-value对；
+}
+static class Entry extends WeakReference<ThreadLocal<?>> {
+	Object value;
+
+    Entry(ThreadLocal<?> k, Object v) {
+        super(k);      // new了一个WeakReference对象"弱引用"key(ThreadLocal对象)
+        value = v;
+    }
+}
+ThreadLocal<person> tl = new ThreadLocal();
+此时tl变量"强引用"ThreadLocal对象，WeakReference对象"弱引用"ThreadLocal对象
+为什么这么设计?主要是为了防止内存泄露，当tl不在引用ThreadLocal对象时，不会因为WeakReference对象仍引用而不回收ThreadLocal对象。
+虽然ThreadLocal对象被回收，即key指向null，但是其value仍存在于Entry[]中，所以当某个ThreadLocal对象不再使用时，要手动移除 tl.remove()，不然会造成内存泄漏。
+
+请问Object o = new Object()在内存中占了多少字节?(对象在内存中的布局是如何的?)
+对象由四部分组成：对象头markword，class point类型指针(表示该对象是哪个类的))，实例数据，对齐(为了凑到8字节的整数倍)
+markword占8字节，class point由于默认开启compressClassPoint占4字节(不压缩占8字节)，实例数据：基本类型按所占字节计算，
+引用类型按指向其类型的指针大小计算，由于默认开启compressOop，一个指针占4字节。
+所以此处o占用8 + 4 + 4(对齐) = 16字节
+举例：
+User u = new User()，User类包括int id和String name属性
+此处u占用8 + 4 + 4 + 4 + 4(对齐) = 24字节
+
+
+对象的创建过程
+示例：
+class T{
+	int m = 8；
+}
+
+public static void main(String[] args){
+	T t = new T();
+}
+
+转换成汇编码：
+0 new #2 <T>                    // 在内存中根据对象布局分配内存，此时m变量是int的默认值0,此阶段称为"半初始化"阶段
+3 dup
+4 invokespecial #3 <T.<init>>   // 调用对象的构造方法
+7 astore_1                      // 将栈上t变量指向创建的对象
+8 return
+
+
+DCL(Double Check Lock双重检查锁)需不需要volatile?
+在对象的创建过程中，0 new #2 <T>执行完毕是"半初始化"状态，其内部属性还未赋值，均为初始值。由于cpu存在指令重排，有可能导致
+4 invokespecial #3 <T.<init>>和 7 astore_1顺序倒转，即先将t变量指向还未完全初始化完毕的对象，再进行运行对象的构造方法，
+若此时有另一个线程进入判断t!=null(true)，会认为该对象已经被创建，进而使用该对象做业务操作，可是事实上该对象还未完成初始化操作。
+
+
+Synchronized实现过程
+1.Java代码层面：代码里添加Synchronized
+2.编译后的Java字节码文件里在进入临界区的位置添加monitorenter，在退出临界区的位置添加monitorexit
+3.在jvm解释器执行字节码文件的过程中完成锁升级
+4.底层汇编其实是通过调用lock comxchg指令
+
+
+Synchronized锁升级过程
+关于锁的信息都记录在锁对象的markword里。
+具体过程：当锁对象第一次被某线程获取到时，在锁对象markword里记录指向该线程的指针(类似于在书本上写上自己的名字)。
+发生竞争时撤销偏向锁，在各自的线程栈中生成Lock Record，并尝试(采用自旋、CAS的方式)在锁对象markword里记录指向自己Lock Record的指针。
+当竞争激烈时升级为重量级锁，会向操作系统申请mutex，并在锁对象markword里记录指向互斥量的指针，而线程则进入该mutex的等待队列中。
+-----------------
+锁状态       25位                    31位                       1位         4位         1位(偏向锁位)       2位(锁标志位)
+无锁状态    unused     如果有调用hashcode()会填充hashcode       unused     分代年龄           0                 0   1
+-----------------
+锁状态                54位                    2位       1位         4位         1位(偏向锁位)       2位(锁标志位)
+偏向锁       指向当前拥有锁的线程的指针        Epoch     unused     分代年龄           1                0   1
+----------------- 
+锁状态                                 62位                          2位(锁标志位)     
+轻量级锁(自旋锁、无锁)        指向线程栈中Lock Record的指针                0    0
+重量级锁                      指向互斥量(重量级锁)的指针                  1    0
+GC标志信息                      CMS过程用到的标记信息                     1    1   
+-----------------
+
+
+锁消除是什么
+示例：
+public void add(String str1, String str2){
+	StringBuffer sb = new StringBuffer();
+	sb.append(str1).append(str2);
+}
+StringBuffer是线程安全的，它的关键方法被Synchronized修饰。上面这段代码中的sb这个变量旨在add()中使用，不可能被其它线程引用(局部变量，线程栈私有)，
+因此sb是不可能共享的资源，JVM会自动消除sb对象内部的锁。
+
+
+锁粗化是什么
+public String test(String str){
+	int i = 0;
+	StringBuffer sb = new StringBuffer();
+	while(i < 100){
+		sb.append(str);
+		i++;
+	}
+	return sb.toString();
+}
+JVM会检测到一连串操作都是对同一个对象加锁(while循环内100次执行append，没有锁粗化的话就要100次加锁和解锁)，此时JVM就会将加锁的范围粗化到这一连串操作
+的外部(while循环体外)，使得这一连串操作只需要加一次锁。
+
+
+系统底层如何实现数据一致性？
+1、采用MESI协议
+2、如果MESI不能解决问题，比如数据过大超过了一个cache line，则采用锁总线的方法(只允许一个cpu访问该块内存)
+
+
+系统底层如何保证有序性
+1、sfence写串行化、lfence读串行化、mfence读写串行化等系统原语
+2、锁总线
+
+
+volatile如何解决指令重排序
+在代码中添加volatile，会在字节码中为该变量添加ACC_VOLATILE记号，当字节码文件交给JVM执行时，JVM会添加内存屏障
+(LoadLoad、LoadStore、StoreLoad、StoreStore，屏障两边的指令不可以重排，保证有序)在volatile变量的读写操作前后，具体如下：
+在hotspot中内存屏障(LoadLoad、LoadStore、StoreLoad、StoreStore)并没有采用底层原语(sfence、lfence、mfence，因为不是所有的cpu都支持)，而是自己通过lock原语实现。
+
+ StoreStoreBarrier         volatile变量的写操作和之前的写操作不能换顺序 
+volatile变量的写操作        
+ StoreLoadBarrier          volatile变量的写操作完成后才能进行读操作  
+
+LoadLoadBarrier            volatile变量的读操作和之前的读操作不能换顺序
+volatile变量的读操作
+LoadStoreBarrier           volatile变量的读操作完成后才能进行写操作
+
+
 JMM Java内存模型
 JMM定义了JVM在计算机内存RAM中的工作方式，JMM隶属于JVM。
 JMM定义了线程和主内存之间的抽象关系：线程之间的共享变量存储在主内存中，每个线程都有一个私有的本地内存，本地内存中存储了该线程共享变量的副本。
@@ -393,7 +525,7 @@ false，大不了抛弃之前进行的操作，重新进行正确的操作。
 (这里所说的数据依赖性仅针对单个处理器中执行的指令序列和单个线程中执行的操作，不同处理器之间和不同线程之间的数据依赖性不被编译器和处理器考虑。)
 
 解决在并发下的问题
-1、内存屏障——禁止重排序
+1、Java层面的内存屏障——禁止重排序
 JMM的四种内存屏障
 LoadLoad Barrier           Load1，LoadLoad，Load2             确保Load1(从主内存装载到工作内存)数据装载，先于Load2及其后的所有指令     
 LoadStore Barrier          Load1，LoadStore，Store2			 确保Load1数据装载，先于Store2(将数据从工作内存刷新到主内存)及其后的所有指令
@@ -407,6 +539,7 @@ StoreStore Barrier         Store1，StoreStore，Store2
 Happens-Before规则要求前一个操作（执行的结果）对后一个操作可见...... 程序顺序规则、监视器锁规则、volatile变量规则、传递性、start()规则、join()规则、线程中断规则
 
 volatile的内存语义
+1、保证内存可见性 2、禁止重排序
 当写一个volatile变量时，JMM会把该线程对应的本地内存中的volatile变量值刷新到主内存。
 当读一个volatile变量时，JMM会把该线程对应的本地内存的volatile变量置为无效，接着将从主内存中读取volatile变量。
 volatile内存语义的实现——JMM对volatile的内存屏障插入策略：
@@ -416,6 +549,7 @@ volatile内存语义的实现——JMM对volatile的内存屏障插入策略：
 锁的内存语义
 当线程释放锁时，JMM会把该线程对应的本地内存中的共享变量刷新到主内存中。
 当线程获取锁时，JMM会把该线程对应的本地内存置为无效。从而使得被监视器保护的临界区代码必须从主内存中读取共享变量。
+
 
 synchronized的实现原理
 使用monitorenter和monitorexit指令实现。
@@ -430,14 +564,36 @@ synchronized上锁对象的对象头里的重量级锁标志指向monitor，moni
 当前拥有锁的线程，如果记录成功，则获取偏向锁，之后当前线程只需要检查锁对象的Mark Word的偏向锁位是否指向自己。
 
 轻量级锁：少量竞争时通过CAS操作来加锁和解锁。（自旋锁——是一种锁的机制，不是状态）
-线程A和线程B分别在自己的栈空间中新建一块存储锁记录的空间，然后将锁对象的Mark Word信息复制到开辟的空间中，然后线程A和线程B进行CAS操作，将锁
-对象的Mark Word的轻量级锁位指向各自开辟的空间。
-假如线程B竞争成功，则线程A进入自旋状态，尝试修改锁对象的Mark Word的轻量级锁位，使其指向自己开辟的空间，如果30~50次尝试失败则进入重量级锁。
+线程A和线程B分别在自己的栈空间中新建lock record，然后将锁对象的Mark Word信息(比如锁对象的hashcode)复制到开辟的lock record中，然后线程A和线程B进行CAS操作，尝试在锁
+对象的Mark Word里记录指向自己lock record的指针。
+假如线程B竞争成功，则线程A进入自旋状态，尝试修改锁对象的Mark Word的轻量级锁指针，使其指向自己的lock record，如果30~50次尝试失败则进入重量级锁。
 
-重量级锁：真正的加锁操作。此处将会用到monitor对象！锁对象的Mark Word的重量级锁标志指向monitor，monitor中保存了当前抢到锁的线程
+重量级锁：真正的加锁操作。此处将会用到monitor对象！锁对象的Mark Word的重量级锁标志指向monitor，monitor中保存了当前抢到锁的线程信息
 
 
 操作系统
+
+L1、L2、L3三级缓存
+L1和L2位于核内，是核心私有缓存，而L3是同个CPU内的核心共享，它可能装在CPU上也可能装在主板上。
+
+
+超线程是什么？
+cpu核主要由ALU数学运算单元、Register寄存器、PC指令寄存器、L1、L2组成
+一组ALU、Register和PC同一时刻只能执行一个线程，而超线程技术可以让单个核心模拟出两组Register和PC，使一个ALU对应两组Register和PC，切换线程时不用改变Register和PC里的内容(切换上下文)，只需要改变ALU的对应关系，所谓的四核八线程。
+ 
+
+Cache line 缓存行的概念、对齐、伪共享
+main memory 主内存 -> L3缓存 -> L2缓存 -> L1缓存 ->计算单元与寄存器
+核心需要数据时首先会去L1找，若没有命中则去L2找，若没有命中则去L3找，若仍没有命中则去主存中读取.
+根据局部性原理，从主存中读取数据按块(cache line，64字节)读取。
+缓存行对齐：CPU核心的操作是针对与64字节的cache line的，利用这一点可以提升运行速度
+缓存航越大，局部性空间效率越高，但读取时间长；缓存行越小，局部性空间效率越低，但读取时间快。目前一般是64字节。
+示例 disruptor开源环形队列
+public long p1,p2,p3,p4,p5,p6,p7;        // cache linepadding
+private volatile long cursor = INITIAL_CURSOR_VALUE;
+public long p8,p9,p10,p11,p12,p13,p14;   // cache linepadding
+cursor这个long类型必定是和p1-p7、p8-p14中的7个变量组合成64字节cache line。    
+
 
 Linux系统下你关注过哪些内核参数，说说你知道的。
 fs.file-max 和 ulimit: 前者是指整个系统最大能打开的文件描述符的数量，后者指某个进程最大能打开的文件描述符的数量。
@@ -941,19 +1097,27 @@ rabbitmq如何实现集群高可用。
 过多，加之大量的消息进入，集群内部的网络带宽将会被这种同步通讯大大消耗掉。难以水平扩展
 
 
-kafka吞吐量高的原因。
-磁盘顺序读写 + 零拷贝(基于内核PageCache、Sendfile) + 分区
-PageCache：当上层有写操作时，操作系统只是将数据写入PageCache，同时标记Page属性为Dirty。当读操作发生时，先从PageCache中查找，如果发生缺页
-才进行磁盘调度，最终返回需要的数据。实际上PageCache是把尽可能多的空闲内存都当做了磁盘缓存来使用。
-Sendfile：传统的网络I/O操作流程，大体上分为以下4步。
-1. OS从硬盘把数据读到内核区的PageCache。
-2. 用户进程把数据从内核区Copy到用户区。
-3. 然后用户进程再把数据写入到Socket，数据流入内核区的Socket Buffer上。
-4. OS再把数据从Buffer中Copy到网卡的Buffer上，这样完成一次发送。
+kafka为什么那么快?
+一、写入数据角度
+1、采用顺序写入方式：kafka的消息是不断追加到文件中的，这个特性使kafka可以充分利用磁盘的顺序读写性能。
+2、采用MMap(Memory Mapped Files)：内存和磁盘建立映射，在指定内存中写入数据后，操作系统会帮你写入磁盘。
+3、分区：kafka的topic中的内容可以被分为多份partition,每个partition又分为多个segment,每次操作仅针对一部分，增加并行操作的能力。
 
-磁盘顺序读写:kafka的消息是不断追加到文件中的，这个特性使kafka可以充分利用磁盘的顺序读写性能
-零拷贝:跳过"用户缓冲区"的拷贝(2和3步)，建立一个磁盘空间和内存的直接映射，数据不再复制到"用户态缓冲区"
-分区:kafka的topic中的内容可以被分为多份partition,每个partition又分为多个segment,每次操作仅针对一小部分，增加并行操作的能力
+二、读取数据角度
+1、基于sendfile实现zero copy(零拷贝):通过sendfile这个系统调用，减少内核空间和用户空间的数据拷贝次数。
+2、PageCache页缓存：将磁盘中的数据缓存到内存中，把对磁盘的访问变为对内存的访问。读取数据时首先查看数据是否在页缓存中，没有命中再去磁盘找。
+3、批量压缩：为减少网络传输量，kafka将多个消息一起压缩以提高压缩率。
+-----------------
+传统的网络I/O操作流程如下：
+1. OS从硬盘把数据读到内核缓冲区。
+2. 用户进程把数据从内核缓冲区拷贝到用户缓冲区。
+3. 然后用户进程再把数据写入到内核与Socket相关的缓冲区。
+4. OS再把数据从Socket缓冲区拷贝到网卡，完成一次发送。
+-----------------
+基于sendfile实现zero copy后的运行流程如下：
+1、sendfile系统调用，文件数据被copy至内核缓冲区
+2、再从内核缓冲区copy至内核中socket相关的缓冲区
+3、最后再socket相关的缓冲区copy到协议引擎
 
 
 kafka 和其他消息队列的区别，kafka 主从同步怎么实现。
@@ -2597,13 +2761,13 @@ http请求方式：get(获取)，post(新增)，put(修改)和delete(删除)
 Netty NIO框架，增加xmx最大堆内存
 
 
-解释什么是 MESI 协议(缓存一致性)
+解释什么是 MESI 协议(Intel的CPU核之间的缓存一致性协议)
 任何多核系统中的缓存都处于如下四种状态之中：
-失效（Invalid）缓存段，要么已经不在缓存中，要么它的内容已经过时。为了达到一致性目的，这种状态的段将会被忽略。一旦缓存段被标记为失效，那效果就等同于它从来没被加载到缓存中。
-共享（Shared）缓存段，它是和主内存内容保持一致的一份拷贝，在这种状态下的缓存段只能被读取，不能被写入。多组缓存可以同时拥有针对同一内存地址的共享缓存段，这就是名称的由来。
-独占（Exclusive）缓存段，和S状态一样，也是和主内存内容保持一致的一份拷贝。区别在于，如果一个处理器持有了某个E状态的缓存段，那其他处理器就不能同时持有它，所以叫“独占”。这意味着，如果其他处理器原本也持有同一缓存段，那么它会马上变成“失效”状态。
-已修改（Modified）缓存段，属于脏段，它们已经被所属的处理器修改了。如果一个段处于已修改状态，那么它在其他处理器缓存中的拷贝马上会变成失效状态，
-这个规律和E状态一样。此外，已修改缓存段如果被丢弃或标记为失效，那么先要把它的内容回写到内存中——这和回写模式下常规的脏段处理方式一样。
+失效（Invalid）缓存行，要么已经不在缓存中，要么它的内容已经过时。为了达到一致性目的，这种状态的缓存航将会被忽略。一旦缓存行被标记为失效，那效果就等同于它从来没被加载到缓存中。
+共享（Shared）缓存行，它是和主内存内容保持一致的一份拷贝，在这种状态下的缓存行只能被读取，不能被写入。多组缓存可以同时拥有针对同一内存地址的共享缓存段，这就是名称的由来。
+独占（Exclusive）缓存行，和共享状态一样，也是和主内存内容保持一致的一份拷贝。区别在于，如果一个处理器持有了某个独占状态的缓存行，那其他处理器就不能同时持有它，所以叫“独占”。这意味着，如果其他处理器原本也持有同一缓存行，那么它会马上变成“失效”状态。
+已修改（Modified）缓存行，属于脏行，它们已经被所属的处理器修改了。如果一个段处于已修改状态，那么它在其他处理器缓存中的副本马上会变成失效状态，
+此外，已修改缓存行如果被丢弃或标记为失效，那么先要把它的内容回写到内存中——这和回写模式下常规的脏段处理方式一样。
 
 
 说说你知道的几种HASH算法，简单的也可以。
