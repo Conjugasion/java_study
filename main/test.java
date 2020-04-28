@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -23,7 +24,7 @@ import java.util.stream.Stream;
  * @auther Lucas
  * @date 2018/12/28 9:16
  */
-@Ignore("ignore this method")
+//@Ignore("ignore this method")
 public class test {
 
     public static Logger logger = Logger.getLogger(test.class);
@@ -1113,5 +1114,12 @@ public class test {
         map.put("e", 2);
         Collection<Integer> values = map.values();   // [1, 2, 1, 4, 2]
         System.out.println(values);
+    }
+
+    @Test
+    public void test34(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String dateId = sdf.format(System.currentTimeMillis());
+        System.out.println(dateId);
     }
 }

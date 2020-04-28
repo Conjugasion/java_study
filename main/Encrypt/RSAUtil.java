@@ -1,17 +1,11 @@
 package Encrypt;
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
-
 import javax.crypto.Cipher;
 import java.security.Key;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author tangdongfan
@@ -19,7 +13,7 @@ import java.util.Map;
  * 基于非对称算法RSA加密/解密用户Pin
  * 公钥加密，私钥解密
  */
-public class EncryptUtil {
+public class RSAUtil {
 
     public static final Key PUBLIC_KEY;
     public static final Key PRIVATE_KEY;
@@ -34,7 +28,7 @@ public class EncryptUtil {
             e.printStackTrace();
         }
         //初始化密钥对生成器，密钥大小512以上
-        keyPairGen.initialize(512);
+        keyPairGen.initialize(1024);
         //生成一个密钥对，保存在keyPair中
         KeyPair keyPair = keyPairGen.generateKeyPair();
         //得到私钥
@@ -52,7 +46,7 @@ public class EncryptUtil {
             //根据公钥，对Cipher对象进行初始化
             cipher.init(Cipher.ENCRYPT_MODE, PUBLIC_KEY);
             byte[] encryptMsgByte = cipher.doFinal(srcMsgByte);
-            return new BASE64Encoder().encode(encryptMsgByte).replaceAll("[\\s*\t\n\r]", "");
+            return Base64.getEncoder().encodeToString(encryptMsgByte);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -62,7 +56,7 @@ public class EncryptUtil {
     // 解密算法
     public static String decrypt(String encryptMsg) {
         try {
-            byte[] encryptMsgByte = new BASE64Decoder().decodeBuffer(encryptMsg);
+            byte[] encryptMsgByte = Base64.getDecoder().decode(encryptMsg);
             //Cipher基于RSA进行解密
             Cipher cipher = Cipher.getInstance("RSA");
             //根据公钥，对Cipher对象进行初始化
@@ -75,8 +69,12 @@ public class EncryptUtil {
         return null;
     }
 
+
+
     public static void main(String[] args) {
-        String srcMsg = "123asdas123asdddddddddddd";
+        String srcMsg = "Lucas";
+        System.out.println("公钥：" + Base64.getEncoder().encodeToString(PUBLIC_KEY.getEncoded()));
+        System.out.println("私钥：" + Base64.getEncoder().encodeToString(PRIVATE_KEY.getEncoded()));
         String encrypt = encrypt(srcMsg);
         String decrypt = decrypt(encrypt);
         System.out.println("密文：" + encrypt);
