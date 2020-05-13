@@ -1,3 +1,5 @@
+import Util.DFormatEnum;
+import Util.DateTimeUtils;
 import org.apache.log4j.Logger;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -1121,5 +1123,12 @@ public class test {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String dateId = sdf.format(System.currentTimeMillis());
         System.out.println(dateId);
+
+        // 会损失精度
+        Date liveStartTime = DateTimeUtils.string2Date("2020-05-12 23:00:00", DFormatEnum.YYYY_MM_DD.pattern);
+
+        Date liveEndTime = DateTimeUtils.string2Date("2020-05-30 02:00:00");
+        SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        System.out.println(formater.format(liveStartTime));
     }
 }
