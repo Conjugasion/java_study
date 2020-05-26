@@ -23,4 +23,9 @@ public class Student {
     public void setAge(Integer age) {
         this.age = age;
     }
+
+    public static void main(String[] args) {
+        String[] bodyParams = {};
+        System.out.println(bodyParams.length);
+    }
 }

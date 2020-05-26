@@ -5,6 +5,7 @@ import Util.DateTimeUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.mysql.cj.xdevapi.JsonArray;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -48,5 +49,12 @@ public class LivingConfigList {
                 System.out.println(dateId + ": " + livingConfigMap.get(dateId).getTabId());
             }
         }
+
+        String result = "{\"code\":0,\"data\":{\"bizCode\":0,\"bizMsg\":\"Success\",\"result\":true},\"msg\":\"调用成功\"}";
+        JSONObject resultJson = JSON.parseObject(result);
+        System.out.println(resultJson.get("data"));
+
+
+        System.out.println(new Boolean(true).equals("true"));   //false
     }
 }
