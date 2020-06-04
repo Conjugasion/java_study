@@ -1,4 +1,4 @@
-package JedisDemo;
+package Redis;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -13,13 +13,13 @@ import java.util.Set;
  * @author Lucas
  * @date 2019/3/25 15:56
  */
-public class jedispool {
+public class JedisPoolDemo {
     public static void main(String[] args) {
         JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
         jedisPoolConfig.setMaxTotal(100);
         jedisPoolConfig.setMaxIdle(10);
 
-        JedisPool jedisPool = new JedisPool(jedisPoolConfig, "127.0.0.1",6379);
+        redis.clients.jedis.JedisPool jedisPool = new redis.clients.jedis.JedisPool(jedisPoolConfig, "127.0.0.1",6379);
         Jedis jedis = jedisPool.getResource();
         String name = jedis.get("name");
         System.out.println(name);
