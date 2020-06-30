@@ -30,7 +30,10 @@ public class StreamDemo {
     }
 
     static boolean isAllowed(String pin){
-        if (pin.compareTo("2") >=0 ) return true;
-        else return false;
+        if (pin.compareTo("2") >=0 ) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
