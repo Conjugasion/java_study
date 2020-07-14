@@ -1,8 +1,7 @@
-package Lambda;
+package Lambda_Stream;
 
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.function.Consumer;
 
 /**

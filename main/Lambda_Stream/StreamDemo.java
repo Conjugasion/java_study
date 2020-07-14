@@ -1,4 +1,4 @@
-package JDK8_Stream;
+package Lambda_Stream;
 
 import java.util.*;
 import java.util.function.Supplier;

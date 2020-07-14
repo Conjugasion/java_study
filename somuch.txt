@@ -1396,6 +1396,45 @@ Ehcache jvm堆内存缓存，如果redis出现了大规模的宕机，导致ngin
 
 开源框架知识
 
+SpringMVC如何做到零配置?
+方法：自定义类实现WebApplicationInitializer接口，在其中完成一系列代码形式上的配置，用以替代XML形式的配置。
+原理：Tomcat启动时会利用SPI(spring-web-4.3.3.RELEASE.jar!\META-INF\services\javax.servlet.ServletContainerInitializer)机制
+调用org.springframework.web.SpringServletContainerInitializer类，此类实现了ServletContainerInitializer接口，所以在Tomcat启动时，Tomcat会
+调用SpringServletContainerInitializer类。
+SpringServletContainerInitializer类有@HandlesTypes(WebApplicationInitializer.class)注解，意思是类中的onStartup()会调用
+WebApplicationInitializer所有实现类的onStartup()。
+
+@HandlesTypes(WebApplicationInitializer.class)
+public class SpringServletContainerInitializer implements ServletContainerInitializer {
+	@Override
+	public void onStartup(Set<Class<?>> webAppInitializerClasses, ServletContext servletContext) throws ServletException {
+		......
+		for (WebApplicationInitializer initializer : initializers) {
+			initializer.onStartup(servletContext);
+		}
+	}
+}
+
+
+SpringBoot的两种启动方式。
+1.以Jar包形式运行
+@SpringBootApplication
+public class ApplicationRunner {
+    public static void main(String[] args) {
+        SpringApplication.run(ApplicationRunner.class, args);
+    }
+}
+
+2.以war包形式运行
+SpringBootServletInitializer类实现WebApplicationInitializer接口，所以启动原理和SpringMVC零配置相似。
+@SpringBootApplication
+public class ApplicationRunner extends SpringBootServletInitializer {
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+        return builder.sources(ApplicationRunner.class);
+    }
+}
+
 简单讲讲tomcat结构，以及其类加载器流程，线程模型等。
 Tomcat的核心组件就Connector和Container，一个Connector+一个Container（Engine）构成一个Service，Service就是对外提供服务的组件
 BootStrap引导加载器，extension扩展加载器，system系统加载器，common加载器(负责加载/common目录的类库，这儿存放的类库可被tomcat以及所有的应用使用)

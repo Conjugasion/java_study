@@ -1,10 +1,8 @@
-package Lambda;
+package Lambda_Stream;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.*;
 
