@@ -1,5 +1,7 @@
 package Json;
 
+import java.util.List;
+
 /**
  * @author tangdongfan
  * @date 2020/5/8 14:25
@@ -7,6 +9,7 @@ package Json;
 public class Student {
     private String name;
     private Integer age;
+    private List<String> hobby;
 
     public String getName() {
         return name;
@@ -24,16 +27,20 @@ public class Student {
         this.age = age;
     }
 
+    public List<String> getHobby() {
+        return hobby;
+    }
+
+    public void setHobby(List<String> hobby) {
+        this.hobby = hobby;
+    }
+
     @Override
     public String toString() {
         return "Student{" +
                 "name='" + name + '\'' +
                 ", age=" + age +
+                ", hobby=" + hobby +
                 '}';
-    }
-
-    public static void main(String[] args) {
-        String[] bodyParams = {};
-        System.out.println(bodyParams.length);
     }
 }
