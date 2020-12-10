@@ -4188,3 +4188,194 @@ Redo Log:
 5.binlog的作用
 binlog是一个二进制格式的文件，用于记录用户对数据库更新的SQL语句信息，例如更改数据库表和更改内容的SQL语句都会记录到binlog里，但是对库表的查询不会记录。
 主要用于数据库的主从复制和数据恢复。
+
+
+
+----------------------------------------------------------------------------
+
+
+主从复制通过三个线程来完成，在master节点运行的binlog dump的线程，I/O线程和SQL线程运行在slave 节点。
+
+        1、master节点的Binlog dump线程，当slave节点与master正常连接的时候，master把更新的binlog 内容推送到slave节点。
+
+        2、slave节点的I/O 线程 ，该线程通过读取master节点binlog日志名称以及偏移量信息将其拷贝到本地relay log日志文件。
+
+        3、slave节点的SQL线程，该线程读取relay log日志信息，将在master节点上提交的事务在本地回放，达到与主库数据保持一致的目的。
+
+        我们可以看到，基于这个机制的主从复制存在一个问题，Master节点的数据库实例并发跑多个线程同时提交事务，但是slave节点只有
+
+SQL单线程来执行relay log中的日志信息，重放主库提交的事务，这会造成主备数据库存在延迟（lag）。
+
+ 
+
+MySQL5.6的改进
+
+        MySQL 5.6版本引入并发复制（schema级别），基于schema级别的并发复制核心思想：“不同schema下的表并发提交时的数据不会相互
+
+影响，即slave节点可以用对relay log中不同的schema各分配一个类似SQL功能的线程，来重放relay log中主库已经提交的事务，保持数据与主
+
+库一致”。可见MySQL5.6版本的并发复制，一个schema分配一个类似SQL线程的功能。
+
+
+rpc的泛化调用
+因为服务消费者没有了接口，我们直接编写消费者端spring的配置文件consumer.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+      
+    <dubbo:application name="demotest-consumer" owner="programmer" organization="dubbox"/>
+    <!--向 zookeeper 订阅 provider 的地址，由 zookeeper 定时推送-->
+    <dubbo:registry address="zookeeper://localhost:2181"/>
+    <!--使用 dubbo 协议调用定义好的 api.PermissionService 接口-->
+    <dubbo:reference id="permissionService" interface="com.alibaba.dubbo.demo.DemoService" generic="true"/>
+</beans>
+
+　　可以看到上图的配置文件中有两个地方需要注意一下，第一个是interface，其实该接口在消费者端并不存在，这是与往常写的不一样的地方，第二个地方需要注意的地方就是generic=”true”这样的标签，表示该接口支持泛型调用。
+
+　　好了，我们写一个服务测试类，看看如何进行泛型调用Consumer.java
+
+package com.alibaba.dubbo.consumer;
+
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import com.alibaba.dubbo.rpc.service.GenericService;
+
+public class Consumer {
+    public static void main(String[] args) {
+        /////////////////Spring泛化调用/////////  
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("consumer.xml");
+        context.start();
+        System.out.println("consumer start");
+        GenericService demoService = (GenericService) context.getBean("permissionService");
+        System.out.println("consumer");
+        Object result = demoService.$invoke("getPermissions", new String[] { "java.lang.Long" }, new Object[]{ 1L });
+        System.out.println(result);
+    }
+}
+看到Main函数中，从spring的上下文中读到”permissionService”之后却把它强转为GenericService的类，然后调用GenericService的$invoke的方法，该方法有三个参数，第一个参数是你调用远程接口的具体方法名，第二个参数是permissionService这个方法的入参的类型，最后一个参数是值。 
+
+
+Java的SPI机制实例详解
+
+SPI的全名为Service Provider Interface.普通开发人员可能不熟悉，因为这个是针对厂商或者插件的。在java.util.ServiceLoader的文档里有比较详细的介绍。究其思想，其实是和"Callback"差不多。“Callback”的思想是在我们调用API的时候，我们可以自己写一段逻辑代码，传入到API里面，API内部在合适的时候会调用它，从而实现某种程度的“定制”。
+典型的是Collections.sort（List<T> list,Comparator<? super T> c）这个方法，它的第二个参数是一个实现Comparator接口的实例。我们可以根据自己的排序规则写一个类，实现此接口，传入此方法，那么这个方法就会根据我们的规则对list进行排序。
+把这个思想扩展开来，我们用SPI来重新实现上面的例子。客户把自己的排序规则写成一个类，并且打包成Jar文件，这个Jar文件里面必须有META-INF目录，其下又有services目录，其下有一个文本文件，文件名即为接口的全名：java.util.Comparator。
+--META-INF
+ --services
+  --java.util.Comparator
+文件内容只有一行：
+com.company1.ComparatorProvider
+
+这一行是你实现了Comparator接口的类的全名，它的代码如下：
+package com.company1;
+import java.util.Comparator;
+import com.mycompany.myapp.MyItem;
+public class ComparatorProvider implements Comparator<MyItem>{
+  @Override
+  public int compare(MyItem o1, MyItem o2) {
+        //依据name排序 
+    return o1.getName().compareTo(o2.getName());
+  }
+}
+
+编译打包后，把它放到你的主程序的class path里。下面是你的主程序：
+
+//从class path中所有Jar的META-INF目录中搜索，找到合适的类并加载。
+private static ServiceLoader<Comparator> serviceLoader
+= ServiceLoader.load(Comparator.class);
+ 
+public static void main(String[] args)
+{
+  List<MyItem> myList = new ArrayList<MyItem>();
+  myList.add(new MyItem(2,"c","hhh"));
+  myList.add(new MyItem(3,"k","ooo"));
+  myList.add(new MyItem(4,"d","ppp"));
+  myList.add(new MyItem(5,"b","ggg"));
+   
+  showList(myList);
+   
+  Collections.sort(myList,getCompartor());
+   
+  showList(myList);  
+}
+ 
+@SuppressWarnings("unchecked")
+private static Comparator<MyItem> getCompartor() {
+   
+  for(Comparator service : serviceLoader)
+  {
+    return (Comparator<MyItem>)service;
+  }
+       
+  return null;
+}
+
+
+
+maven打包指定moudle
+
+假设现有项目结构如下
+dailylog-parent
+|-dailylog-common
+|-dailylog-web
+
+三个文件夹处在同级目录中
+dailylog-web依赖dailylog-common
+dailylog-parent管理dailylog-common和dailylog-web。
+根据资料已知：
+
+参数	全称	释义	说明
+-pl	--projects	Build specified reactor projects instead of all projects	
+选项后可跟随{groupId}:{artifactId}或者所选模块的相对路径(多个模块以逗号分隔)
+
+-am	--also-make	If project list is specified, also build projects required by the list	
+表示同时处理选定模块所依赖的模块
+
+-amd	--also-make-dependents	If project list is specified, also build projects that depend on projects on the list	
+表示同时处理依赖选定模块的模块
+
+-N	--Non-recursive	Build projects without recursive	
+表示不递归子模块
+
+-rf	--resume-from	Resume reactor from specified project	
+表示从指定模块开始继续处理
+
+以下是在maven-3.3.9中的试验
+
+1. 在dailylog-parent目录运行`mvn clean install -pl org.lxp:dailylog-web -am`，结果
+
+dailylog-common成功安装到本地库
+dailylog-parent成功安装到本地库
+dailylog-web成功安装到本地库
+该命令等价于`mvn clean install -pl ../dailylog-web -am`
+
+2. 在dailylog-parent目录运行`mvn clean install -pl ../dailylog-common -am`，结果
+
+dailylog-common成功安装到本地库
+dailylog-parent成功安装到本地库
+3. 在dailylog-parent目录运行`mvn clean install -pl ../dailylog-common -amd`，结果
+
+dailylog-common成功安装到本地库
+dailylog-web成功安装到本地库
+由于dailylog-parent并不依赖dailylog-common模块，故没有被安装
+
+4. 在dailylog-parent目录运行`mvn clean install -pl ../dailylog-common,../dailylog-parent -amd`，结果
+
+dailylog-common成功安装到本地库
+dailylog-parent成功安装到本地库
+dailylog-web成功安装到本地库
+5. 在dailylog-parent目录运行`mvn clean install -N`，结果
+
+dailylog-parent成功安装到本地库
+-N表示不递归，那么dailylog-parent管理的子模块不会被同时安装
+
+6. 在dailylog-parent目录运行`mvn clean install -pl ../dailylog-parent -N`，结果
+
+dailylog-parent成功安装到本地库
+7. 在dailylog-parent目录运行`mvn clean install -rf ../dailylog-common`，结果
+
+dailylog-common成功安装到本地库
+dailylog-web成功安装到本地库
