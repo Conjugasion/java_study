@@ -4379,3 +4379,20 @@ dailylog-parent成功安装到本地库
 
 dailylog-common成功安装到本地库
 dailylog-web成功安装到本地库
+
+
+
+自定义META-INF文件夹，可以放在resources下，另外需要在pom文件中添加以下配置，不让Maven打包时生成maven自己的描述文件，这样就maven就不会覆盖自定义的文件了
+<build>
+    <plugins>
+        <plugin>  
+            <groupId>org.apache.maven.plugins</groupId>  
+            <artifactId>maven-jar-plugin</artifactId>  
+            <configuration>  
+                <archive>
+                    <addMavenDescriptor>false</addMavenDescriptor>  
+                </archive>
+            </configuration>  
+        </plugin>
+    </plugins>
+</build>
