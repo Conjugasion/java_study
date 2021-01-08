@@ -1,6 +1,5 @@
 package CollectionDemo;
 
-import org.junit.Test;
 import StaticInvoke.father;
 import StaticInvoke.son;
 
@@ -13,8 +12,7 @@ import java.util.*;
  */
 public class IteratorDemo {
 
-    @Test
-    public void ArrayListDemo(){
+    public static void main(String[] args) {
         ArrayList<String> arrayList = new ArrayList<>();
         arrayList.add("1");
         arrayList.add("2");
@@ -33,13 +31,6 @@ public class IteratorDemo {
     public <E extends father> E returnE(E e){
         return e;
     }
-
-    @Test
-    public void test(){
-        father e = returnE(new son());
-        System.out.println(e);
-    }
-
 
     public Class<?> clazz(){
         // return String.class;

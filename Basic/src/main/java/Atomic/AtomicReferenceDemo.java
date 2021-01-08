@@ -1,6 +1,5 @@
 package Atomic;
 
-import org.junit.Test;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -11,10 +10,9 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class AtomicReferenceDemo {
     public static final AtomicReference<String> atomicStr = new AtomicReference<>("abc");
-    final CountDownLatch latch = new CountDownLatch(10);
+    static final CountDownLatch latch = new CountDownLatch(10);
 
-    @Test
-    public void test1() {
+    public static void main(String[] args) {
         for (int i = 0; i < 10; i++) {
             new Thread(String.valueOf(i)) {
                 @Override
@@ -41,7 +39,5 @@ public class AtomicReferenceDemo {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-
     }
 }
