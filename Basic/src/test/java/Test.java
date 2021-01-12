@@ -1,7 +1,6 @@
 import Util.DFormatEnum;
 import Util.DateTimeUtils;
 import org.apache.log4j.Logger;
-import org.junit.Test;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,9 +20,9 @@ import java.util.stream.IntStream;
  * @date 2018/12/28 9:16
  */
 //@Ignore("ignore this method")
-public class test {
+public class Test {
 
-    public static Logger logger = Logger.getLogger(test.class);
+    public static Logger logger = Logger.getLogger(Test.class);
 
     public static void main(String[] args) throws IOException {
         InputStreamReader isr = new InputStreamReader(System.in);
@@ -48,7 +47,7 @@ public class test {
         }
     }
 
-    @Test
+    @org.junit.Test
     public void test1(){
         Father f = new Son();
         System.out.println(f.getClass());
@@ -57,14 +56,14 @@ public class test {
         // f.methodB();
     }
 
-    @Test
+    @org.junit.Test
     public void test2(){
         int x = 5;
         int y = 10;
         System.out.println(x+y+""+(x+y)+y);  //151510
     }
 
-    @Test
+    @org.junit.Test
     public void test3(){
         String i = new String("123");
         String j = "123";
@@ -73,7 +72,7 @@ public class test {
         byte[] bytes = {-128,127,0};
     }
 
-    @Test
+    @org.junit.Test
     public void test4(){
         String str = "ttest.java";
         String strTest = "test.java";
@@ -127,7 +126,7 @@ public class test {
         System.out.println("join: " + String.join("$", new ArrayList<String>(){{add("a");add("s");add("d");}}));
     }
 
-    @Test
+    @org.junit.Test
     public void test5(){
         String s = "Asdfg";
         StringBuilder sb = new StringBuilder();
@@ -144,14 +143,14 @@ public class test {
         System.out.println("大写变小写，小写变大写: " + sb);
     }
 
-    @Test
+    @org.junit.Test
     public void test6(){
         StringBuilder sb = new StringBuilder();
         sb.append('c');
         System.out.println(sb);
     }
 
-    @Test
+    @org.junit.Test
     public void test7(){
         List<Integer> a = new ArrayList<>();
         a.add(4);
@@ -171,7 +170,7 @@ public class test {
 
     }
 
-    @Test
+    @org.junit.Test
     public void test9() throws IOException {
         List<String> list = new ArrayList<>(2);
         System.out.println("list大小为：" + list.size());
@@ -192,7 +191,7 @@ public class test {
 //        list.clear();
 //        System.out.println(list);
     }
-    @Test
+    @org.junit.Test
     public void test10(){
         System.out.println(getValue(2));
     }
@@ -211,7 +210,7 @@ public class test {
         return result;
     }
 
-    @Test
+    @org.junit.Test
     public void test11(){
         System.out.println(Integer.parseInt("0011",8));
         int i = 0;
@@ -228,7 +227,7 @@ public class test {
         return true;
     }
 
-    @Test
+    @org.junit.Test
     public void test12(){
         String s = null;
 //        if( (s!=null) & (s.length() > 0)){
@@ -245,7 +244,7 @@ public class test {
         }
     }
 
-    @Test
+    @org.junit.Test
     public void test13(){
         String a = "a" ;
         String b = new String("a");
@@ -260,7 +259,7 @@ public class test {
         int c[] = new int[10];
     }
 
-    @Test
+    @org.junit.Test
     public void test14(){
         char[] c = {'a','b'};
         System.out.println(new String(c));
@@ -288,7 +287,7 @@ public class test {
     /**
      * 条件断点
      */
-    @Test
+    @org.junit.Test
     public void test15(){
         int j = 0;
         for (int i = 0; i < 100; i++) {
@@ -298,7 +297,7 @@ public class test {
         }
     }
 
-    @Test
+    @org.junit.Test
     public void test16(){
         boolean[][] a = new boolean[10][10];
         boolean b[][] = new boolean[20][20];
@@ -321,7 +320,7 @@ public class test {
         System.out.println("g= " + g);
     }
 
-    @Test
+    @org.junit.Test
     public void test17(){
         double[] d = new double[3];  // 0.0
         System.out.println(d[0]);
@@ -332,7 +331,7 @@ public class test {
         System.out.println(d[0]==f[0]); // true
     }
 
-    @Test
+    @org.junit.Test
     /*
     基本数据类型转型
      */
@@ -421,7 +420,7 @@ public class test {
     /*
     类的向上 向下转型
      */
-    @Test
+    @org.junit.Test
     public void test19(){
         abstract class father{
             public father(){}
@@ -463,7 +462,7 @@ public class test {
     /*
     数组、list和map的排序
      */
-    @Test
+    @org.junit.Test
     public void test20(){
         Map<String, String> map1 = new HashMap();
         map1.put("six","6");
@@ -538,7 +537,7 @@ public class test {
     /*
     TreeMap
      */
-    @Test
+    @org.junit.Test
     public void test21(){
         TreeMap<String, String> treeMap = new TreeMap<>(new Comparator<String>() {
             @Override
@@ -562,7 +561,7 @@ public class test {
     /*
     compile、pattern
      */
-    @Test
+    @org.junit.Test
     public void test22(){
         String pid = "mallocw: initialized with features=0 2945";
         String[] pidStr = Pattern.compile(" ").split(pid);
@@ -604,7 +603,7 @@ public class test {
         System.out.println(c1==c2);
     }
 
-    @Test
+    @org.junit.Test
     /*
     十进制转二进制
     不带加号的加法
@@ -709,7 +708,7 @@ public class test {
         }
     }
 
-    @Test
+    @org.junit.Test
     public void test24(){
         HashSet<Long> sortSet = new HashSet<>();
         sortSet.add(2L);
@@ -747,7 +746,7 @@ public class test {
     }
 
     // set集合并、差、交
-    @Test
+    @org.junit.Test
     public void test25(){
         Set<Integer> result = new HashSet<>();
         Set<Integer> set1 = new HashSet<Integer>(){{
@@ -780,7 +779,7 @@ public class test {
     }
 
     //
-    @Test
+    @org.junit.Test
     public void test26(){
         char[] chars = {'a','b','c','d','e'};
         //String s = new String(chars);
@@ -812,7 +811,7 @@ public class test {
         Arrays.sort(new int[]{1,2,3});
     }
 
-    @Test
+    @org.junit.Test
     public void test27(){
         ArrayList<ArrayList<Integer>> arrayLists = new ArrayList<>();
         ArrayList<Integer> list1 = new ArrayList<>();
@@ -847,7 +846,7 @@ public class test {
     }
 
     // 正则匹配
-    @Test
+    @org.junit.Test
     public void test28(){
         //Pattern pattern = Pattern.compile("ab*ac*a");     // true
         //Pattern pattern = Pattern.compile("aa.a");        // false
@@ -889,7 +888,7 @@ public class test {
         }
     }
 
-    @Test
+    @org.junit.Test
     public void test29(){
         int[] a = {2,1,4,6,0,9,3};
         Arrays.sort(a, 2,5);     // 包头不包尾
@@ -934,10 +933,10 @@ public class test {
         System.out.println(test);
     }
 
-    @Test
+    @org.junit.Test
     public void test30() throws ClassNotFoundException {
         ClassLoader loader = ClassLoader.getSystemClassLoader();
-        Class<?> test = loader.loadClass("test");
+        Class<?> test = loader.loadClass("Test");
         System.out.println(test);
 
         // 队列！
@@ -1017,7 +1016,7 @@ public class test {
         }
     }
 
-    @Test
+    @org.junit.Test
     public void test31(){
         int[] arr = {1,2,3};
         // int[]转Integer[]
@@ -1044,7 +1043,7 @@ public class test {
         System.out.println("asda".lastIndexOf('a'));
     }
 
-    @Test
+    @org.junit.Test
     public void test32(){
         int[] nums = {2,3,1,0,2,5,3};
         Integer[] numsBoxed = Arrays.stream(nums).boxed().toArray(Integer[]::new);
@@ -1100,7 +1099,7 @@ public class test {
         System.out.println(s);
     }
 
-    @Test
+    @org.junit.Test
     public void test33(){
         HashMap<String, Integer> map = new HashMap<>();
         map.put("a", 1);
@@ -1112,7 +1111,7 @@ public class test {
         System.out.println(values);
     }
 
-    @Test
+    @org.junit.Test
     public void test34(){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String dateId = sdf.format(System.currentTimeMillis());

@@ -1,4 +1,4 @@
-package Lambda_Stream;
+package Stream;
 
 import java.util.*;
 import java.util.function.Supplier;
