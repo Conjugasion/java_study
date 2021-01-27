@@ -12,6 +12,8 @@
         <module>basic</module>
         <module>SPIServiceImpl</module>
         <module>InvokeSPIDemo</module>
+        <module>GroovyVsJava</module>
+        <module>GroovyVsJava</module>
     </modules>
 
     <dependencies>
@@ -71,6 +73,11 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.12</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+            <version>2.4.7</version>
         </dependency>
     </dependencies>
 </project>
