@@ -39,7 +39,7 @@ HashMap/linkedhashmap中key和value都允许为null。key为null的键值对永�
 HashTable在 key、value 遇到null时，会抛出NullPointerException异常
 HashMap仅支持Iterator的遍历方式，Hashtable支持Iterator和Enumeration两种遍历方式
 
-				 
+
 JAVA8的ConcurrentHashMap为什么放弃了分段锁，有什么问题吗，如果你来设计，你如何设计。
 ConcurrentHashMap的Key和Value不允许null值。ConcurrentHashmap和Hashtable都是支持并发的，这样会有一个问题，当你通过get(k)获取对应的value时，
 如果获取到的是null时，你无法判断，它是put（k,v）的时候value为null，还是这个key从来没有做过映射。
@@ -580,7 +580,7 @@ L1和L2位于核内，是核心私有缓存，而L3是同个CPU内的核心共�
 超线程是什么？
 cpu核主要由ALU数学运算单元、Register寄存器、PC指令寄存器、L1、L2组成
 一组ALU、Register和PC同一时刻只能执行一个线程，而超线程技术可以让单个核心模拟出两组Register和PC，使一个ALU对应两组Register和PC，切换线程时不用改变Register和PC里的内容(切换上下文)，只需要改变ALU的对应关系，所谓的四核八线程。
- 
+
 
 Cache line 缓存行的概念、对齐、伪共享
 main memory 主内存 -> L3缓存 -> L2缓存 -> L1缓存 ->计算单元与寄存器
@@ -1287,16 +1287,16 @@ Memcached只是个内存缓存，对可靠性无要求；而Redis更倾向于内
 1)性能上：
 性能上都很出色，具体到细节，由于Redis只使用单核，而Memcached可以使用多核，所以平均每一个核上Redis在存储小数据时比Memcached性能更高。
 而在100K以上的数据中，Memcached性能要高于Redis，虽然Redis最近也在存储大数据的性能上进行优化，但是比起 Memcached，还是稍有逊色。
- 
+
 2)内存空间和数据量大小：
 MemCached可以修改最大内存，采用LRU算法。Redis增加了VM的特性，突破了物理内存的限制。
- 
+
 3)操作便利上：
 MemCached数据结构单一，仅用来缓存数据，而Redis支持更加丰富的数据类型，也可以在服务器端直接对数据进行丰富的操作,这样可以减少网络IO次数和数据体积。
- 
+
 4)可靠性上：
 MemCached不支持数据持久化，断电或重启后数据消失，但其稳定性是有保证的。Redis支持数据持久化和数据恢复，允许单点故障，但是同时也会付出性能的代价。
- 
+
 5)应用场景：
 Memcached：动态系统中减轻数据库负载，提升性能；做缓存，适合读多写少，大数据量的情况（如大量查询用户信息、好友信息、文章信息等）。
 Redis：适用于对读写效率要求都很高，数据处理业务复杂和对安全性要求较高的系统（如新浪微博的计数和微博发布部分系统，对数据安全性、读写要求都很高）。
@@ -2062,7 +2062,7 @@ IoC让相互协作的组件保持松散的耦合，而AOP编程允许你把遍�
       所以我们需要进行控制反转，上层控制下层，而不是下层控制着上层。我们用依赖注入DI这种方式来实现控制反转。所谓依赖注入，就是把底层类作为参数传入上层类，实现上层类对下层类的“控制“
 优点2：容器可以自动对你的代码进行初始化，你只需要维护一个Configuration（可以是xml可以是一段代码），而不用每次初始化一辆车都要亲手去写那一大段初始化的代码。
 	  我们在创建实例的时候不需要了解其中的细节(轮胎->底盘->车身->车)。
- 
+
 
 5、BeanFactory和ApplicationContext有什么区别？
 
@@ -3559,7 +3559,7 @@ DDL操作是隐性提交的！不能rollback
 
 数据控制语言DCL用来授予或回收访问数据库的某种特权，并控制数据库操纵事务发生的时间及效果，对数据库实行监视等。如：
  GRANT：授权。
- 
+
  ROLLBACK [WORK] TO [SAVEPOINT]：回退到某一点。回滚---ROLLBACK；回滚命令使数据库状态回到上次最后提交的状态。其格式为：
 SQL>ROLLBACK;
 
@@ -4197,11 +4197,11 @@ binlog是一个二进制格式的文件，用于记录用户对数据库更新�
 主从复制通过三个线程来完成，在master节点运行的binlog dump的线程，I/O线程和SQL线程运行在slave 节点。
 
         1、master节点的Binlog dump线程，当slave节点与master正常连接的时候，master把更新的binlog 内容推送到slave节点。
-
+    
         2、slave节点的I/O 线程 ，该线程通过读取master节点binlog日志名称以及偏移量信息将其拷贝到本地relay log日志文件。
-
+    
         3、slave节点的SQL线程，该线程读取relay log日志信息，将在master节点上提交的事务在本地回放，达到与主库数据保持一致的目的。
-
+    
         我们可以看到，基于这个机制的主从复制存在一个问题，Master节点的数据库实例并发跑多个线程同时提交事务，但是slave节点只有
 
 SQL单线程来执行relay log中的日志信息，重放主库提交的事务，这会造成主备数据库存在延迟（lag）。
@@ -4216,8 +4216,7 @@ MySQL5.6的改进
 
 库一致”。可见MySQL5.6版本的并发复制，一个schema分配一个类似SQL线程的功能。
 
-
-rpc的泛化调用
+### rpc的泛化调用
 因为服务消费者没有了接口，我们直接编写消费者端spring的配置文件consumer.xml
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
@@ -4226,6 +4225,7 @@ rpc的泛化调用
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
        http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
       
+
     <dubbo:application name="demotest-consumer" owner="programmer" organization="dubbox"/>
     <!--向 zookeeper 订阅 provider 的地址，由 zookeeper 定时推送-->
     <dubbo:registry address="zookeeper://localhost:2181"/>
@@ -4258,7 +4258,8 @@ public class Consumer {
 看到Main函数中，从spring的上下文中读到”permissionService”之后却把它强转为GenericService的类，然后调用GenericService的$invoke的方法，该方法有三个参数，第一个参数是你调用远程接口的具体方法名，第二个参数是permissionService这个方法的入参的类型，最后一个参数是值。 
 
 
-Java的SPI机制实例详解
+
+### Java的SPI机制实例详解
 
 SPI的全名为Service Provider Interface.普通开发人员可能不熟悉，因为这个是针对厂商或者插件的。在java.util.ServiceLoader的文档里有比较详细的介绍。究其思想，其实是和"Callback"差不多。“Callback”的思想是在我们调用API的时候，我们可以自己写一段逻辑代码，传入到API里面，API内部在合适的时候会调用它，从而实现某种程度的“定制”。
 典型的是Collections.sort（List<T> list,Comparator<? super T> c）这个方法，它的第二个参数是一个实现Comparator接口的实例。我们可以根据自己的排序规则写一个类，实现此接口，传入此方法，那么这个方法就会根据我们的规则对list进行排序。
@@ -4286,7 +4287,7 @@ public class ComparatorProvider implements Comparator<MyItem>{
 //从class path中所有Jar的META-INF目录中搜索，找到合适的类并加载。
 private static ServiceLoader<Comparator> serviceLoader
 = ServiceLoader.load(Comparator.class);
- 
+
 public static void main(String[] args)
 {
   List<MyItem> myList = new ArrayList<MyItem>();
@@ -4294,17 +4295,17 @@ public static void main(String[] args)
   myList.add(new MyItem(3,"k","ooo"));
   myList.add(new MyItem(4,"d","ppp"));
   myList.add(new MyItem(5,"b","ggg"));
-   
+
   showList(myList);
-   
+
   Collections.sort(myList,getCompartor());
-   
+
   showList(myList);  
 }
- 
+
 @SuppressWarnings("unchecked")
 private static Comparator<MyItem> getCompartor() {
-   
+
   for(Comparator service : serviceLoader)
   {
     return (Comparator<MyItem>)service;
@@ -4315,7 +4316,7 @@ private static Comparator<MyItem> getCompartor() {
 
 
 
-maven打包指定moudle
+### maven打包指定moudle
 
 假设现有项目结构如下
 dailylog-parent
@@ -4397,8 +4398,7 @@ dailylog-web成功安装到本地库
     </plugins>
 </build>
 
-
-脑裂问题
+### 脑裂问题
 对于一个集群，想要提高这个集群的可用性，通常会采用多机房部署，比如现在有一个由6台zkServer所组成的一个集群，部署在了两个机房。
 正常情况下，此集群只会有一个Leader，那么如果机房之间的网络线路断了之后，两个机房内的zkServer还是可以相互通信的，如果不考虑过半机制，那么就会出现每个机房内部都将选出一个Leader。
 解决方案：
@@ -4407,8 +4407,7 @@ dailylog-web成功安装到本地库
 1.添加冗余的网络线路，尽量减少“裂脑”发生几率
 2.设置仲裁机制。例如设置参考IP（如网关IP），当机房完全断开时，2个节点都各自ping一下参考IP，不通则表明断点出现在本机房，即使启动（或继续）应用服务也没有用，还不如主动放弃竞争，以彻底释放有可能还占用着的共享资源，让能够ping通参考IP的一端继续服务。
 
-
-事务失效的场景
+### 事务失效的场景
 其实发生最多就是：
 1.自身调用
 调用本类自己的方法，而没有经过 Spring 的代理类，默认只有在外部调用事务才会生效
@@ -4419,24 +4418,28 @@ dailylog-web成功安装到本地库
 4.方法不是public
 @Transactional 只能用于 public 的方法上，否则事务不会失效，如果要用在非 public 方法上，可以开启 AspectJ 代理模式
 
-
-HTTP/2相比于HTTP1.1的改进
+### HTTP/2相比于HTTP1.1的改进
 多路复用
 1.文件传输从串行变为并行。当请求a文件时，b文件只能等待，等待a连接到服务器、服务器处理文件、服务器返回文件，这三个步骤。我们假设这三步用时都是1秒，那么a文件用时为3秒，b文件传输完成用时为6秒，依此类推。（注：此项计算有一个前提条件，就是浏览器和服务器是单通道传输）。在HTTP1.1的协议中，我们传输的request和response都是基本于文本的，这样就会引发一个问题：所有的数据必须按顺序传输，比如需要传输：hello world，只能从h到d一个一个的传输，不能并行传输，因为接收端并不知道这些字符的顺序，所以并行传输在HTTP1.1是不能实现的。HTTP/2引入二进制数据帧和流的概念，其中帧对数据进行顺序标识，这样浏览器收到数据之后，就可以按照序列对数据进行合并，而不会出现合并后数据错乱的情况。同样是因为有了序列，服务器就可以并行的传输数据，这就是流所做的事情。
 2.HTTP/2基于流式传输。我们假设Apache设置了最大并发数为300，因为浏览器限制，浏览器发起的最大请求数为6，也就是服务器能承载的最高并发为50，当第51个人访问时，就需要等待前面某个请求处理完成。。HTTP/2对同一域名下所有请求都是基于流，也就是说同一域名不管访问多少文件，也只建立一路连接。同样Apache的最大连接数为300，因为有了这个新特性，最大的并发就可以提升到300，比原来提升了6倍！
 3.解决了http队头阻塞，但是依然没有解决TCP队头阻塞，但是改造TCP涉及范围太广，包括一系列硬件设备，所以HTTP/3采用基于UDP的QUIC技术
 
 
-卫语句：解决嵌套if-then-else
+
+### 卫语句：解决嵌套if-then-else
 if（obj != null）{
   doSomething();
 }
- 
+
 转换成卫语句以后的代码如下：
 if(obj == null){
    return;
 }
 doSomething();
+
+
+
+### 系统稳定性建设
 
 团队协作理念，一人会团队会
 
@@ -4477,8 +4480,7 @@ doSomething();
 
 线上事故紧急处理流程宣导。
 
-
-Groovy VS Java 性能
+### Groovy VS Java 性能
 如果在一个groovy文件中没有任何类定义，它将被当做script来处理，也就意味着这个文件将被透明的转换为一个Script类型的类，这个自动转换得到的类将使用原始的groovy文件名作为类的名字。groovy文件的内容被打包进run方法，另外在新产生的类中被加入一个main方法以进行外部执行该脚本。
 如果在groovy文件只有一个类的定义，并且该类的名字与文件名称相同，那么这就和java中的类与文件的一一对应关系相同。
 在一个groovy文件中可以包含多个类定义，并且没有强制要求其中有一个类的类名与文件名相同。groovyc编译器会很乐于把该文件中定义的所有的类都编译成*.class文件。如果希望能够直接调用这个groovy script，比如说在使用groovy命令行或者在某个IDE中执行，那么应该在该文件中的第一个类中定义一个main方法。
@@ -4534,10 +4536,31 @@ n=1000万时，采用Groovy编写，耗时410毫秒，采用Java编写，耗时1
 n=1亿时，采用Groovy编写，耗时2.7秒，采用Java编写，耗时1.3秒
 n=10亿时，采用Groovy编写，耗时22.6秒，采用Java编写，耗时11.5秒
 
-
 如果在Groovy代码的类或者方法上添加@CompileStatic注解，将会进行静态类型检查和静态编译，并且生成的字节码和javac生成的字节码很相似(不添加此注释生成的字节码文件和java字节码文件很不一样)
 代码运行速度和java持平,对于通过复制和粘贴从Java移植到Groovy的类可以通过@CompileStatic提高性能。
 副作用是所有的动态功能都不再可用，比如元对象协议(Meta Object Protocol)。
 
 
+
+### 用例图
+
+用例图主要用来描述角色以及角色与用例之间的**连接关系**。说明的是谁要使用系统，以及他们使用该系统可以做些什么。一个用例图包含了**多个模型元素**，如系统、参与者和用例，并且**显示这些元素之间的各种关系**，如**泛化**、**关联**和**依赖**。它展示了一个外部用户能够观察到的系统功能模型图。
+
+【用途】：帮助开发团队以一种可视化的方式理解系统的功能需求
+
+**参与者(Actor)——**与应用程序或系统进行交互的用户、组织或外部系统。**用一个小人表示**。
+
+**用例(Use Case)——**用例就是外部可见的系统功能，对系统提供的服务进行描述。**用椭圆表示**。
+
+**子系统(Subsystem)——**用来展示系统的一部分功能，这部分功能联系紧密。
+
+**关联**：发送或接收消息，箭头指向消息接收方
+
+**泛化**：继承关系
+
+**包含**：大用例包含各个子用例(大功能划分为一个个小功能)，比如维护用户信息包括添加信息、修改信息、删除信息
+
+**扩展**：用例之外的附属功能，比如查询功能扩展导出查询结果or打印查询结果
+
+ 
 
