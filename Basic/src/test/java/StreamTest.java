@@ -89,7 +89,7 @@ public class StreamTest {
     /*
      * 函数式接口
      * 1.只包含一个抽象方法的接口
-     * 2.可以通过Lambda表达式来创建该接口的对象
+     * 2.可以通过m匿名内部类/Lambda表达式来创建该接口的对象
      * 3.可以在任意函数式接口上使用@FunctionalInterface注解, 这样做可以检查它是否是一个函数式接口
      * 4.四大核心函数式接口:
      *   Consumer<T>: 消费型接口, void accept(T t);
@@ -100,28 +100,28 @@ public class StreamTest {
     @Test
     public void useFunctionalInterface() {
         // Consumer<T>: 消费型接口
-        new Consumer<Person>() {
+        Consumer<Person> consumer = new Consumer<Person>() {
             @Override
             public void accept(Person person) {
                 System.out.println(person.toString());
             }
         };
         // Supplier<T>: 供给型接口
-        new Supplier<Person>() {
+        Supplier<Person> supplier = new Supplier<Person>() {
             @Override
             public Person get() {
                 return new Person();
             }
         };
         // Function<T, R>: 函数型接口
-        new Function<Person, String>() {
+        Function<Person, String> function = new Function<Person, String>() {
             @Override
             public String apply(Person p) {
                 return p.getName();
             }
         };
         // Predicate<T>: 断言型接口
-        new Predicate<Person>() {
+        Predicate<Person> predicate = new Predicate<Person>() {
             @Override
             public boolean test(Person p) {
                 return "male".equals(p.getSex());
@@ -145,15 +145,13 @@ public class StreamTest {
         noReturnNoParam.method();
 
         // Lambda表达式实现 一个参数无返回 的接口
-        // 简化方法体大括号, 如果方法条只有一条语句, 则可以胜率方法体大括号
+        // 简化方法体大括号, 如果方法条只有一条语句, 则可以省略方法体大括号
         NoReturnOneParam noReturnOneParam = (int a) -> System.out.println("NoReturnOneParam param:" + a);
         noReturnOneParam.method(6);
 
         // Lambda表达式实现 多个参数无返回 的接口
         // 简化参数类型, 可以不写参数类型, 但是必须所有参数都不写
-        NoReturnMultiParam noReturnMultiParam = (a, b) -> {
-            System.out.println("NoReturnMultiParam param:" + "{" + a +"," + + b +"}");
-        };
+        NoReturnMultiParam noReturnMultiParam = (a, b) -> System.out.println("NoReturnMultiParam param:" + "{" + a +"," + + b +"}");
         noReturnMultiParam.method(6, 8);
 
         // Lambda表达式实现 无参有返回值 的接口
@@ -235,9 +233,10 @@ public class StreamTest {
         System.out.println("optional2.orElseGet: " + value2);
 
         // 实战举例
-        Person person = Optional.ofNullable(personMap.get("Lucas")).orElse(new Person());
+        Person person = Optional.ofNullable(personMap.get("Lucas")).orElseGet(Person::new);
     }
-    public String getDefaultValue(){  //远程方法调用
+    // 模拟远程方法调用
+    public String getDefaultValue(){
         System.out.println("getDefaultValue()被调用了!");
         return "默认值";
     }
@@ -256,15 +255,17 @@ public class StreamTest {
         */
         List<String> list = Stream.of("a", "b", "c").collect(Collectors.toList());
         // 创建一个顺序流, 由主线程按顺序对流执行操作
-        java.util.stream.Stream<String> listStream = list.stream();
+        Stream<String> listStream = list.stream();
         // 创建一个并行流, 内部以多线程并行执行的方式对流进行操作, 最后再将结果合并。前提是流中的数据处理没有顺序要求
-        java.util.stream.Stream<String> listParallelStream = list.parallelStream();
+        Stream<String> listParallelStream = list.parallelStream();
 
         /*
         * 数组创建流
         */
-        int[] array={1,3,5,6,8};
-        IntStream arrayStream = Arrays.stream(array);
+        int[] intArray={1,3,5,6,8};
+        IntStream intStream = Arrays.stream(intArray);
+        String[] strArray={"1","3","5","6","8"};
+        Stream<String> stringStream = Arrays.stream(strArray);
 
         /*
         * 使用Stream的静态方法创建流: empty()、of()、iterate()、generate()
@@ -321,11 +322,6 @@ public class StreamTest {
 
     /*
     * 映射(map/flatMap)
-    * map接收一个函数作为参数, 返回一个流, 该函数会被应用到每个元素上, 并将其映射成一个新的元素
-    * flatMap接收一个函数作为参数, 返回一个流, 该函数会被应用到每个元素上, 然后把所有流连接成一个流
-    * 有二箱鸡蛋, 每箱5个, 现在要把鸡蛋加工成煎蛋, 然后分给学生。
-    * map做的事情: 把二箱鸡蛋分别加工成煎蛋, 还是放成原来的两箱, 分给2组学生。
-    * flatMap做的事情: 把二箱鸡蛋分别加工成煎蛋, 然后放到一起【10个煎蛋】, 分给10个学生。
     * */
     @Test
     public void method3() {
@@ -333,12 +329,26 @@ public class StreamTest {
         List<String> list2 = Stream.of("c", "d").collect(Collectors.toList());
         List<List<String>> lists = Stream.of(new ArrayList<>(list1), new ArrayList<>(list2)).collect(Collectors.toList());
         // map
-        List<String> transList1 = list1.stream().map(String::toUpperCase).peek(System.out::print).collect(Collectors.toList());
-        System.out.println();
-        List<String> transList2 = list2.stream().map(String::toUpperCase).peek(System.out::print).collect(Collectors.toList());
-        System.out.println();
+        // [A, B]
+        List<String> transList1 = list1.stream().map(String::toUpperCase).collect(Collectors.toList());
+        System.out.println(transList1);
+        // [C, D]
+        List<String> transList2 = list2.stream().map(String::toUpperCase).collect(Collectors.toList());
+        System.out.println(transList2);
+
         // flatMap
-        List<String> transLists = lists.stream().flatMap(Collection::stream).map(String::toUpperCase).peek(System.out::print).collect(Collectors.toList());
+        // [A, B, C, D]
+        List<String> transLists1 = lists.stream().flatMap(Collection::stream).map(String::toUpperCase).collect(Collectors.toList());
+        System.out.println(transLists1);
+        // Map [[A, B], [C, D]]
+        List<List<String>> transLists2 = lists.stream().map(x -> x.stream().map(String::toUpperCase).collect(Collectors.toList())).collect(Collectors.toList());
+        System.out.println(transLists2.toString());
+        /*
+        * 有二箱鸡蛋，每箱2个，现在要把鸡蛋加工成煎蛋，然后分给学生。
+        * map做的事情：把二箱鸡蛋分别加工成煎蛋，还是放成原来的两箱，分给2组学生；
+        * flatMap做的事情：把二箱鸡蛋分别加工成煎蛋，然后放到一起【4个煎蛋】，分给4个学生；
+        * */
+
     }
 
     /*
@@ -347,11 +357,11 @@ public class StreamTest {
     @Test
     public void method4() {
         List<Integer> list = Stream.of(1, 3, 2, 8, 11, 4).collect(Collectors.toList());
-        // 求和方式1
+        // 求和方式1  29
         Optional<Integer> sum1 = list.stream().reduce((x, y) -> x + y);
-        // 求和方式2
+        // 求和方式2  29
         Optional<Integer> sum2 = list.stream().reduce(Integer::sum);
-        // 求乘积
+        // 求乘积  2112
         Optional<Integer> product = list.stream().reduce((x, y) -> x * y);
         System.out.println("list求和, sum1 = " + sum1.get() + ", sum2 = " + sum2.get());
         System.out.println("list求乘积, product = " + product.get());
